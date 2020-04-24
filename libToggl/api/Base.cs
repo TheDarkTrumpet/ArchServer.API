@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using RestSharp;
+using RestSharp.Authenticators;
 
 namespace libToggl.api
 {
@@ -20,7 +23,7 @@ namespace libToggl.api
         protected void CreateClient()
         {
             RestClient = new RestClient(BaseURL);
-            RestClient.Authenticator = new HttpBaseAuthenticator(ApiKey, "api_token");
+            RestClient.Authenticator = new HttpBasicAuthenticator(ApiKey, "api_token");
             RestClient.CookieContainer = CookieContainer;
         }
     }
