@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using libToggl.models;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -8,7 +9,7 @@ namespace libToggl.api
 {
     public class Workspaces : Base
     {
-        public Workspaces(string apiKey) : base(apiKey) { }
+        public Workspaces(string apiKey) : base(apiKey) { CreateClient(); }
         private readonly string _endpointUri = "/workspaces";
 
         public JArray GetRawWorkspaces()
@@ -36,6 +37,12 @@ namespace libToggl.api
             }
 
             return workspaces;
+        }
+
+        public Workspace GetWorkspaceIdByName(string name)
+        {
+            List<Workspace> workspaces = GetWorkspaces();
+            return workspaces.FirstOrDefault(x => x.Name == name);
         }
     }
 }
