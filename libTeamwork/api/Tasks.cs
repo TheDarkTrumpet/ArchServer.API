@@ -2,7 +2,8 @@ namespace libTeamwork.api
 {
     public class Tasks : Base
     {
-        public long Id { get; set; }
-        
+        protected Tasks(string apiKey, string baseUrl) : base(apiKey, baseUrl)
+        {
+        }
     }
 }
