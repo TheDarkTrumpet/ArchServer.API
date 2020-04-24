@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using libToggl.models;
 using Newtonsoft.Json.Linq;
@@ -23,14 +24,14 @@ namespace libToggl.api
         private readonly string _endpointUri = "/details";
         private string _userAgent { get; set; }
 
-        public JObject GetRawTimeEntries(string workspaceName, DateTime? startDate, DateTime? endDate)
+        public JObject GetRawTimeEntries(string workspaceName, DateTime? startDate = null, DateTime? endDate = null)
         {
             Workspaces workspace_query = new Workspaces(ApiKey);
             Workspace workspace = workspace_query.GetWorkspaceIdByName(workspaceName);
             return GetRawTimeEntries(workspace, startDate, endDate);
         }
 
-        public JObject GetRawTimeEntries(Workspace workspace, DateTime? startDate, DateTime? endDate)
+        public JObject GetRawTimeEntries(Workspace workspace, DateTime? startDate = null, DateTime? endDate = null)
         {
             if (startDate == null)
             {
@@ -46,6 +47,46 @@ namespace libToggl.api
             IRestResponse response = RestClient.Execute(request);
             JObject results = JObject.Parse(response.Content);
             return results;
+        }
+
+        public IEnumerable<TimeEntry> GetTimeEntries(Workspace workspace, DateTime? startDate = null, DateTime? endDate = null)
+        {
+            JObject rawEntries = GetRawTimeEntries(workspace, startDate, endDate);
+            JArray rawTimeEntries = rawEntries["data"] as JArray;
+
+            List<TimeEntry> timeEntries = new List<TimeEntry>();
+            foreach(JObject rt in rawTimeEntries)
+            {
+                TimeEntry timeEntry = new TimeEntry()
+                {
+                    Id = (long) rt["id"],
+                    IsBillable = (bool) rt["is_billable"],
+                    Client = (string) rt["client"],
+                    User = (string) rt["user"],
+                    Project = (string) rt["project"]
+                };
+
+                if (timeEntry.IsBillable)
+                {
+                    timeEntry.Billable = (double) rt["billable"];
+                }
+
+                string datetime = rt["start"].ToString();
+                if (!String.IsNullOrEmpty(datetime))
+                {
+                    timeEntry.StartDate = DateTime.Parse(datetime);
+                }
+                
+                datetime = rt["end"].ToString();
+                if (!String.IsNullOrEmpty(datetime))
+                {
+                    timeEntry.EndDate = DateTime.Parse(datetime);
+                }
+
+                timeEntries.Add(timeEntry);
+            }
+
+            return timeEntries;
         }
     }
 }
