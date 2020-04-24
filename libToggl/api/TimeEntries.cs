@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Linq;
 using libToggl.models;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -24,12 +25,13 @@ namespace libToggl.api
         private readonly string _endpointUri = "/details";
         private string _userAgent { get; set; }
 
-        public JObject GetRawTimeEntries(string workspaceName, DateTime? startDate = null, DateTime? endDate = null)
+        public JArray GetRawTimeEntries(string workspaceName, DateTime? startDate = null, DateTime? endDate = null)
         {
             return GetRawTimeEntries(_getWorkspace(workspaceName), startDate, endDate);
         }
 
-        public JObject GetRawTimeEntries(Workspace workspace, DateTime? startDate = null, DateTime? endDate = null)
+        public JArray GetRawTimeEntries(Workspace workspace, DateTime? startDate = null, DateTime? endDate = null,
+            int page = 1)
         {
             if (startDate == null)
             {
@@ -40,20 +42,31 @@ namespace libToggl.api
             request.AddQueryParameter("workspace_id", workspace.Id.ToString());
             request.AddQueryParameter("since",
                 startDate.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z");
+            request.AddQueryParameter("page", page.ToString());
             request.AddQueryParameter("user_agent", _userAgent);
             
             IRestResponse response = RestClient.Execute(request);
-            JObject results = JObject.Parse(response.Content);
+            JObject baseObject = JObject.Parse(response.Content);
+            JArray results = (JArray) baseObject["data"];
+            
+            //Calculate the remaining, by what page we're on, and recursively call if needed
+            int total_count = (int) baseObject["total_count"];
+            int per_page = (int) baseObject["per_page"];
+
+            if (total_count > (per_page * page))
+            {
+                results.Merge(GetRawTimeEntries(workspace, startDate, endDate, page + 1));
+            }
+            
             return results;
         }
 
         public IEnumerable<TimeEntry> GetTimeEntries(Workspace workspace, DateTime? startDate = null, DateTime? endDate = null)
         {
-            JObject rawEntries = GetRawTimeEntries(workspace, startDate, endDate);
-            JArray rawTimeEntries = rawEntries["data"] as JArray;
-
+            JArray rawEntries = GetRawTimeEntries(workspace, startDate, endDate);
+            
             List<TimeEntry> timeEntries = new List<TimeEntry>();
-            foreach(JObject rt in rawTimeEntries)
+            foreach(JObject rt in rawEntries)
             {
                 TimeEntry timeEntry = new TimeEntry()
                 {
