@@ -1,7 +1,4 @@
 using System;
-using libTeamwork.api;
-using Newtonsoft.Json.Linq;
-using RestSharp;
 
 namespace libTeamwork.models
 {
@@ -16,5 +13,6 @@ namespace libTeamwork.models
         public string AssignedTo { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? DueDate { get; set; }
+        public Boolean Completed { get; set; }
     }
 }
