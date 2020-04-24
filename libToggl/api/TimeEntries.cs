@@ -26,9 +26,7 @@ namespace libToggl.api
 
         public JObject GetRawTimeEntries(string workspaceName, DateTime? startDate = null, DateTime? endDate = null)
         {
-            Workspaces workspace_query = new Workspaces(ApiKey);
-            Workspace workspace = workspace_query.GetWorkspaceIdByName(workspaceName);
-            return GetRawTimeEntries(workspace, startDate, endDate);
+            return GetRawTimeEntries(_getWorkspace(workspaceName), startDate, endDate);
         }
 
         public JObject GetRawTimeEntries(Workspace workspace, DateTime? startDate = null, DateTime? endDate = null)
@@ -87,6 +85,19 @@ namespace libToggl.api
             }
 
             return timeEntries;
+        }
+
+        public IEnumerable<TimeEntry> GetTimeEntries(string name, DateTime? startDate = null, DateTime? endDate = null)
+        {
+            Workspace workspace = _getWorkspace(name);
+            return GetTimeEntries(workspace, startDate, endDate);
+        }
+
+        private Workspace _getWorkspace(string name)
+        {
+            Workspaces workspace_query = new Workspaces(ApiKey);
+            Workspace workspace = workspace_query.GetWorkspaceIdByName(name);
+            return workspace;
         }
     }
 }
