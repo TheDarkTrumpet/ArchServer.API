@@ -10,14 +10,14 @@ namespace libTeamwork.api
     {
         private readonly string _endpointUri = "/people.json";
         
-        protected People(string apiKey, string baseUrl) : base(apiKey, baseUrl)
+        public People(string apiKey, string baseUrl) : base(apiKey, baseUrl)
         {
             CreateClient();
         }
 
         public JArray GetRawPeople()
         {
-            RestRequest request = new RestRequest("/people.json", Method.GET);
+            RestRequest request = new RestRequest(_endpointUri, Method.GET);
             request.AddHeader("Accept", "application/json");
 
             IRestResponse response = RestClient.Execute(request);
