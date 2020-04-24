@@ -5,33 +5,16 @@ using RestSharp;
 
 namespace libTeamwork.models
 {
-    public class Task : Base
+    public class Task
     {
-        private readonly string _endpointUri = "/tasks.json";
-        public bool IncludeCompleted { get; set; } = true;
-        public DateTime? UpdatedAfterDate { get; set; }
-
-        public Task(string apiKey, string baseUrl) : base(apiKey, baseUrl)
-        {
-            CreateClient();
-        }
-
-        public JArray GetRawTasks()
-        {
-            RestRequest request = new RestRequest(_endpointUri, Method.GET);
-            request.AddQueryParameter("includeCompletedSubtasks", IncludeCompleted.ToString());
-
-            if (UpdatedAfterDate != null)
-            {
-                request.AddQueryParameter("updatedAfterDate",
-                    UpdatedAfterDate.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z");
-            }
-            request.AddHeader("Accept", "application/json");
-
-            IRestResponse response = RestClient.Execute(request);
-            JObject responseObject = JObject.Parse(response.Content);
-
-            return (JArray) responseObject["todo-items"];
-        }
+        public long Id { get; set; }
+        public string ProjectName { get; set; }
+        public string CompanyName { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Priority { get; set; }
+        public string AssignedTo { get; set; }
+        public DateTime? CreatedOn { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }
