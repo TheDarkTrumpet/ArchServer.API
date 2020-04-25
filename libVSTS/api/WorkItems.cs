@@ -50,15 +50,12 @@ namespace libVSTS.api
                     id = (int) rwi["id"],
                     //url = "", // Generate this...
                     Type = rwi["fields"]["System.WorkItemType"].ToString(),
-                    /*
                     State = rwi["fields"]["System.State"].ToString(),
-                    Description = rwi["fields"]["System.Description"].ToString(),
-                    
-                    AssignedTo = rwi["fields"]["System.AssignedTo"]["displayName"].ToString(),
+                    Description = rwi["fields"]["System.Description"]?.ToString(),
+                    AssignedTo = rwi["fields"]["System.AssignedTo"]?["displayName"]?.ToString(),
                     CreatedBy = rwi["fields"]["System.CreatedBy"]["displayName"].ToString(),
                     CreatedDate = (DateTime) rwi["fields"]["System.CreatedDate"],
                     ChangedDate = (DateTime) rwi["fields"]["System.ChangedDate"]
-                    */
                 };
                 workItems.Add(workItem);
             }
