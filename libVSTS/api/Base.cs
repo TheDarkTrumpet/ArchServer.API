@@ -4,7 +4,7 @@ using RestSharp.Authenticators;
 
 namespace libVSTS.api
 {
-    internal class Base
+    public class Base
     {
         protected string ApiKey { get; set; }
         protected string BaseURL { get; set; } = "https://dev.azure.com";
