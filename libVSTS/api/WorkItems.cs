@@ -57,8 +57,7 @@ namespace libVSTS.api
                     //url = "", // Generate this...
                     Type = rwi["fields"]["System.WorkItemType"].ToString(),
                     State = rwi["fields"]["System.State"].ToString(),
-                    // Description = _sanitizeHTML(rwi["fields"]["System.Description"]?.ToString()),
-                    Description = rwi["fields"]["System.Description"]?.ToString(),
+                    Description = _sanitizeHTML(rwi["fields"]["System.Description"]?.ToString()),
                     AssignedTo = rwi["fields"]["System.AssignedTo"]?["displayName"]?.ToString(),
                     CreatedBy = rwi["fields"]["System.CreatedBy"]["displayName"].ToString(),
                     CreatedDate = (DateTime) rwi["fields"]["System.CreatedDate"],
@@ -126,10 +125,20 @@ namespace libVSTS.api
             {
                 return input;
             }
-
             input = Regex.Replace(input, "<[/]{0,1}(div|span).*?>", "");
-            Converter converter = new Converter();
-            return converter.Convert(input);
+            
+            string returnText = input;
+
+            try
+            {
+                Converter converter = new Converter();
+                return converter.Convert(input);
+            }
+            catch (Exception)
+            {
+                return returnText;
+            }
+            
         }
     }
 }
