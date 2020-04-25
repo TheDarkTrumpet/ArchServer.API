@@ -103,10 +103,10 @@ namespace libVSTS.api
             request.AddQueryParameter("$depth", "2");
             request.AddQueryParameter("$expand", "all");
             request.AddHeader("Content-Type", "application/json");
-            
+
+            string query = _buildQuery();
             var body = new Dictionary<string, string>() {
-                {"query", "Select [System.Id], [System.Title], [System.State] From WorkItems Where ([Assigned To] = 'dthole@gmail.com' or [Assigned To] = 'dthole@uiowa.edu')" +
-                          "and [Work Item Type] = 'Product Backlog Item' and [State] <> 'Done' and [State] <> 'Closed' and [State] <> 'Removed'"}
+                {"query", query}
             };
 
             request.AddJsonBody(body);
@@ -119,6 +119,83 @@ namespace libVSTS.api
             return (JArray) contentJSON["workItems"];
         }
 
+        public string _buildQuery()
+        {
+            string query = "Select [System.Id], [System.Title], [System.State] From WorkItems where ";
+
+            bool subFilterApplied = false;
+            
+            for (int x = 0; x < AssignedToInclude.Count; x++)
+            {
+                subFilterApplied = true;
+                if (x == 0)
+                {
+                    query += "(";
+                }
+                query += $"[Assigned To] = '{AssignedToInclude[x]}'";
+
+                if (x < AssignedToInclude.Count - 1)
+                {
+                    query += " or ";
+                }
+                else
+                {
+                    query += ") ";
+                }
+                
+            }
+            
+
+            for (int x = 0; x < TypesToInclude.Count; x++)
+            {
+                if (subFilterApplied)
+                {
+                    query += " and ";
+                }
+
+                subFilterApplied = true;
+                
+                if (x == 0)
+                {
+                    query += "(";
+                }
+                query += $"[Work Item Type] = '{TypesToInclude[x]}'";
+
+                if (x < TypesToInclude.Count - 1)
+                {
+                    query += " or ";
+                }
+                else
+                {
+                    query += ") ";
+                }
+            }
+            
+            for (int x = 0; x < StatesToExclude.Count; x++)
+            {
+                if (subFilterApplied)
+                {
+                    query += " and ";
+                }
+                
+                if (x == 0)
+                {
+                    query += "(";
+                }
+                query += $"[State] <> '{StatesToExclude[x]}'";
+
+                if (x < StatesToExclude.Count - 1)
+                {
+                    query += " and ";
+                }
+                else
+                {
+                    query += ") ";
+                }
+            }
+
+            return query;
+        }
         private string _sanitizeHTML(string input)
         {
             if (String.IsNullOrEmpty(input))
