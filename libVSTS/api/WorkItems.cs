@@ -121,8 +121,12 @@ namespace libVSTS.api
 
         public string _buildQuery()
         {
-            string query = "Select [System.Id], [System.Title], [System.State] From WorkItems where ";
+            string query = "Select [System.Id], [System.Title], [System.State] From WorkItems ";
 
+            if (AssignedToInclude.Any() || TypesToInclude.Any() || StatesToExclude.Any())
+            {
+                query += " where ";
+            }
             bool subFilterApplied = false;
             
             for (int x = 0; x < AssignedToInclude.Count; x++)
@@ -145,13 +149,14 @@ namespace libVSTS.api
                 
             }
             
-
+            if (subFilterApplied && TypesToInclude.Any())
+            {
+                query += " and ";
+            }
+            
             for (int x = 0; x < TypesToInclude.Count; x++)
             {
-                if (subFilterApplied)
-                {
-                    query += " and ";
-                }
+                
 
                 subFilterApplied = true;
                 
@@ -171,13 +176,13 @@ namespace libVSTS.api
                 }
             }
             
+            if (subFilterApplied && StatesToExclude.Any())
+            {
+                query += " and ";
+            }
+            
             for (int x = 0; x < StatesToExclude.Count; x++)
             {
-                if (subFilterApplied)
-                {
-                    query += " and ";
-                }
-                
                 if (x == 0)
                 {
                     query += "(";
