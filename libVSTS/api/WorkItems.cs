@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using libVSTS.models;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
@@ -23,6 +24,29 @@ namespace libVSTS.api
         }
 
         public JArray GetRawWorkItems()
+        {
+            JArray workItemLinks = _getWorkItemLinks();
+            
+            JArray workItems = new JArray();
+            foreach (var wil in workItemLinks)
+            {
+                RestRequest request = new RestRequest((string)wil["url"]);
+                IRestResponse response = RestClient.Execute(request);
+                JObject content = JObject.Parse(response.Content);
+                workItems.Add(content);
+            }
+            return workItems;
+        }
+
+        public List<WorkItem> GetWorkItems()
+        {
+            List<WorkItem> workItems = new List<WorkItem>();
+
+
+            return workItems;
+        }
+
+        private JArray _getWorkItemLinks()
         {
             RestRequest request = new RestRequest(_endpointUri, Method.POST);
             request.AddQueryParameter("api-version", "5.1");
