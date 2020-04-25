@@ -13,6 +13,7 @@ namespace libVSTS.api
         public List<string> AssignedToInclude { get; set; }
         public List<string> TypesToInclude { get; set; }
         public DateTime? FromChanged { get; set; }
+        public Boolean IncludeComments { get; set; }
         
         public WorkItems(string apiKey, string organization, string project) : base(apiKey, organization)
         {
@@ -57,12 +58,39 @@ namespace libVSTS.api
                     CreatedDate = (DateTime) rwi["fields"]["System.CreatedDate"],
                     ChangedDate = (DateTime) rwi["fields"]["System.ChangedDate"]
                 };
+                if (IncludeComments)
+                {
+                    workItem.Comments = _supplementComments(rwi);
+                }
                 workItems.Add(workItem);
             }
 
             return workItems;
         }
 
+        private List<WorkItemComment> _supplementComments(JObject workItem)
+        {
+            string commentsLink = (string) workItem["_links"]["workItemComments"]["href"];
+            RestRequest request = new RestRequest(commentsLink);
+            IRestResponse response = RestClient.Execute(request);
+            JObject content = JObject.Parse(response.Content);
+
+            List<WorkItemComment> comments = new List<WorkItemComment>();
+            foreach (JObject jcomment in content["comments"])
+            {
+                WorkItemComment comment = new WorkItemComment()
+                {
+                    id = (int) jcomment["id"],
+                    CreatedBy = (string) jcomment["createdBy"]["displayName"],
+                    CreatedDate = (DateTime) jcomment["createdDate"],
+                    Comment = jcomment["text"]?.ToString()
+                };
+                comments.Add(comment);
+            }
+
+            return comments;
+        }
+        
         private JArray _getWorkItemLinks()
         {
             RestRequest request = new RestRequest(_endpointUri, Method.POST);
