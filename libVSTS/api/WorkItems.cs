@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using Html2Markdown;
 using HtmlAgilityPack;
 using libVSTS.models;
 using Newtonsoft.Json.Linq;
@@ -56,7 +57,8 @@ namespace libVSTS.api
                     //url = "", // Generate this...
                     Type = rwi["fields"]["System.WorkItemType"].ToString(),
                     State = rwi["fields"]["System.State"].ToString(),
-                    Description = _sanitizeHTML(rwi["fields"]["System.Description"]?.ToString()),
+                    // Description = _sanitizeHTML(rwi["fields"]["System.Description"]?.ToString()),
+                    Description = rwi["fields"]["System.Description"]?.ToString(),
                     AssignedTo = rwi["fields"]["System.AssignedTo"]?["displayName"]?.ToString(),
                     CreatedBy = rwi["fields"]["System.CreatedBy"]["displayName"].ToString(),
                     CreatedDate = (DateTime) rwi["fields"]["System.CreatedDate"],
@@ -124,12 +126,10 @@ namespace libVSTS.api
             {
                 return input;
             }
-            
-            HtmlDocument document = new HtmlDocument();
-            document.LoadHtml(input);
-            return String.Join('\n',
-                document.DocumentNode.ChildNodes.Select(x =>
-                    Regex.Replace(HttpUtility.HtmlDecode(x.InnerHtml), @"<[/]{0,1}\w{1,4}[ ]{0,1}.*[/]{0,1}>", "")));
+
+            input = Regex.Replace(input, "<[/]{0,1}(div|span).*?>", "");
+            Converter converter = new Converter();
+            return converter.Convert(input);
         }
     }
 }
