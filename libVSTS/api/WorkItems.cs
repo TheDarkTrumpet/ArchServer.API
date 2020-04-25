@@ -125,9 +125,10 @@ namespace libVSTS.api
             {
                 return input;
             }
-            input = Regex.Replace(input, "<[/]{0,1}(div|span).*?>", "");
-            
-            string returnText = input;
+
+            input = input.Replace("<div>", "");
+            input = input.Replace("</div>", "\n");
+            input = Regex.Replace(input, "<[/]{0,1}span.*?>", "");
 
             try
             {
@@ -136,7 +137,7 @@ namespace libVSTS.api
             }
             catch (Exception)
             {
-                return returnText;
+                return input;
             }
             
         }
