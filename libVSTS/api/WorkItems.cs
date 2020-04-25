@@ -104,7 +104,7 @@ namespace libVSTS.api
             request.AddQueryParameter("$expand", "all");
             request.AddHeader("Content-Type", "application/json");
 
-            string query = _buildQuery();
+            string query = BuildQuery();
             var body = new Dictionary<string, string>() {
                 {"query", query}
             };
@@ -119,7 +119,7 @@ namespace libVSTS.api
             return (JArray) contentJSON["workItems"];
         }
 
-        public string _buildQuery()
+        public string BuildQuery()
         {
             string query = "Select [System.Id], [System.Title], [System.State] From WorkItems ";
 
