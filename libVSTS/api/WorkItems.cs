@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
+using HtmlAgilityPack;
 using libVSTS.models;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -52,7 +56,7 @@ namespace libVSTS.api
                     //url = "", // Generate this...
                     Type = rwi["fields"]["System.WorkItemType"].ToString(),
                     State = rwi["fields"]["System.State"].ToString(),
-                    Description = rwi["fields"]["System.Description"]?.ToString(),
+                    Description = _sanitizeHTML(rwi["fields"]["System.Description"]?.ToString()),
                     AssignedTo = rwi["fields"]["System.AssignedTo"]?["displayName"]?.ToString(),
                     CreatedBy = rwi["fields"]["System.CreatedBy"]["displayName"].ToString(),
                     CreatedDate = (DateTime) rwi["fields"]["System.CreatedDate"],
@@ -83,7 +87,7 @@ namespace libVSTS.api
                     id = (int) jcomment["id"],
                     CreatedBy = (string) jcomment["createdBy"]["displayName"],
                     CreatedDate = (DateTime) jcomment["createdDate"],
-                    Comment = jcomment["text"]?.ToString()
+                    Comment = _sanitizeHTML(jcomment["text"]?.ToString())
                 };
                 comments.Add(comment);
             }
@@ -112,6 +116,20 @@ namespace libVSTS.api
             // Convert the list of tasks received into a work item list.
             JObject contentJSON = JObject.Parse(content);
             return (JArray) contentJSON["workItems"];
+        }
+
+        private string _sanitizeHTML(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+            
+            HtmlDocument document = new HtmlDocument();
+            document.LoadHtml(input);
+            return String.Join('\n',
+                document.DocumentNode.ChildNodes.Select(x =>
+                    Regex.Replace(HttpUtility.HtmlDecode(x.InnerHtml), @"<[/]{0,1}\w{1,4}[ ]{0,1}.*[/]{0,1}>", "")));
         }
     }
 }
