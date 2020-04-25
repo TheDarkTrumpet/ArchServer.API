@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using libTeamwork.models;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -62,7 +63,8 @@ namespace libTeamwork.api
                 }
 
                 dateString = (string) element["due-date"];
-                if (DateTime.TryParse(dateString, out date))
+                if (DateTime.TryParseExact(dateString, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None,
+                    out date))
                 {
                     task.DueDate = date;
                 }
