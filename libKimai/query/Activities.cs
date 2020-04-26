@@ -10,7 +10,7 @@ namespace libKimai.query
         public DateTime? FromDate { get; set; }
 
         private TimeZoneInfo _timeZone { get; set; }
-        private string _sqlStatementBase = @"select ka.name as 'ActivityName', ka.comment as 'ActivityComment',
+        private string _sqlStatementBase = @"select kt.id, ka.name as 'ActivityName', ka.comment as 'ActivityComment',
             kp.name as 'ProjectName', kp.comment as 'ProjectComment', kc.name as 'Customer',
             kc.hourly_rate as 'HourlyRate', kt.start_time as 'StartTime', kt.end_time as 'EndTime',
             kt.description as 'TimeNotes' from kimai2_timesheet kt
@@ -27,6 +27,11 @@ namespace libKimai.query
         {
             string sqlStatement = _sqlStatementBase;
 
+            if (FromDate != null)
+            {
+                sqlStatement += $" where start_time > '{FromDate.Value:yyyy-mm-dd}' ";
+            }
+            
             if (orderByDesc)
             {
                 sqlStatement += " order by end_time desc, start_time desc";
@@ -52,6 +57,7 @@ namespace libKimai.query
         {
             Activity activity = new Activity()
             {
+                Id = (int) record.GetValue(record.GetOrdinal("id")),
                 ActivityName = record.GetValue(record.GetOrdinal("ActivityName")) as string,
                 ActivityComment = record.GetValue(record.GetOrdinal("ActivityComment")) as string,
                 ProjectName = record.GetValue(record.GetOrdinal("ProjectName")) as string,
