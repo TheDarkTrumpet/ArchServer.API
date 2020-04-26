@@ -13,6 +13,7 @@ namespace libAPICache.Models.VSTS
             Comments = new List<WorkItemComment>();
         }
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int id { get; set; }
         [MaxLength(255)]
         public string url { get; set; }

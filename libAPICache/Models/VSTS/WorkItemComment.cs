@@ -8,6 +8,7 @@ namespace libAPICache.Models.VSTS
     public class WorkItemComment
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int id { get; set; }
         [MaxLength(200)]
         public string CreatedBy { get; set; }

@@ -7,6 +7,7 @@ namespace libAPICache.Models.Toggl
     public class Workspace
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         [MaxLength(100)]
         public string Name { get; set; }

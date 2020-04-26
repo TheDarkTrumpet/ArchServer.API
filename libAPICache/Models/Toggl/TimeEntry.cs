@@ -8,6 +8,7 @@ namespace libAPICache.Models.Toggl
     public class TimeEntry
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

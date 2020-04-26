@@ -8,6 +8,7 @@ namespace libAPICache.Models.Teamwork
     public class Task
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
         [MaxLength(255)]
         public string ProjectName { get; set; }

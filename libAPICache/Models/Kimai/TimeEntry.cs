@@ -8,6 +8,7 @@ namespace libAPICache.Models.Kimai
     public class TimeEntry
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         [MaxLength(255)]
         public string ActivityName { get; set; }

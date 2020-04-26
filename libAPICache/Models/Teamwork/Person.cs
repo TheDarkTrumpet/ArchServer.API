@@ -8,6 +8,7 @@ namespace libAPICache.Models.Teamwork
     public class Person
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public long Id { get; set; }
         [MaxLength(100)]
         public string UserName { get; set; }
