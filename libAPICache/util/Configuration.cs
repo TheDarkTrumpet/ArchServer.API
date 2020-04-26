@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -10,9 +11,10 @@ namespace libAPICache.util
     {
         public static IConfiguration GetConfiguration()
         {
-            return new Microsoft.Extensions.Configuration.ConfigurationBuilder().SetBasePath(@Directory.GetCurrentDirectory())
+            var configurationBuilder = new Microsoft.Extensions.Configuration.ConfigurationBuilder().SetBasePath(@Directory.GetCurrentDirectory());
+            return configurationBuilder
 #if DEBUG
-                .AddJsonFile(@Directory.GetCurrentDirectory() + "{project path}/appsettings.Development.json", optional: true, reloadOnChange: true)
+                .AddJsonFile(@Directory.GetCurrentDirectory() + "/appsettings.Development.json", optional: true, reloadOnChange: true)
 #else
                 .AddJsonFile(@Directory.GetCurrentDirectory() + "{project path}/appsettings.json", optional: true, reloadOnChange: true)
 #endif

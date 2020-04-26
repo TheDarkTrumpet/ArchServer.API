@@ -16,7 +16,7 @@ namespace libAPICache.Entities
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfiguration config = util.Configuration.GetConfiguration();
-            string connectionString = (string)config["ConnectionStrings:EFDbContext"];
+            string connectionString = (string) config["ConnectionStrings:EFDbContext"];
 
             optionsBuilder.UseSqlServer(connectionString);
         }
