@@ -55,14 +55,24 @@ namespace libVSTS.api
                 {
                     id = (int) rwi["id"],
                     //url = "", // Generate this...
-                    Type = rwi["fields"]["System.WorkItemType"].ToString(),
-                    State = rwi["fields"]["System.State"].ToString(),
+                    Type = rwi["fields"]["System.WorkItemType"]?.ToString(),
+                    State = rwi["fields"]["System.State"]?.ToString(),
                     Description = _sanitizeHTML(rwi["fields"]["System.Description"]?.ToString()),
                     AssignedTo = rwi["fields"]["System.AssignedTo"]?["displayName"]?.ToString(),
-                    CreatedBy = rwi["fields"]["System.CreatedBy"]["displayName"].ToString(),
-                    CreatedDate = (DateTime) rwi["fields"]["System.CreatedDate"],
-                    ChangedDate = (DateTime) rwi["fields"]["System.ChangedDate"]
+                    CreatedBy = rwi["fields"]["System.CreatedBy"]["displayName"]?.ToString()
                 };
+
+                DateTime parsedDate;
+                if (DateTime.TryParse(rwi["fields"]["System.CreatedDate"]?.ToString(), out parsedDate))
+                {
+                    workItem.CreatedDate = parsedDate;
+                }
+                
+                if (DateTime.TryParse(rwi["fields"]["System.ChangedDate"]?.ToString(), out parsedDate))
+                {
+                    workItem.ChangedDate = parsedDate;
+                }
+                
                 if (IncludeComments)
                 {
                     workItem.Comments = _supplementComments(rwi);
@@ -86,7 +96,7 @@ namespace libVSTS.api
                 WorkItemComment comment = new WorkItemComment()
                 {
                     id = (int) jcomment["id"],
-                    CreatedBy = (string) jcomment["createdBy"]["displayName"],
+                    CreatedBy = jcomment["createdBy"]?["displayName"]?.ToString(),
                     CreatedDate = (DateTime) jcomment["createdDate"],
                     Comment = _sanitizeHTML(jcomment["text"]?.ToString())
                 };
@@ -199,6 +209,15 @@ namespace libVSTS.api
                 }
             }
 
+            if (subFilterApplied && FromChanged != null)
+            {
+                query += " and ";
+            }
+            
+            if (FromChanged != null)
+            {
+                query += $" [Changed Date] > '{FromChanged.Value.ToShortDateString()}'";
+            }
             return query;
         }
         private string _sanitizeHTML(string input)
