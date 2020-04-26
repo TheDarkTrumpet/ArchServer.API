@@ -97,9 +97,15 @@ namespace libVSTS.api
                 {
                     id = (int) jcomment["id"],
                     CreatedBy = jcomment["createdBy"]?["displayName"]?.ToString(),
-                    CreatedDate = (DateTime) jcomment["createdDate"],
                     Comment = _sanitizeHTML(jcomment["text"]?.ToString())
                 };
+
+                DateTime parsedDate;
+                if (DateTime.TryParse(jcomment["createdDate"]?.ToString(), out parsedDate))
+                {
+                    comment.CreatedDate = parsedDate;
+                }
+                
                 comments.Add(comment);
             }
 
