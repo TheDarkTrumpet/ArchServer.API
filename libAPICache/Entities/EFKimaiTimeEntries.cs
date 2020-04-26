@@ -37,6 +37,8 @@ namespace libAPICache.Entities
             {
                 
             }
+
+            return true;
         }
 
         public TimeEntry GetOrReturnNull(int id)
