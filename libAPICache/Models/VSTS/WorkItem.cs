@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace libAPICache.Models.VSTS
 {
+    [Table(name: "WorkItems", Schema = "VSTS")]
     public class WorkItem
     {
         public WorkItem()
