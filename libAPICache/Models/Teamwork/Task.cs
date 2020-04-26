@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace libAPICache.Models.Teamwork
 {
-    [Table(name: "Task", Schema = "Teamwork")]
+    [Table(name: "Tasks", Schema = "Teamwork")]
     public class Task
     {
         [Key]
