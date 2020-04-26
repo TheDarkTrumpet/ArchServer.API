@@ -20,5 +20,7 @@ namespace libAPICache.Entities
 
             optionsBuilder.UseSqlServer(connectionString);
         }
+        
+        public EFDbContext(): base() { }
     }
 }
