@@ -10,7 +10,7 @@ namespace libKimai.query
         public DateTime? FromDate { get; set; }
 
         private TimeZoneInfo _timeZone { get; set; }
-        private string _sqlStatementBase = @"select kt.id, ka.name as 'ActivityName', ka.comment as 'ActivityComment',
+        private string _sqlStatementBase = @"select SQL_NO_CACHE kt.id as 'Id', ka.name as 'ActivityName', ka.comment as 'ActivityComment',
             kp.name as 'ProjectName', kp.comment as 'ProjectComment', kc.name as 'Customer',
             kc.hourly_rate as 'HourlyRate', kt.start_time as 'StartTime', kt.end_time as 'EndTime',
             kt.description as 'TimeNotes' from kimai2_timesheet kt
@@ -25,19 +25,9 @@ namespace libKimai.query
 
         public List<Activity> GetActivities(bool orderByDesc = false)
         {
-            string sqlStatement = _sqlStatementBase;
-
-            if (FromDate != null)
-            {
-                sqlStatement += $" where start_time > '{FromDate.Value:yyyy-mm-dd}' ";
-            }
+            string sqlStatement = BuildStatement(orderByDesc);
             
-            if (orderByDesc)
-            {
-                sqlStatement += " order by end_time desc, start_time desc";
-            }
-            
-            using MySqlConnection connection = new MySqlConnection(_mysqlConnectionString);
+            MySqlConnection connection = new MySqlConnection(_mysqlConnectionString);
             connection.Open();
             
             MySqlCommand cmd = new MySqlCommand(sqlStatement, connection);
@@ -50,14 +40,32 @@ namespace libKimai.query
             }
 
             connection.Close();
+            connection.Dispose();
             return activities;
         }
 
+        public string BuildStatement(bool orderByDesc = false)
+        {
+            string sqlStatement = _sqlStatementBase;
+
+            if (FromDate != null)
+            {
+                sqlStatement += $" where start_time > '{FromDate.Value.ToString("yyyy/MM/dd")}' ";
+            }
+            
+            if (orderByDesc)
+            {
+                sqlStatement += " order by start_time desc";
+            }
+
+            return sqlStatement;
+        }
+        
         public Activity CreateActivity(MySqlDataReader record)
         {
             Activity activity = new Activity()
             {
-                Id = (int) record.GetValue(record.GetOrdinal("id")),
+                Id = (int) record.GetValue(record.GetOrdinal("Id")),
                 ActivityName = record.GetValue(record.GetOrdinal("ActivityName")) as string,
                 ActivityComment = record.GetValue(record.GetOrdinal("ActivityComment")) as string,
                 ProjectName = record.GetValue(record.GetOrdinal("ProjectName")) as string,
