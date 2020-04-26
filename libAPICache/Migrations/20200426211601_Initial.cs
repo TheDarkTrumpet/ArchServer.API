@@ -23,32 +23,11 @@ namespace libAPICache.Migrations
                 name: "VSTS");
 
             migrationBuilder.CreateTable(
-                name: "VSTSWorkItems",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    url = table.Column<string>(maxLength: 255, nullable: true),
-                    Type = table.Column<string>(maxLength: 50, nullable: true),
-                    State = table.Column<string>(maxLength: 50, nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    AssignedTo = table.Column<string>(maxLength: 100, nullable: true),
-                    CreatedBy = table.Column<string>(maxLength: 100, nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ChangedDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VSTSWorkItems", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TimeEntries",
                 schema: "Kimai",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(nullable: false),
                     ActivityName = table.Column<string>(maxLength: 255, nullable: true),
                     ActivityComment = table.Column<string>(nullable: true),
                     ProjectName = table.Column<string>(maxLength: 255, nullable: true),
@@ -69,8 +48,7 @@ namespace libAPICache.Migrations
                 schema: "Teamwork",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false),
                     ProjectName = table.Column<string>(maxLength: 255, nullable: true),
                     CompanyName = table.Column<string>(maxLength: 255, nullable: true),
                     Title = table.Column<string>(maxLength: 255, nullable: true),
@@ -91,8 +69,7 @@ namespace libAPICache.Migrations
                 schema: "TeamWork",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false),
                     UserName = table.Column<string>(maxLength: 100, nullable: true),
                     LastActive = table.Column<DateTime>(nullable: true),
                     FullName = table.Column<string>(maxLength: 100, nullable: true),
@@ -110,8 +87,7 @@ namespace libAPICache.Migrations
                 schema: "Toggl",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
                     Duration = table.Column<int>(nullable: false),
@@ -127,12 +103,31 @@ namespace libAPICache.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkItems",
+                schema: "VSTS",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false),
+                    url = table.Column<string>(maxLength: 255, nullable: true),
+                    Type = table.Column<string>(maxLength: 50, nullable: true),
+                    State = table.Column<string>(maxLength: 50, nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    AssignedTo = table.Column<string>(maxLength: 100, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ChangedDate = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkItems", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WorkItemComment",
                 schema: "VSTS",
                 columns: table => new
                 {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    id = table.Column<int>(nullable: false),
                     CreatedBy = table.Column<string>(maxLength: 200, nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Comment = table.Column<string>(nullable: true),
@@ -142,9 +137,10 @@ namespace libAPICache.Migrations
                 {
                     table.PrimaryKey("PK_WorkItemComment", x => x.id);
                     table.ForeignKey(
-                        name: "FK_WorkItemComment_VSTSWorkItems_WorkItemid",
+                        name: "FK_WorkItemComment_WorkItems_WorkItemid",
                         column: x => x.WorkItemid,
-                        principalTable: "VSTSWorkItems",
+                        principalSchema: "VSTS",
+                        principalTable: "WorkItems",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -179,7 +175,8 @@ namespace libAPICache.Migrations
                 schema: "VSTS");
 
             migrationBuilder.DropTable(
-                name: "VSTSWorkItems");
+                name: "WorkItems",
+                schema: "VSTS");
         }
     }
 }

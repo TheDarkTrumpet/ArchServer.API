@@ -10,8 +10,8 @@ using libAPICache.Entities;
 namespace libAPICache.Migrations
 {
     [DbContext(typeof(EFDbContext))]
-    [Migration("20200426183554_ChangeVSTSWorkItem")]
-    partial class ChangeVSTSWorkItem
+    [Migration("20200426211601_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,9 +24,7 @@ namespace libAPICache.Migrations
             modelBuilder.Entity("libAPICache.Models.Kimai.TimeEntry", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("ActivityComment")
                         .HasColumnType("nvarchar(max)");
@@ -66,9 +64,7 @@ namespace libAPICache.Migrations
             modelBuilder.Entity("libAPICache.Models.Teamwork.Person", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("Administrator")
                         .HasColumnType("bit");
@@ -100,9 +96,7 @@ namespace libAPICache.Migrations
             modelBuilder.Entity("libAPICache.Models.Teamwork.Task", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<string>("AssignedTo")
                         .HasColumnType("nvarchar(50)")
@@ -144,9 +138,7 @@ namespace libAPICache.Migrations
             modelBuilder.Entity("libAPICache.Models.Toggl.TimeEntry", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint");
 
                     b.Property<double>("Billable")
                         .HasColumnType("float");
@@ -183,9 +175,7 @@ namespace libAPICache.Migrations
             modelBuilder.Entity("libAPICache.Models.VSTS.WorkItem", b =>
                 {
                     b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("AssignedTo")
                         .HasColumnType("nvarchar(100)")
@@ -224,9 +214,7 @@ namespace libAPICache.Migrations
             modelBuilder.Entity("libAPICache.Models.VSTS.WorkItemComment", b =>
                 {
                     b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
