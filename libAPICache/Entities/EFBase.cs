@@ -8,13 +8,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace libAPICache.Entities
 {
-    public class EFBase<T> where T: Base
+    public class EFBase<T> where T : Base
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
         public IEnumerable<T> Entries;
-        
-        public EFBase() : this(new EFDbContext()) { }
+
+        public EFBase() : this(new EFDbContext())
+        {
+        }
 
         public EFBase(EFDbContext context)
         {
@@ -43,14 +45,14 @@ namespace libAPICache.Entities
             }
             else
             {
-                _dbSet.Add((T)input);
+                _dbSet.Add((T) input);
             }
 
             if (saveChanges)
             {
                 _context.SaveChanges();
             }
-            
+
             return true;
         }
 
@@ -59,3 +61,4 @@ namespace libAPICache.Entities
             return Entries.FirstOrDefault(x => x.Id == id);
         }
     }
+}
