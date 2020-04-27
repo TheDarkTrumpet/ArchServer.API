@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using libAPICache.Abstract;
 using libAPICache.Models.Toggl;
 using libToggl.api;
 using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public sealed class EFTogglTimeEntries : EFBase<TimeEntry, libToggl.models.TimeEntry>
+    public sealed class EFTogglTimeEntries : EFBase<TimeEntry, libToggl.models.TimeEntry>, ITogglTimeEntries
     {
         public EFTogglTimeEntries() : this(new EFDbContext()) { }
 
