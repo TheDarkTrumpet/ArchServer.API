@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public class EFKimaiTimeEntries : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
+    public class EFKimaiTimeEntries : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>, IKimaiTimeEntries
     {
         public EFKimaiTimeEntries() : this(new EFDbContext()) { }
 

@@ -2,17 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using libAPICache.Abstract;
 using libAPICache.Models;
 using libAPICache.util;
 using Microsoft.EntityFrameworkCore;
 
 namespace libAPICache.Entities
 {
-    public class EFBase<T, T1> where T : Base, new() where T1 : class
+    public class EFBase<T,T1> : IBase<T,T1>  where T: Base, new() where T1 : class
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
-        public IEnumerable<T> Entries;
+        public IEnumerable<T> Entries { get; set; }
 
         public EFBase() : this(new EFDbContext())
         {

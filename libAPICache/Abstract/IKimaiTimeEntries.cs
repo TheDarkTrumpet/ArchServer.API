@@ -5,13 +5,8 @@ using libKimai.models;
 
 namespace libAPICache.Abstract
 {
-    public interface IKimaiTimeEntries
+    public interface IKimaiTimeEntries : IBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
     {
-        IEnumerable<TimeEntry> TimeEntries { get; }
-        bool SaveEntry(Activity timeEntry);
-        bool SaveEntry(TimeEntry timeEntry);
-        bool SaveEntries(List<Activity> timeEntries);
-        TimeEntry GetOrReturnNull(long id);
         void CacheEntries(DateTime? fromDate = null);
     }
 }
