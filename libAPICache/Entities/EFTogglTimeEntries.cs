@@ -1,24 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using libAPICache.Abstract;
 using libAPICache.Models.Toggl;
-using libAPICache.util;
-using libKimai.query;
 using libToggl.api;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public class EFTogglTimeEntries : EFBase<libAPICache.Models.Toggl.TimeEntry>
+    public class EFTogglTimeEntries : EFBase<TimeEntry, libToggl.models.TimeEntry>
     {
-        public IEnumerable<TimeEntry> TimeEntries => _context.TogglTimeEntries;
-
-        public EFTogglTimeEntries()
+        public EFTogglTimeEntries() : base()
         {
-            Entries = _dbSet = _context.TogglTimeEntries;
+            _dbSet = _context.TogglTimeEntries;
         }
+        
+        
 
         public void CacheEntries(string workspaceName, DateTime? fromDate = null)
         {

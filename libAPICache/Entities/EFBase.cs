@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace libAPICache.Entities
 {
-    public class EFBase<T> where T : Base, new()
+    public class EFBase<T, T1> where T : Base, new() where T1 : class
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
@@ -21,9 +21,10 @@ namespace libAPICache.Entities
         public EFBase(EFDbContext context)
         {
             _context = context;
+            Entries = _dbSet;
         }
 
-        public bool SaveEntry(Object input)
+        public bool SaveEntry(T1 input)
         {
             var newEntry = new T();
             newEntry.Copy(input);
@@ -32,7 +33,7 @@ namespace libAPICache.Entities
             return true;
         }
 
-        public bool SaveEntry(T input, bool saveChanges)
+        public bool SaveEntry(T input, bool saveChanges = true)
         {
             var srcEntry = GetOrReturnNull(input.Id);
 
@@ -53,7 +54,7 @@ namespace libAPICache.Entities
             return true;
         }
 
-        public bool SaveEntries(List<Object> entries)
+        public bool SaveEntries(List<T1> entries)
         {
             bool result = false;
             foreach (var te in entries)
