@@ -64,7 +64,7 @@ namespace libAPICache.Entities
             return result;
         }
         
-        public Object GetOrReturnNull(long id)
+        public T GetOrReturnNull(long id)
         {
             return Entries.FirstOrDefault(x => x.Id == id);
         }
