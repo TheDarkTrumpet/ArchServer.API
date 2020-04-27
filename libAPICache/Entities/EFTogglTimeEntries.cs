@@ -9,11 +9,12 @@ namespace libAPICache.Entities
 {
     public class EFTogglTimeEntries : EFBase<TimeEntry, libToggl.models.TimeEntry>
     {
-        public EFTogglTimeEntries() : base()
+        public EFTogglTimeEntries() : this(new EFDbContext()) { }
+
+        public EFTogglTimeEntries(EFDbContext context) : base(context)
         {
             _dbSet = _context.TogglTimeEntries;
         }
-        
         
 
         public void CacheEntries(string workspaceName, DateTime? fromDate = null)

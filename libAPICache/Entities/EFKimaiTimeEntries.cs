@@ -10,61 +10,15 @@ using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public class EFKimaiTimeEntries : IKimaiTimeEntries
+    public class EFKimaiTimeEntries : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
     {
-        private readonly EFDbContext _context;
         public EFKimaiTimeEntries() : this(new EFDbContext()) { }
 
-        public EFKimaiTimeEntries(EFDbContext context)
+        public EFKimaiTimeEntries(EFDbContext context) : base(context)
         {
-            _context = context;
-        }
-
-        public IEnumerable<TimeEntry> TimeEntries => _context.KimaiTimeEntries;
-
-        public bool SaveEntry(Activity timeEntry)
-        {
-            TimeEntry saveTimeEntry = new TimeEntry();
-
-            saveTimeEntry.Copy(timeEntry);
-            SaveEntry(saveTimeEntry);
-
-            return true;
-        }
-
-        public bool SaveEntry(TimeEntry timeEntry)
-        {
-            TimeEntry srcEntry = GetOrReturnNull(timeEntry.Id);
-
-            if (srcEntry != null)
-            {
-                _context.Entry(srcEntry).CurrentValues.SetValues(timeEntry);
-            }
-            else
-            {
-                _context.KimaiTimeEntries.Add(timeEntry);
-            }
-
-            _context.SaveChanges();
-            return true;
-        }
-
-        public bool SaveEntries(List<Activity> timeEntries)
-        {
-            bool result = false;
-            foreach (var te in timeEntries)
-            {
-                result = SaveEntry(te);
-            }
-
-            return result;
+            _dbSet = _context.KimaiTimeEntries;
         }
         
-        public TimeEntry GetOrReturnNull(long id)
-        {
-            return TimeEntries.FirstOrDefault(x => x.Id == id);
-        }
-
         public void CacheEntries(DateTime? fromDate = null)
         {
             IConfiguration config = util.Configuration.GetConfiguration();
