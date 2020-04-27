@@ -80,6 +80,8 @@ namespace libAPICache.Entities
 
             activities.FromDate = fromDate;
             List<Activity> results = activities.GetActivities();
+
+            SaveEntries(results);
         }
     }
 }
