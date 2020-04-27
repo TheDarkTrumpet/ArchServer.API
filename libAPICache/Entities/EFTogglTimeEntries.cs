@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public class EFTogglTimeEntries : EFBase<TimeEntry, libToggl.models.TimeEntry>
+    public sealed class EFTogglTimeEntries : EFBase<TimeEntry, libToggl.models.TimeEntry>
     {
         public EFTogglTimeEntries() : this(new EFDbContext()) { }
 

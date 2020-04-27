@@ -4,7 +4,7 @@ using libAPICache.Abstract;
 
 namespace libAPICache.Models
 {
-    public class Base
+    public abstract class Base
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]

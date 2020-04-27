@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace libAPICache.Entities
 {
-    public class EFBase<T,T1> : IBase<T,T1>  where T: Base, new() where T1 : class
+    public abstract class EFBase<T,T1> : IBase<T,T1>  where T: Base, new() where T1 : class
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
