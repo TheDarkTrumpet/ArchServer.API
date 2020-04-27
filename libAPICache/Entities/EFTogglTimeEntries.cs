@@ -20,15 +20,7 @@ namespace libAPICache.Entities
 
         public void CacheEntries(string workspaceName, DateTime? fromDate = null)
         {
-            IConfiguration config = util.Configuration.GetConfiguration();
-            string apiKey = (string) config["APISources:Toggl"];
-
-            if (String.IsNullOrEmpty(apiKey))
-            {
-                throw new Exception(
-                    "Toggl API Key is not defined, please add to the appsettings!");
-            }
-            
+            string apiKey = GetAPIKey("APISources:Toggl");
             TimeEntries activities = new TimeEntries(apiKey);
 
             List<libToggl.models.TimeEntry> results = activities.GetTimeEntries(workspaceName, fromDate).ToList();

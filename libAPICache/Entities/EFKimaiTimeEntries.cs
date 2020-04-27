@@ -21,14 +21,7 @@ namespace libAPICache.Entities
         
         public void CacheEntries(DateTime? fromDate = null)
         {
-            IConfiguration config = util.Configuration.GetConfiguration();
-            string connectionString = (string) config["APISources:Kimai"];
-
-            if (String.IsNullOrEmpty(connectionString))
-            {
-                throw new Exception(
-                    "MySQL Connection string was not found in the appsettings, please ensure it's there before running this");
-            }
+            string connectionString = GetAPIKey("APISources:Kimai");
             
             Activities activities = new Activities(connectionString);
 
