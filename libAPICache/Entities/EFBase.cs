@@ -41,6 +41,11 @@ namespace libAPICache.Entities
             if (srcEntry != null)
             {
                 _context.Entry(srcEntry).CurrentValues.SetValues(input);
+
+                if (srcEntry.GetEnumerables().Any())
+                {
+                    UpdateEnumerables(input, srcEntry);
+                }
             }
             else
             {
@@ -83,6 +88,12 @@ namespace libAPICache.Entities
             }
 
             return apiKey;
+        }
+
+        public T UpdateEnumerables(T source, T destination)
+        {
+            throw new Exception("This method must be implemented in the derived class!");
+            // return destination
         }
     }
 }
