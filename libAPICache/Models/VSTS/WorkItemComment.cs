@@ -11,5 +11,6 @@ namespace libAPICache.Models.VSTS
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Comment { get; set; }
+        public WorkItem WorkItem { get; set; }
     }
 }
