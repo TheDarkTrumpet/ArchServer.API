@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace libAPICache.Models.Kimai
 {
     [Table(name: "TimeEntries", Schema = "Kimai")]
-    public class TimeEntry
+    public class TimeEntry : Base
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int Id { get; set; }
         [MaxLength(255)]
         public string ActivityName { get; set; }
         public string ActivityComment { get; set; }
