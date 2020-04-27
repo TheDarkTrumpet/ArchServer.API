@@ -77,7 +77,7 @@ namespace libToggl.api
                     Project = (string) rt["project"],
                     Description = rt["description"]?.ToString()
                 };
-
+                
                 if (timeEntry.IsBillable)
                 {
                     timeEntry.Billable = (double) rt["billable"];
@@ -95,6 +95,8 @@ namespace libToggl.api
                     timeEntry.EndDate = DateTime.Parse(datetime);
                 }
 
+                timeEntry.Duration = (int)(timeEntry.EndDate - timeEntry.StartDate).TotalMinutes;
+                
                 timeEntries.Add(timeEntry);
             }
 
