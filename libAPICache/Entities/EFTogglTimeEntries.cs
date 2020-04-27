@@ -6,48 +6,20 @@ using libAPICache.Models.Toggl;
 using libAPICache.util;
 using libKimai.query;
 using libToggl.api;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public class EFTogglTimeEntries : ITogglTimeEntries
+    public class EFTogglTimeEntries : EFBase<libAPICache.Models.Toggl.TimeEntry>
     {
-        private readonly EFDbContext _context;
-        public EFTogglTimeEntries() : this(new EFDbContext()) { }
-
-        public EFTogglTimeEntries(EFDbContext context)
-        {
-            _context = context;
-        }
-        
         public IEnumerable<TimeEntry> TimeEntries => _context.TogglTimeEntries;
-        
-        public bool SaveEntry(libToggl.models.TimeEntry timeEntry)
+
+        public EFTogglTimeEntries()
         {
-            TimeEntry saveTimeEntry = new TimeEntry();
-
-            saveTimeEntry.Copy(timeEntry);
-            SaveEntry(saveTimeEntry);
-
-            return true;
+            Entries = _dbSet = _context.TogglTimeEntries;
         }
 
-        public bool SaveEntry(TimeEntry timeEntry)
-        {
-            TimeEntry srcEntry = GetOrReturnNull(timeEntry.Id);
-
-            if (srcEntry != null)
-            {
-                _context.Entry(srcEntry).CurrentValues.SetValues(timeEntry);
-            }
-            else
-            {
-                _context.TogglTimeEntries.Add(timeEntry);
-            }
-
-            _context.SaveChanges();
-            return true;
-        }
 
         public bool SaveEntries(List<libToggl.models.TimeEntry> timeEntries)
         {
