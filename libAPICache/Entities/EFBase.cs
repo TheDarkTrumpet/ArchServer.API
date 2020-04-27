@@ -21,7 +21,6 @@ namespace libAPICache.Entities
         public EFBase(EFDbContext context)
         {
             _context = context;
-            Entries = _dbSet;
         }
 
         public bool SaveEntry(T1 input)

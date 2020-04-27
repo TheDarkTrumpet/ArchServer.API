@@ -4,7 +4,7 @@ namespace libKimai.models
 {
     public class Activity
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ActivityName { get; set; }
         public string ActivityComment { get; set; }
         public string ProjectName { get; set; }

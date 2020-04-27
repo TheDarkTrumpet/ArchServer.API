@@ -16,7 +16,7 @@ namespace libAPICache.Entities
 
         public EFKimaiTimeEntries(EFDbContext context) : base(context)
         {
-            _dbSet = _context.KimaiTimeEntries;
+            Entries = _dbSet = _context.KimaiTimeEntries;
         }
         
         public void CacheEntries(DateTime? fromDate = null)

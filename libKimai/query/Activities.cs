@@ -65,7 +65,7 @@ namespace libKimai.query
         {
             Activity activity = new Activity()
             {
-                Id = (int) record.GetValue(record.GetOrdinal("Id")),
+                Id = long.Parse(record.GetValue(record.GetOrdinal("Id")).ToString()),
                 ActivityName = record.GetValue(record.GetOrdinal("ActivityName")) as string,
                 ActivityComment = record.GetValue(record.GetOrdinal("ActivityComment")) as string,
                 ProjectName = record.GetValue(record.GetOrdinal("ProjectName")) as string,
