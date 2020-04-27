@@ -17,8 +17,8 @@ namespace libAPICache.Entities
         
         public void CacheEntries(DateTime? fromDate = null, bool includeCompleted = true)
         {
-            string apiKey = GetAPIKey("APISources:Teamwork");
-            string baseURL = GetAPIKey("APISources:TeamworkURL");
+            string apiKey = GetAPIKey("APISources:Teamwork:API_Key");
+            string baseURL = GetAPIKey("APISources:Teamwork:Base_URL");
             Tasks tasks = new Tasks(apiKey, baseURL);
             tasks.UpdatedAfterDate = fromDate;
             tasks.IncludeCompleted = true;

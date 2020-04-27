@@ -15,8 +15,8 @@ namespace libAPICache.Entities
 
         public void CacheEntries()
         {
-            string apiKey = GetAPIKey("APISources:Teamwork");
-            string baseURL = GetAPIKey("APISources:TeamworkURL");
+            string apiKey = GetAPIKey("APISources:Teamwork:API_Key");
+            string baseURL = GetAPIKey("APISources:Teamwork:Base_URL");
             People people = new People(apiKey, baseURL);
 
             List<libTeamwork.models.Person> peopleList = people.GetPeople();

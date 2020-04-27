@@ -90,7 +90,7 @@ namespace libAPICache.Entities
             return apiKey;
         }
 
-        public T UpdateEnumerables(T source, T destination)
+        public virtual T UpdateEnumerables(T source, T destination)
         {
             throw new Exception("This method must be implemented in the derived class!");
             // return destination

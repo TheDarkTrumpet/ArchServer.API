@@ -21,7 +21,7 @@ namespace libAPICache.Entities
         
         public void CacheEntries(DateTime? fromDate = null)
         {
-            string connectionString = GetAPIKey("APISources:Kimai");
+            string connectionString = GetAPIKey("APISources:Kimai:Mysql_CS");
             
             Activities activities = new Activities(connectionString);
 
