@@ -8,7 +8,11 @@ namespace libAPICache.Entities
     public class EFTogglWorkspace : EFBase<Workspace, libToggl.models.Workspace>, ITogglWorkspace
     {
         public EFTogglWorkspace() : this(new EFDbContext()) { }
-        public EFTogglWorkspace(EFDbContext context) : base(context) { }
+
+        public EFTogglWorkspace(EFDbContext context) : base(context)
+        {
+            Entries = _dbSet = _context.TogglWorkspaces;
+        }
         
         public void CacheEntries()
         {
