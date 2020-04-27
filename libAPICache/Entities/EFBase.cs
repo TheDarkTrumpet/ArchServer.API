@@ -6,10 +6,11 @@ using libAPICache.Abstract;
 using libAPICache.Models;
 using libAPICache.util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public abstract class EFBase<T,T1> : IBase<T,T1>  where T: Base, new() where T1 : class
+    public abstract class EFBase<T,T1> : IBaseInternal, IBase<T,T1>  where T: Base, new() where T1 : class
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
@@ -68,6 +69,20 @@ namespace libAPICache.Entities
         public T GetOrReturnNull(long id)
         {
             return Entries.FirstOrDefault(x => x.Id == id);
+        }
+
+        public string GetAPIKey(string identifier)
+        {
+            IConfiguration config = util.Configuration.GetConfiguration();
+            string apiKey = (string) config[identifier];
+            
+            if (String.IsNullOrEmpty(apiKey))
+            {
+                throw new Exception(
+                    $"appsettings.json entry does not exist for {identifier}, please make sure it's defined!");
+            }
+
+            return apiKey;
         }
     }
 }
