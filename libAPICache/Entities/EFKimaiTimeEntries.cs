@@ -60,7 +60,7 @@ namespace libAPICache.Entities
             return result;
         }
         
-        public TimeEntry GetOrReturnNull(int id)
+        public TimeEntry GetOrReturnNull(long id)
         {
             return TimeEntries.FirstOrDefault(x => x.Id == id);
         }

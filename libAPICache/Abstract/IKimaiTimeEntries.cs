@@ -11,7 +11,7 @@ namespace libAPICache.Abstract
         bool SaveEntry(Activity timeEntry);
         bool SaveEntry(TimeEntry timeEntry);
         bool SaveEntries(List<Activity> timeEntries);
-        TimeEntry GetOrReturnNull(int id);
+        TimeEntry GetOrReturnNull(long id);
         void CacheEntries(DateTime? fromDate = null);
     }
 }
