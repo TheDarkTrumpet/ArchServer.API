@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace libAPICache.Entities
 {
-    public class EFBase<T> where T : Base
+    public class EFBase<T> where T : Base, new()
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
@@ -25,19 +25,16 @@ namespace libAPICache.Entities
 
         public bool SaveEntry(Object input)
         {
-            var inputType = input.GetType();
-            var newEntry = Activator.CreateInstance(inputType);
+            var newEntry = new T();
             newEntry.Copy(input);
 
             SaveEntry(newEntry, true);
             return true;
         }
 
-        public bool SaveEntry(Object input, bool saveChanges)
+        public bool SaveEntry(T input, bool saveChanges)
         {
-            var type = input.GetType();
-            long id = (long) type.GetProperty("Id").GetValue(input);
-            var srcEntry = GetOrReturnNull(id);
+            var srcEntry = GetOrReturnNull(input.Id);
 
             if (srcEntry != null)
             {
@@ -45,7 +42,7 @@ namespace libAPICache.Entities
             }
             else
             {
-                _dbSet.Add((T) input);
+                _dbSet.Add(input);
             }
 
             if (saveChanges)
@@ -56,6 +53,17 @@ namespace libAPICache.Entities
             return true;
         }
 
+        public bool SaveEntries(List<Object> entries)
+        {
+            bool result = false;
+            foreach (var te in entries)
+            {
+                result = SaveEntry(te);
+            }
+
+            return result;
+        }
+        
         public Object GetOrReturnNull(long id)
         {
             return Entries.FirstOrDefault(x => x.Id == id);

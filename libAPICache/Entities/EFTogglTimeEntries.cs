@@ -20,23 +20,6 @@ namespace libAPICache.Entities
             Entries = _dbSet = _context.TogglTimeEntries;
         }
 
-
-        public bool SaveEntries(List<libToggl.models.TimeEntry> timeEntries)
-        {
-            bool result = false;
-            foreach (var te in timeEntries)
-            {
-                result = SaveEntry(te);
-            }
-
-            return result;
-        }
-        
-        public TimeEntry GetOrReturnNull(long id)
-        {
-            return TimeEntries.FirstOrDefault(x => x.Id == id);
-        }
-
         public void CacheEntries(string workspaceName, DateTime? fromDate = null)
         {
             IConfiguration config = util.Configuration.GetConfiguration();
