@@ -19,6 +19,8 @@ namespace libAPICache.Models.Toggl
         public string Client { get; set; }
         [MaxLength(100)]
         public string Project { get; set; }
+        [MaxLength(500)]
+        public string Description { get; set; }
         public double Billable { get; set; }
         public bool IsBillable { get; set; }   
     }

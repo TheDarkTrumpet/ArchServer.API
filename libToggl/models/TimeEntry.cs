@@ -11,6 +11,7 @@ namespace libToggl.models
         public string User { get; set; }
         public string Client { get; set; }
         public string Project { get; set; }
+        public string Description { get; set; }
         public double Billable { get; set; }
         public bool IsBillable { get; set; }
      }

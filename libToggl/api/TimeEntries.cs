@@ -74,7 +74,8 @@ namespace libToggl.api
                     IsBillable = (bool) rt["is_billable"],
                     Client = (string) rt["client"],
                     User = (string) rt["user"],
-                    Project = (string) rt["project"]
+                    Project = (string) rt["project"],
+                    Description = rt["description"]?.ToString()
                 };
 
                 if (timeEntry.IsBillable)
