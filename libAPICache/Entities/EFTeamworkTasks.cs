@@ -8,6 +8,8 @@ namespace libAPICache.Entities
 {
     public class EFTeamworkTasks : EFBase<Models.Teamwork.Task, libTeamwork.models.Task>, ITeamworkTasks
     {
+        public EFTeamworkTasks() : this(new EFDbContext()) { }
+
         public EFTeamworkTasks(EFDbContext context) : base(context)
         {
             Entries = _dbSet = _context.TeamworkTasks;
