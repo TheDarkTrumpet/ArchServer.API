@@ -6,15 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace libAPICache.Models.VSTS
 {
     [Table(name: "WorkItems", Schema = "VSTS")]
-    public class WorkItem
+    public class WorkItem : Base
     {
         public WorkItem()
         {
             Comments = new List<WorkItemComment>();
         }
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int id { get; set; }
         [MaxLength(255)]
         public string url { get; set; }
         [MaxLength(50)]

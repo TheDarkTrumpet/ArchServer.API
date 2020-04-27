@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace libAPICache.Models.Teamwork
 {
     [Table(name: "Tasks", Schema = "Teamwork")]
-    public class Task
+    public class Task : Base
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long Id { get; set; }
         [MaxLength(255)]
         public string ProjectName { get; set; }
         [MaxLength(255)]

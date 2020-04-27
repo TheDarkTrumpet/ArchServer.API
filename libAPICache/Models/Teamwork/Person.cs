@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace libAPICache.Models.Teamwork
 {
     [Table(name: "People", Schema = "TeamWork")]
-    public class Person
+    public class Person : Base
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long Id { get; set; }
         [MaxLength(100)]
         public string UserName { get; set; }
         public DateTime? LastActive { get; set; }

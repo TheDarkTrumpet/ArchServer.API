@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace libAPICache.Models.VSTS
 {
     [Table(name: "WorkItemComment", Schema = "VSTS")]
-    public class WorkItemComment
+    public class WorkItemComment : Base
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int id { get; set; }
         [MaxLength(200)]
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

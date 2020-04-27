@@ -5,11 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace libAPICache.Models.Toggl
 {
     [Table(name: "TimeEntries", Schema = "Toggl")]
-    public class TimeEntry
+    public class TimeEntry : Base
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public long Id { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Duration { get; set; }

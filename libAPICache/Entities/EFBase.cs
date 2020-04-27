@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using libAPICache.Models;
 using libAPICache.util;
 using Microsoft.EntityFrameworkCore;
 
 namespace libAPICache.Entities
 {
-    public class EFBase<T> where T: class
+    public class EFBase<T> where T: Base
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
@@ -31,7 +33,9 @@ namespace libAPICache.Entities
 
         public bool SaveEntry(Object input, bool saveChanges)
         {
-            var srcEntry = GetOrReturnNull(input.Id);
+            var type = input.GetType();
+            long id = (long) type.GetProperty("Id").GetValue(input);
+            var srcEntry = GetOrReturnNull(id);
 
             if (srcEntry != null)
             {
@@ -50,7 +54,7 @@ namespace libAPICache.Entities
             return true;
         }
 
-        public Object GetOrReturnNull(int id)
+        public Object GetOrReturnNull(long id)
         {
             return Entries.FirstOrDefault(x => x.Id == id);
         }
