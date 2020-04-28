@@ -20,7 +20,7 @@ namespace libAPICache.Entities
 
         public void CacheEntries(string workspaceName, DateTime? fromDate = null)
         {
-            string apiKey = GetAPIKey("APISources:Toggl");
+            string apiKey = GetAPIKey("APISources:Toggl:API_Key");
             TimeEntries activities = new TimeEntries(apiKey);
 
             List<libToggl.models.TimeEntry> results = activities.GetTimeEntries(workspaceName, fromDate).ToList();

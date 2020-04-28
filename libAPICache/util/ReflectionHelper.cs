@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,11 +11,12 @@ namespace libAPICache.util
         public static IEnumerable<PropertyInfo> GetEnumerables(this Base cl)
         {
             return cl.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty)
-                .Where(x => x.PropertyType.IsGenericType);
+                .Where(x => x.PropertyType.IsGenericType && x.HasEnumerable());
         }
-        public static IEnumerable<PropertyInfo> GetEnumerables(this PropertyInfo[] properties)
+        public static bool HasEnumerable(this PropertyInfo property)
         {
-            return properties.Where(x => x.PropertyType.IsGenericType);
+            return property.PropertyType.IsGenericType &&
+                   property.PropertyType.GetInterfaces().Contains(typeof(IEnumerable));
         }
     }
 }
