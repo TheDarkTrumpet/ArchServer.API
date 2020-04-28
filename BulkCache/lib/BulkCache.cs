@@ -19,9 +19,9 @@ namespace BulkCache.lib
 
         public void CacheAll()
         {
-            CacheKimai();
-            CacheToggl();
-            CacheTeamwork();
+            //CacheKimai();
+            //CacheToggl();
+            //CacheTeamwork();
             CacheVSTS();
         }
         
@@ -50,7 +50,9 @@ namespace BulkCache.lib
 
         protected void CacheVSTS()
         {
-            
+            IVSTSWorkItems efVSTS = new EFVSTSWorkItems();
+
+            var two = 1 + 1;
         }
 
         private List<string> GetFromCollection(string identifier)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using libAPICache.Abstract;
 using libAPICache.Models.VSTS;
 using libAPICache.util;
 using libVSTS.api;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace libAPICache.Entities
 {
-    public class EFVSTSWorkItems : EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>
+    public class EFVSTSWorkItems : EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
     {
         public EFVSTSWorkItems() : this(new EFDbContext())
         {
