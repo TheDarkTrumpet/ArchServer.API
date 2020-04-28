@@ -27,8 +27,8 @@ namespace BulkCache.lib
         {
             writeTimeLog("CacheAll", "Starting");
             CacheKimai();
-            //CacheToggl();
-            //CacheTeamwork();
+            CacheToggl();
+            CacheTeamwork();
             CacheVSTS();
             writeTimeLog("CacheAll", "Finishing");
         }
