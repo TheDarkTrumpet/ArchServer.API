@@ -1,12 +1,11 @@
-﻿using System;
-
-namespace BulkCache
+﻿namespace BulkCache
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            lib.BulkCache cache = new lib.BulkCache();
+            cache.CacheAll();
         }
     }
 }
