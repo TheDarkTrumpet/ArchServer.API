@@ -12,25 +12,19 @@ namespace libAPICache.util
             where T2: class
         {
             IEnumerable<PropertyInfo> srcFields = otherObject.GetType().GetProperties(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty);
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty)
+                .Where(x => !x.PropertyType.IsGenericType);
 
             IEnumerable<PropertyInfo> destFields = obj.GetType().GetProperties(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty);
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty)
+                .Where(x => !x.PropertyType.IsGenericType);
 
             foreach (var property in srcFields) {
                 var dest = destFields.FirstOrDefault(x => x.Name == property.Name);
 
                 if (dest != null && dest.CanWrite)
                 {
-                    if (property.PropertyType.IsGenericType)
-                    {
-                        // Create instance and do magic
-                    }
-                    else
-                    {
-                        dest.SetValue(obj, property.GetValue(otherObject, null), null);    
-                    }
-                    
+                    dest.SetValue(obj, property.GetValue(otherObject, null), null);
                 }
                     
             }
