@@ -1,5 +1,7 @@
 # ArchServer.API
 
+![.NET Core](https://github.com/TheDarkTrumpet/ArchServer.API/workflows/.NET%20Core/badge.svg)
+
 ## Purpose
 
 This project is a personal project that can be used as reference or largely out of box for people with similar use cases.  The purpose of this repo, for myself, is to reduce the frustration I have regarding task tracking, notes, and the like when it comes to the various systems I use.  A large part of my goal here is to allow for better reporting - cross system, as needed.  This project aims to do the following:
