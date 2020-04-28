@@ -19,3 +19,14 @@ Long with the above goals (some of which are done, and some not), this solution 
 
 ## Getting Started and Navigating
 
+Largely speaking, each subfolder/project has a dedicated readme associated with it.  This repository is as much for teaching, as it is for actual use.  I recommend navigating to each project individually and reading what the purpose for each is.  From a very high level, the following projects exist and their pupose explained (very shortly) is:
+
+| Project     | Description                                                                                                        |
+|-------------|--------------------------------------------------------------------------------------------------------------------|
+| BulkCache   | A console application that utilizes lib* (minus tests) to insert/update the records                                |
+| libAPICache | This is the Entity Framework model for this solution.  It contains, largely, the CRUD operations                   |
+| libKimai    | This is the API library for Kimai (Time tracking), which relies on direct MySQL connections (their API is limited) |
+| libToggl    | This is the API library for Toggl (Time tracking), which utilizes their API.                                       |
+| libVSTS     | This is the API library for Visual Studio Team Services (Azure DevOps, primarily)                                  |
+| libTeamwork | This is the API library for Teamwork (task tracking system)                                                        |
+
