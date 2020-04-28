@@ -9,7 +9,7 @@ namespace libVSTS.models
         {
             Comments = new List<WorkItemComment>();
         }
-        public int id { get; set; }
+        public long Id { get; set; }
         public string url { get; set; }
         public string Type { get; set; }
         public string State { get; set; }

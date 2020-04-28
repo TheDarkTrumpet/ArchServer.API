@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -9,11 +10,13 @@ namespace libAPICache.util
             where T1: class
             where T2: class
         {
-            PropertyInfo[] srcFields = otherObject.GetType().GetProperties(
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty);
+            IEnumerable<PropertyInfo> srcFields = otherObject.GetType().GetProperties(
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty)
+                .Where(x => !x.PropertyType.IsGenericType);
 
-            PropertyInfo[] destFields = obj.GetType().GetProperties(
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty);
+            IEnumerable<PropertyInfo> destFields = obj.GetType().GetProperties(
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty)
+                .Where(x => !x.PropertyType.IsGenericType);
 
             foreach (var property in srcFields) {
                 var dest = destFields.FirstOrDefault(x => x.Name == property.Name);

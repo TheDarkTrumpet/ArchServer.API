@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
-    public abstract class EFBase<T,T1> : IBaseInternal, IBase<T,T1>  where T: Base, new() where T1 : class
+    public abstract class EFBase<T,T1> : IBaseInternal<T,T1>, IBase<T,T1>  where T: Base, new() where T1 : class
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;

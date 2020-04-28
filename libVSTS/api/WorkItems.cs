@@ -53,7 +53,7 @@ namespace libVSTS.api
             {
                 WorkItem workItem = new WorkItem()
                 {
-                    id = (int) rwi["id"],
+                    Id = (long) rwi["id"],
                     //url = "", // Generate this...
                     Type = rwi["fields"]["System.WorkItemType"]?.ToString(),
                     State = rwi["fields"]["System.State"]?.ToString(),
@@ -95,7 +95,7 @@ namespace libVSTS.api
             {
                 WorkItemComment comment = new WorkItemComment()
                 {
-                    id = (int) jcomment["id"],
+                    Id = (long) jcomment["id"],
                     CreatedBy = jcomment["createdBy"]?["displayName"]?.ToString(),
                     Comment = _sanitizeHTML(jcomment["text"]?.ToString())
                 };
