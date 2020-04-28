@@ -17,7 +17,8 @@ namespace libAPICache.Entities
 
         public EFVSTSWorkItems(EFDbContext context) : base(context)
         {
-            Entries = _dbSet = _context.VSTSWorkItems;
+            _dbSet = _context.VSTSWorkItems;
+            Entries = _dbSet.Include(x => x.Comments);
         }
 
         public void CacheEntries(bool includeComments = false, List<string> assignedToInclude = null,
@@ -30,7 +31,6 @@ namespace libAPICache.Entities
             WorkItems workItemQuery = new WorkItems(api_key, organization, project);
             workItemQuery.FromChanged = fromChanged;
             workItemQuery.IncludeComments = includeComments;
-            Console.WriteLine("Include Comments: " + workItemQuery.IncludeComments);
             if (assignedToInclude != null && assignedToInclude.Any())
             {
                 foreach (var ai in assignedToInclude)

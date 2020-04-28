@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,17 +12,27 @@ namespace libAPICache.util
             where T2: class
         {
             IEnumerable<PropertyInfo> srcFields = otherObject.GetType().GetProperties(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty)
-                .Where(x => !x.PropertyType.IsGenericType);
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty);
 
             IEnumerable<PropertyInfo> destFields = obj.GetType().GetProperties(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty)
-                .Where(x => !x.PropertyType.IsGenericType);
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty);
 
             foreach (var property in srcFields) {
                 var dest = destFields.FirstOrDefault(x => x.Name == property.Name);
+
                 if (dest != null && dest.CanWrite)
-                    dest.SetValue(obj, property.GetValue(otherObject, null), null);
+                {
+                    if (property.PropertyType.IsGenericType)
+                    {
+                        // Create instance and do magic
+                    }
+                    else
+                    {
+                        dest.SetValue(obj, property.GetValue(otherObject, null), null);    
+                    }
+                    
+                }
+                    
             }
 
             return obj;
