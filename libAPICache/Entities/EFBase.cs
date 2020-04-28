@@ -14,6 +14,7 @@ namespace libAPICache.Entities
     {
         protected readonly EFDbContext _context;
         protected DbSet<T> _dbSet;
+        private T1 _cachedInput;
         public IEnumerable<T> Entries { get; set; }
 
         public EFBase() : this(new EFDbContext())
@@ -27,6 +28,7 @@ namespace libAPICache.Entities
 
         public bool SaveEntry(T1 input)
         {
+            _cachedInput = input;
             var newEntry = new T();
             newEntry.Copy(input);
 
@@ -44,7 +46,7 @@ namespace libAPICache.Entities
 
                 if (srcEntry.GetEnumerables().Any())
                 {
-                    UpdateEnumerables(input, srcEntry);
+                    UpdateEnumerables(_cachedInput, srcEntry);
                 }
             }
             else
@@ -90,7 +92,7 @@ namespace libAPICache.Entities
             return apiKey;
         }
 
-        public virtual T UpdateEnumerables(T source, T destination)
+        public virtual T UpdateEnumerables(T1 source, T destination)
         {
             throw new Exception("This method must be implemented in the derived class!");
             // return destination

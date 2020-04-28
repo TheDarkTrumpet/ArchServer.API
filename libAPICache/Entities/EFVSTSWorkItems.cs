@@ -4,6 +4,7 @@ using System.Linq;
 using libAPICache.Models.VSTS;
 using libVSTS.api;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace libAPICache.Entities
 {
@@ -28,7 +29,7 @@ namespace libAPICache.Entities
             WorkItems workItemQuery = new WorkItems(api_key, organization, project);
             workItemQuery.FromChanged = fromChanged;
             workItemQuery.IncludeComments = includeComments;
-
+            Console.WriteLine("Include Comments: " + workItemQuery.IncludeComments);
             if (assignedToInclude != null && assignedToInclude.Any())
             {
                 foreach (var ai in assignedToInclude)
@@ -57,8 +58,34 @@ namespace libAPICache.Entities
             SaveEntries(workItems);
         }
 
-        public override WorkItem UpdateEnumerables(Models.VSTS.WorkItem source, Models.VSTS.WorkItem destination)
+        // Comments are immutable, so this is simpler than it could have been. Check each end, verifying the elements exist, and add/remove as necessary
+        // TODO Automapper may be good here, or a refactor of how the models and decouple from the API into their own set.
+        public override WorkItem UpdateEnumerables(libVSTS.models.WorkItem source, Models.VSTS.WorkItem destination)
         {
+            foreach (libVSTS.models.WorkItemComment wic in source.Comments)
+            {
+                if (destination.Comments.All(x => x.Id != wic.Id))
+                {
+                    WorkItemComment newComment = new WorkItemComment()
+                    {
+                        Id = wic.Id,
+                        Comment = wic.Comment,
+                        CreatedBy = wic.CreatedBy,
+                        CreatedDate = wic.CreatedDate
+                    };
+                    destination.Comments.Add(newComment);
+                }
+            }
+
+            foreach (WorkItemComment wic in destination.Comments)
+            {
+                if (source.Comments.All(x => x.Id != wic.Id))
+                {
+                    Console.WriteLine("removing elements");
+                    destination.Comments.Remove(wic);
+                }
+            }
+            
             return destination;
         }
 }
