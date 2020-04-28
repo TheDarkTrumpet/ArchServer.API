@@ -11,28 +11,38 @@ namespace BulkCache.lib
     public class BulkCache
     {
         private readonly IConfiguration _configuration;
-
+        private DateTime _timeLog;
+        
         public BulkCache()
         {
             _configuration = Configuration.GetConfiguration();
         }
 
+        private void writeTimeLog(string operation, string state)
+        {
+            _timeLog = DateTime.Now;
+            Console.WriteLine($"{operation} {state} at {_timeLog}");
+        }
         public void CacheAll()
         {
+            writeTimeLog("CacheAll", "Starting");
             CacheKimai();
             //CacheToggl();
             //CacheTeamwork();
             CacheVSTS();
+            writeTimeLog("CacheAll", "Finishing");
         }
         
         protected void CacheKimai()
         {
+            writeTimeLog("--CacheKimai", "Starting");
             IKimaiTimeEntries efKimai = new EFKimaiTimeEntries();
             efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"), GetFromConfig("Kimai:TimeZone"));
         }
 
         protected void CacheToggl()
         {
+            writeTimeLog("--CacheToggl", "Starting");
             ITogglWorkspace efToggl = new EFTogglWorkspace();
             //TODO Add in cache by date here.
             efToggl.CacheEntries();
@@ -40,9 +50,11 @@ namespace BulkCache.lib
 
         protected void CacheTeamwork()
         {
+            writeTimeLog("--CacheTeamwork:People", "Starting");
             ITeamworkPeople efTeamworkPeople = new EFTeamworkPeople();
             efTeamworkPeople.CacheEntries();
             
+            writeTimeLog("--CacheTeamwork:Tasks", "Starting");
             ITeamworkTasks efTeamworkTasks = new EFTeamworkTasks();
             efTeamworkTasks.CacheEntries(GetFromDay("Teamwork:FromDateDays"),
                 Boolean.Parse(GetFromConfig("Teamwork:IncludeCompleted")));
@@ -50,10 +62,16 @@ namespace BulkCache.lib
 
         protected void CacheVSTS()
         {
+            writeTimeLog("--CacheVSTS", "Starting");
             IVSTSWorkItems efVSTS = new EFVSTSWorkItems();
-            List<string> assignedToInclude = GetFromCollection("VSTS:AssignedToInclude");
             
-            var two = 1 + 1;
+            List<string> assignedToInclude = GetFromCollection("VSTS:AssignedToInclude");
+            List<string> statesToExclude = GetFromCollection("VSTS:StatesToExclude");
+            List<string> typesToInclude = GetFromCollection("VSTS:TypesToInclude");
+            DateTime fromDate = GetFromDay("VSTS:FromDateDays");
+            bool includeComments = Boolean.Parse(GetFromConfig("VSTS:IncludeComments"));
+
+            efVSTS.CacheEntries(includeComments, assignedToInclude, statesToExclude, typesToInclude, fromDate);
         }
 
         private List<string> GetFromCollection(string identifier)
