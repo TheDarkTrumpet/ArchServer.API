@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using libAPICache.Abstract;
 using libAPICache.Entities;
 using libAPICache.util;
@@ -69,13 +70,13 @@ namespace BulkCache.lib
         
         private string GetFromConfig(string identifier)
         {
-            string fullLookup = $"APISources:identifier";
+            string fullLookup = $"APISources:{identifier}";
             string value = (string) _configuration[fullLookup];
             
             if (String.IsNullOrEmpty(value))
             {
                 throw new Exception(
-                    $"appsettings.json entry does not exist for {identifier}, please make sure it's defined!");
+                    $"{@Directory.GetCurrentDirectory()}/appsettings.json entry does not exist for {fullLookup}, please make sure it's defined!");
             }
 
             return value;
