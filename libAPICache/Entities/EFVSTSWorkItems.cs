@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using libAPICache.Models.VSTS;
+using libAPICache.util;
 using libVSTS.api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -66,13 +67,8 @@ namespace libAPICache.Entities
             {
                 if (destination.Comments.All(x => x.Id != wic.Id))
                 {
-                    WorkItemComment newComment = new WorkItemComment()
-                    {
-                        Id = wic.Id,
-                        Comment = wic.Comment,
-                        CreatedBy = wic.CreatedBy,
-                        CreatedDate = wic.CreatedDate
-                    };
+                    WorkItemComment newComment = new WorkItemComment();
+                    newComment.Copy(wic);
                     destination.Comments.Add(newComment);
                 }
             }
