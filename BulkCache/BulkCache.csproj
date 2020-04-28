@@ -12,7 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\libAPICache\libAPICache.csproj" />
   </ItemGroup>
-  <Target Name="CopyCustomContentOnPublish" AfterTargets="Publish" Condition=" '$(Configuration)' == 'Release'>
+  <Target Name="CopyCustomContentOnPublish" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
     <Copy SourceFiles="appsettings.Release.json" DestinationFolder="$(PublishDir)" DestinationFiles="appsettings.json" />
   </Target>
 

@@ -3,6 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>40234e9c-001b-4cad-8199-588112866102</UserSecretsId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>David Thole</Authors>
+    <Description>A library for pulling, and caching, entries from various APIs into a single source.</Description>
+    <PackageProjectUrl>https://www.thedarktrumpet.com</PackageProjectUrl>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
