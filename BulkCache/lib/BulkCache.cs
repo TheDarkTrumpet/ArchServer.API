@@ -19,7 +19,7 @@ namespace BulkCache.lib
 
         public void CacheAll()
         {
-            //CacheKimai();
+            CacheKimai();
             //CacheToggl();
             //CacheTeamwork();
             CacheVSTS();
@@ -51,14 +51,15 @@ namespace BulkCache.lib
         protected void CacheVSTS()
         {
             IVSTSWorkItems efVSTS = new EFVSTSWorkItems();
-
+            List<string> assignedToInclude = GetFromCollection("VSTS:AssignedToInclude");
+            
             var two = 1 + 1;
         }
 
         private List<string> GetFromCollection(string identifier)
         {
             List<string> returnValues = new List<string>();
-
+            _configuration.GetSection($"APISources:{identifier}").Bind(returnValues);
             return returnValues;
         }
         
