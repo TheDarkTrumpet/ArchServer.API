@@ -4,6 +4,7 @@
 # Jetbrains
 .idea
 */appsettings.Development.json
+*/appsettings.Release.json
 
 # User-specific files
 *.suo
