@@ -7,6 +7,6 @@ namespace libAPICache.Abstract
 {
     public interface IKimaiTimeEntries : IBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
     {
-        void CacheEntries(DateTime? fromDate = null);
+        void CacheEntries(DateTime? fromDate = null, string timeZone = "Central Standard Time");
     }
 }

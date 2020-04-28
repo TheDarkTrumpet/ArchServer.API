@@ -28,7 +28,7 @@ namespace BulkCache.lib
         protected void CacheKimai()
         {
             IKimaiTimeEntries efKimai = new EFKimaiTimeEntries();
-            efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"));
+            efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"), GetFromConfig("Kimai:TimeZone"));
         }
 
         protected void CacheToggl()
