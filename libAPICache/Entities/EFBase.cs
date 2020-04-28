@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using libAPICache.Abstract;
@@ -86,7 +87,7 @@ namespace libAPICache.Entities
             if (String.IsNullOrEmpty(apiKey))
             {
                 throw new Exception(
-                    $"appsettings.json entry does not exist for {identifier}, please make sure it's defined!");
+                    $"{@Directory.GetCurrentDirectory()}/appsettings.json entry does not exist for {identifier}, please make sure it's defined!");
             }
 
             return apiKey;

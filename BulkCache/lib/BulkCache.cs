@@ -32,12 +32,19 @@ namespace BulkCache.lib
 
         protected void CacheToggl()
         {
-            
+            ITogglWorkspace efToggl = new EFTogglWorkspace();
+            //TODO Add in cache by date here.
+            efToggl.CacheEntries();
         }
 
         protected void CacheTeamwork()
         {
+            ITeamworkPeople efTeamworkPeople = new EFTeamworkPeople();
+            efTeamworkPeople.CacheEntries();
             
+            ITeamworkTasks efTeamworkTasks = new EFTeamworkTasks();
+            efTeamworkTasks.CacheEntries(GetFromDay("Teamwork:FromDateDays"),
+                Boolean.Parse(GetFromConfig("Teamwork:IncludeCompleted")));
         }
 
         protected void CacheVSTS()
