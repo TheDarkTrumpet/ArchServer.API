@@ -13,7 +13,7 @@ namespace libAPICache.tests.Entities
     public class EFBaseTests
     {
         private Mock<EFDbContext> _context;
-        
+        private BaseMock _baseMock;
         [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void UpdateEnumerables_NoOverride_ShouldThrowException()
@@ -22,20 +22,47 @@ namespace libAPICache.tests.Entities
             input.UpdateEnumerables(new Activity(), new TimeEntry());
         }
 
-        [TestInitialize]
-        private void Intialize()
+        [TestMethod]
+        public void EFBase_WithContext_ShouldSetIt()
         {
-            
+            Assert.IsNotNull(_baseMock.InsertedContext);
+            Assert.AreSame(_context.Object, _baseMock.InsertedContext);
+        }
+        
+        
+        [TestInitialize]
+        public void Intialize()
+        {
+            _context = new Mock<EFDbContext>();
+            _baseMock = new BaseMock(_context.Object);
         }
 
         [TestCleanup]
-        private void Cleanup()
+        public void Cleanup()
         {
-            
+            _context = null;
+            _baseMock = null;
         }
+        
         private class BaseMockWithoutEnumerables : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
         {
             //Empty!
+        }
+
+        private class BaseMock : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
+        {
+            public int EnumerablesTimesCalled { get; set; } = 0;
+            public EFDbContext InsertedContext { get; set; }
+
+            public BaseMock(EFDbContext context) : base(context)
+            {
+                InsertedContext = context;
+            }
+
+            public void UpdateEnumerables(TimeEntry timeEntry, Activity activity)
+            {
+                EnumerablesTimesCalled += 1;
+            }
         }
     }
 }
