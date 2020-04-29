@@ -20,10 +20,4 @@
     <ProjectReference Include="..\libAPICache\libAPICache.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Teamwork" />
-    <Folder Include="Models\Toggl" />
-    <Folder Include="Models\VSTS" />
-  </ItemGroup>
-
 </Project>
