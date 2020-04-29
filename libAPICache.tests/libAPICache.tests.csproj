@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="autofixture" Version="4.11.0" />
-    <PackageReference Include="automoq" Version="2.0.0" />
+    <PackageReference Include="automoqcore" Version="1.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="moq" Version="4.14.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
