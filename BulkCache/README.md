@@ -15,4 +15,4 @@ Right now, there's no selective operation on what API sources are cached, so all
 
 ## Navigating
 
-`Program.cs` is the entry point for this project
+`Program.cs` is the entry point for this project.  Most of the functionality is in the `lib/BulkCache.cs` file.  The overall logic is pretty simple. We have a main entry, and submethods for each.  This is a good way to view how to pass parameters that are needed to get these libraries to work.  To better allow for expansion, we make heavy use of the config file.
