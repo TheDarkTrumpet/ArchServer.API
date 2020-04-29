@@ -1,4 +1,5 @@
 using AutoFixture;
+using AutoFixture.Dsl;
 using libAPICache.Models.Kimai;
 using libAPICache.util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,12 +12,13 @@ namespace libAPICache.tests.Models.Kimai
         [TestMethod]
         public void TestProperties()
         {
-            var fixture = new Fixture();
-            var expected = fixture.Build<TimeEntry>()
+            Fixture fixture = new Fixture();
+            TimeEntry expected = fixture.Build<TimeEntry>()
                 .OmitAutoProperties()
                 .Create();
-            TimeEntry result = new TimeEntry().Copy(expected);
-            
+
+            TimeEntry result = expected;
+
             Assert.AreSame(expected, result);
         }
     }
