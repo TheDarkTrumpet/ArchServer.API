@@ -27,17 +27,17 @@ namespace libAPICache.tests.util
             
             IEnumerable<PropertyInfo> result = input.GetEnumerables();
             Assert.AreEqual(1, result.Count());
-            Assert.AreEqual("date", result.First().Name);
+            Assert.AreEqual("Strings", result.First().Name);
         }
 
         private class DateTimeOnly : Base
         {
-            private DateTime? date { get; set; }
+            public DateTime? date { get; set; }
         }
 
         private class WithEnumerable : Base
         {
-            private List<string> Strings { get; set; }
+            public List<string> Strings { get; set; }
         }
     }
 }
