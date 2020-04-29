@@ -13,11 +13,11 @@ namespace libAPICache.util
         {
             IEnumerable<PropertyInfo> srcFields = otherObject.GetType().GetProperties(
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty)
-                .Where(x => !x.PropertyType.IsGenericType);
+                .Where(x => !x.HasEnumerable());
 
             IEnumerable<PropertyInfo> destFields = obj.GetType().GetProperties(
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty)
-                .Where(x => !x.PropertyType.IsGenericType && x.HasEnumerable());
+                .Where(x => !x.HasEnumerable());
 
             foreach (var property in srcFields) {
                 var dest = destFields.FirstOrDefault(x => x.Name == property.Name);
