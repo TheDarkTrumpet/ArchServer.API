@@ -18,51 +18,51 @@ namespace BulkCache.lib
             _configuration = Configuration.GetConfiguration();
         }
 
-        private void writeTimeLog(string operation, string state)
+        private void WriteTimeLog(string operation, string state)
         {
             _timeLog = DateTime.Now;
             Console.WriteLine($"{operation} {state} at {_timeLog}");
         }
         public void CacheAll()
         {
-            writeTimeLog("CacheAll", "Starting");
+            WriteTimeLog("CacheAll", "Starting");
             CacheKimai();
             CacheToggl();
             CacheTeamwork();
             CacheVSTS();
-            writeTimeLog("CacheAll", "Finishing");
+            WriteTimeLog("CacheAll", "Finishing");
         }
-        
-        protected void CacheKimai()
+
+        private void CacheKimai()
         {
-            writeTimeLog("--CacheKimai", "Starting");
+            WriteTimeLog("--CacheKimai", "Starting");
             IKimaiTimeEntries efKimai = new EFKimaiTimeEntries();
             efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"), GetFromConfig("Kimai:TimeZone"));
         }
 
-        protected void CacheToggl()
+        private void CacheToggl()
         {
-            writeTimeLog("--CacheToggl", "Starting");
+            WriteTimeLog("--CacheToggl", "Starting");
             ITogglWorkspace efToggl = new EFTogglWorkspace();
             //TODO Add in cache by date here.
             efToggl.CacheEntries();
         }
 
-        protected void CacheTeamwork()
+        private void CacheTeamwork()
         {
-            writeTimeLog("--CacheTeamwork:People", "Starting");
+            WriteTimeLog("--CacheTeamwork:People", "Starting");
             ITeamworkPeople efTeamworkPeople = new EFTeamworkPeople();
             efTeamworkPeople.CacheEntries();
             
-            writeTimeLog("--CacheTeamwork:Tasks", "Starting");
+            WriteTimeLog("--CacheTeamwork:Tasks", "Starting");
             ITeamworkTasks efTeamworkTasks = new EFTeamworkTasks();
             efTeamworkTasks.CacheEntries(GetFromDay("Teamwork:FromDateDays"),
                 Boolean.Parse(GetFromConfig("Teamwork:IncludeCompleted")));
         }
 
-        protected void CacheVSTS()
+        private void CacheVSTS()
         {
-            writeTimeLog("--CacheVSTS", "Starting");
+            WriteTimeLog("--CacheVSTS", "Starting");
             IVSTSWorkItems efVSTS = new EFVSTSWorkItems();
             
             List<string> assignedToInclude = GetFromCollection("VSTS:AssignedToInclude");

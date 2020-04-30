@@ -27,17 +27,16 @@ namespace libAPICache.Entities
             _context = context;
         }
 
-        public bool SaveEntry(T1 input)
+        public T SaveEntry(T1 input)
         {
             _cachedInput = input;
             var newEntry = new T();
             newEntry.Copy(input);
 
-            SaveEntry(newEntry, true);
-            return true;
+            return SaveEntry(newEntry, true);
         }
 
-        public bool SaveEntry(T input, bool saveChanges = true)
+        public T SaveEntry(T input, bool saveChanges = true)
         {
             var srcEntry = GetOrReturnNull(input.Id);
 
@@ -60,18 +59,18 @@ namespace libAPICache.Entities
                 _context.SaveChanges();
             }
 
-            return true;
+            return input;
         }
 
-        public bool SaveEntries(List<T1> entries)
+        public List<T> SaveEntries(List<T1> entries)
         {
-            bool result = false;
+            List<T> savedEntries = new List<T>();
             foreach (var te in entries)
             {
-                result = SaveEntry(te);
+                savedEntries.Add(SaveEntry(te));
             }
 
-            return result;
+            return savedEntries;
         }
         
         public T GetOrReturnNull(long id)
