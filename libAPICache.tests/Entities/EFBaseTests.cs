@@ -50,6 +50,22 @@ namespace libAPICache.tests.Entities
             _context.Verify(x => x.SaveChanges(), Times.Once);
             _mockDbSet.Verify(x => x.Add(It.IsAny<TimeEntry>()), Times.Once);
         }
+
+        [TestMethod]
+        public void SaveEntry_WithObjectExistent_ShouldNotAddButSave()
+        {
+            TimeEntry input = new TimeEntry()
+            {
+                Id = 12345,
+                ActivityComment = "A New comment"
+            };
+
+            TimeEntry result = _baseMock.SaveEntry(input);
+            
+            _context.Verify(x => x.SaveChanges(), Times.Once);
+            _mockDbSet.Verify(x => x.Add(It.IsAny<TimeEntry>()), Times.Never);
+            Assert.AreSame(input.ActivityComment, result.ActivityComment);
+        }
         
         [TestInitialize]
         public void Initialize()
