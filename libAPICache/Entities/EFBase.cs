@@ -27,7 +27,7 @@ namespace libAPICache.Entities
             _context = context;
         }
 
-        public T SaveEntry(T1 input)
+        public virtual T SaveEntry(T1 input)
         {
             _cachedInput = input;
             var newEntry = new T();
@@ -36,7 +36,7 @@ namespace libAPICache.Entities
             return SaveEntry(newEntry, true);
         }
 
-        public T SaveEntry(T input, bool saveChanges = true)
+        public virtual T SaveEntry(T input, bool saveChanges = true)
         {
             var srcEntry = GetOrReturnNull(input.Id);
 
@@ -62,7 +62,7 @@ namespace libAPICache.Entities
             return input;
         }
 
-        public List<T> SaveEntries(List<T1> entries)
+        public virtual List<T> SaveEntries(List<T1> entries)
         {
             List<T> savedEntries = new List<T>();
             foreach (var te in entries)
@@ -73,12 +73,12 @@ namespace libAPICache.Entities
             return savedEntries;
         }
         
-        public T GetOrReturnNull(long id)
+        public virtual T GetOrReturnNull(long id)
         {
             return Entries.FirstOrDefault(x => x.Id == id);
         }
 
-        public string GetAPIKey(string identifier)
+        public virtual string GetAPIKey(string identifier)
         {
             IConfiguration config = util.Configuration.GetConfiguration();
             string apiKey = (string) config[identifier];

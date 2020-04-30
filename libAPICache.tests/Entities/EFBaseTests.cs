@@ -19,6 +19,8 @@ namespace libAPICache.tests.Entities
     {
         private Mock<EFDbContext> _context;
         private BaseMock _baseMock;
+        private Mock<DbSet<TimeEntry>> _mockDbSet;
+            
         [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void UpdateEnumerables_NoOverride_ShouldThrowException()
@@ -33,10 +35,24 @@ namespace libAPICache.tests.Entities
             Assert.IsNotNull(_baseMock.InsertedContext);
             Assert.AreSame(_context.Object, _baseMock.InsertedContext);
         }
-        
+
+        [TestMethod]
+        public void SaveEntry_WithObjectNonExistent_ShouldAddAndSave()
+        {
+            TimeEntry input = new TimeEntry()
+            {
+                Id = 11111,
+                ProjectName = "New Project Name"
+            };
+
+            _baseMock.SaveEntry(input);
+            
+            _context.Verify(x => x.SaveChanges(), Times.Once);
+            _mockDbSet.Verify(x => x.Add(It.IsAny<TimeEntry>()), Times.Once);
+        }
         
         [TestInitialize]
-        public void Intialize()
+        public void Initialize()
         {
             IQueryable<TimeEntry> timeEntries = new List<TimeEntry>()
             {
@@ -44,15 +60,16 @@ namespace libAPICache.tests.Entities
                 new TimeEntry() {Id = 54321, ActivityName = "A Name"}
             }.AsQueryable();
             
-            Mock<DbSet<TimeEntry>> mockDbSet = GenerateDBSetHelper<TimeEntry>.GenerateDbSet(timeEntries);
+            _mockDbSet = GenerateDBSetHelper<TimeEntry>.GenerateDbSet(timeEntries);
             _context = new Mock<EFDbContext>();
-            _context.Setup(x => x.KimaiTimeEntries).Returns(mockDbSet.Object);
+            _context.Setup(x => x.KimaiTimeEntries).Returns(_mockDbSet.Object);
             _baseMock = new BaseMock(_context.Object);
         }
 
         [TestCleanup]
         public void Cleanup()
         {
+            _mockDbSet = null;
             _context = null;
             _baseMock = null;
         }
