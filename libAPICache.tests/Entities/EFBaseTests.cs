@@ -87,6 +87,7 @@ namespace libAPICache.tests.Entities
             public BaseMock(EFDbContext context) : base(context)
             {
                 InsertedContext = context;
+                Entries = _dbSet = context.KimaiTimeEntries;
             }
 
             public void UpdateEnumerables(TimeEntry timeEntry, Activity activity)
