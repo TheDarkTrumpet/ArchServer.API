@@ -8,7 +8,7 @@ namespace libAPICache.tests.Helpers
 {
     public static class GenerateDBSetHelper<T> where T: Base, new()
     {
-        public static Mock<DbSet<T>> GenerateDbSet(IEnumerable<T> elements)
+        public static Mock<DbSet<T>> GenerateDbSet(IQueryable<T> elements)
         {
             Mock<DbSet<T>> mockSet = new Mock<DbSet<T>>();
             mockSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(elements.Provider);

@@ -1,8 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using libAPICache.Entities;
 using libAPICache.Models;
 using libAPICache.Models.Kimai;
+using libAPICache.tests.Helpers;
 using libKimai.models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -33,7 +38,15 @@ namespace libAPICache.tests.Entities
         [TestInitialize]
         public void Intialize()
         {
+            IQueryable<TimeEntry> timeEntries = new List<TimeEntry>()
+            {
+                new TimeEntry() {Id = 12345, ActivityComment = "A Comment"},
+                new TimeEntry() {Id = 54321, ActivityName = "A Name"}
+            }.AsQueryable();
+            
+            Mock<DbSet<TimeEntry>> mockDbSet = GenerateDBSetHelper<TimeEntry>.GenerateDbSet(timeEntries);
             _context = new Mock<EFDbContext>();
+            _context.Setup(x => x.KimaiTimeEntries).Returns(mockDbSet.Object);
             _baseMock = new BaseMock(_context.Object);
         }
 
