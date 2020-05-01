@@ -74,6 +74,34 @@ namespace libAPICache.tests.Entities
             Assert.AreEqual(1, _baseMock.EnumerablesTimesCalled);
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        [DataRow(true, 1)]
+        [DataRow(false, 0)]
+        public void SaveEntry_WithAPIObject_ShouldCopyAndSave(bool saveChanges, int saveChangesExpected)
+        {
+            libVSTS.models.WorkItem input = new WorkItem()
+            {
+                AssignedTo = "auser@domain.com",
+                ChangedDate = DateTime.Now,
+                Comments = null,
+                CreatedBy = "anotheruser@anotherdomain.com",
+                CreatedDate = DateTime.Now,
+                Description = "A test work item, full property!",
+                Id = 1232231,
+                State = "New",
+                Type = "Product Backlog Item",
+                url = "https://www.duckduckgo.com"
+            };
+
+            Models.VSTS.WorkItem result = _baseMock.SaveEntry(input, saveChanges);
+            
+            _context.Verify(x => x.SaveChanges(), Times.Exactly(saveChangesExpected));
+            _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Never);
+            Assert.AreEqual(1, _baseMock.UpdateEntityDataTimesCalled);
+            Assert.AreEqual(1, _baseMock.EnumerablesTimesCalled);
+            Assert.IsNotNull(result);
+        }
         
         [TestMethod]
         public void GetOrReturnNull_WithElement_ShouldReturnIt()
