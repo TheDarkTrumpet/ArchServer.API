@@ -2,7 +2,7 @@ using libAPICache.Entities;
 using libVSTS.models;
 
 
-namespace libAPICache.tests.Entities
+namespace libAPICache.tests.Helpers
 {
     public class BaseMock : EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>
     {
