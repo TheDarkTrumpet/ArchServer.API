@@ -11,6 +11,7 @@ using libKimai.query;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Base = libAPICache.Models.Base;
 
 namespace libAPICache.tests.Entities
 {
@@ -47,6 +48,7 @@ namespace libAPICache.tests.Entities
             
             Assert.AreEqual(inputDate, _date);
             _iAPIMethod.Verify(x => x.GetActivities(false), Times.Once);
+            _context.Verify(x => x.SaveChanges(), Times.Once);
         }
 
         [TestInitialize]
