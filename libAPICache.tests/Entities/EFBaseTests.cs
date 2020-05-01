@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
 using libAPICache.Entities;
 using libAPICache.Models;
 using libAPICache.Models.Kimai;
@@ -12,6 +13,7 @@ using libVSTS.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using WorkItemComment = libAPICache.Models.VSTS.WorkItemComment;
 
 namespace libAPICache.tests.Entities
 {
@@ -43,11 +45,7 @@ namespace libAPICache.tests.Entities
         [DataRow(false, 0)]
         public void SaveEntry_WithObjectNonExistent_ShouldAddAndSave(bool saveChanges, int saveChangesExpected)
         {
-            WorkItem input = new WorkItem()
-            {
-                Id = 11111,
-                Description= "New Description"
-            };
+            Models.VSTS.WorkItem input = GenerateModelWorkItem();
 
             _baseMock.SaveEntry(input, saveChanges);
             
@@ -62,12 +60,9 @@ namespace libAPICache.tests.Entities
         [DataRow(false, 0)]
         public void SaveEntry_WithObjectExistent_ShouldNotAddButMaybeSave(bool saveChanges, int saveChangesExpected)
         {
-            WorkItem input = new WorkItem()
-            {
-                Id = 12345,
-                Description = "A New comment"
-            };
-
+            Models.VSTS.WorkItem input = GenerateModelWorkItem();
+            input.Id = 12345;
+            
             Models.VSTS.WorkItem result = _baseMock.SaveEntry(input, saveChanges);
             
             _context.Verify(x => x.SaveChanges(), Times.Exactly(saveChangesExpected));
@@ -82,19 +77,7 @@ namespace libAPICache.tests.Entities
         [DataRow(false, 0)]
         public void SaveEntry_WithAPIObject_ShouldCopyAndSave(bool saveChanges, int saveChangesExpected)
         {
-            libVSTS.models.WorkItem input = new WorkItem()
-            {
-                AssignedTo = "auser@domain.com",
-                ChangedDate = DateTime.Now,
-                Comments = null,
-                CreatedBy = "anotheruser@anotherdomain.com",
-                CreatedDate = DateTime.Now,
-                Description = "A test work item, full property!",
-                Id = 1232231,
-                State = "New",
-                Type = "Product Backlog Item",
-                url = "https://www.duckduckgo.com"
-            };
+            WorkItem input = GenerateVSTSAPIWorkItem();
 
             Models.VSTS.WorkItem result = _baseMock.SaveEntry(input, saveChanges);
             
@@ -175,6 +158,23 @@ namespace libAPICache.tests.Entities
             {
                 UpdateEntityDataTimesCalled += 1;
             }
+        }
+        public WorkItem GenerateVSTSAPIWorkItem()
+        {
+            Fixture autoFixture = new Fixture();
+            WorkItem workItem = autoFixture.Create<WorkItem>();
+            return workItem;
+        }
+
+        public Models.VSTS.WorkItem GenerateModelWorkItem()
+        {
+            Fixture autoFixture = new Fixture();
+            IEnumerable<WorkItemComment> comments =
+                autoFixture.Build<WorkItemComment>().Without(x => x.WorkItem).CreateMany();
+            Models.VSTS.WorkItem workItem = autoFixture.Build<Models.VSTS.WorkItem>()
+                .With(x => x.Comments, comments.ToList())
+                .Create();
+            return workItem;
         }
     }
 }
