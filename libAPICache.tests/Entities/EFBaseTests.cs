@@ -75,7 +75,7 @@ namespace libAPICache.tests.Entities
         [TestMethod]
         [DataRow(true, 1)]
         [DataRow(false, 0)]
-        public void SaveEntry_WithAPIObject_ShouldCopyAndSave(bool saveChanges, int saveChangesExpected)
+        public void SaveEntry_WithAPIObject_ShouldCopyAndMaybeSave(bool saveChanges, int saveChangesExpected)
         {
             WorkItem input = GenerateVSTSAPIWorkItem();
 
@@ -87,7 +87,23 @@ namespace libAPICache.tests.Entities
             Assert.AreEqual(0, _baseMock.EnumerablesTimesCalled);
             Assert.IsNotNull(result);
         }
-        
+
+        [TestMethod]
+        [DataRow(true, 1)]
+        [DataRow(false, 0)]
+        public void SaveEntries_WithAPIObjects_ShouldInsertAndMaybeSave(bool saveChanges, int saveChangesExpected)
+        {
+            List<WorkItem> inputs = Enumerable.Range(1, 5).Select(x => GenerateVSTSAPIWorkItem()).ToList();
+
+            List<Models.VSTS.WorkItem> results = _baseMock.SaveEntries(inputs, saveChanges);
+            
+            _context.Verify(x => x.SaveChanges(), Times.Exactly(saveChangesExpected));
+            _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Exactly(5));
+            Assert.AreEqual(0, _baseMock.UpdateEntityDataTimesCalled);
+            Assert.AreEqual(0, _baseMock.EnumerablesTimesCalled);
+            Assert.IsNotNull(results);
+            Assert.AreEqual(5, results.Count());
+        }
         [TestMethod]
         public void GetOrReturnNull_WithElement_ShouldReturnIt()
         {
