@@ -9,7 +9,7 @@ namespace Configuration
     public class Config : IConfig
     {
         protected string ConfigurationFile { get; set; }
-        protected Microsoft.Extensions.Configuration.IConfiguration LoadedConfiguration { get; set; }
+        protected IConfiguration LoadedConfiguration { get; set; }
         
         public Config(string fileName = null, string directory = null)
         {
