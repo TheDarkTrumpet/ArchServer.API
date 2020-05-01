@@ -37,7 +37,7 @@ namespace BulkCache.lib
         {
             WriteTimeLog("--CacheKimai", "Starting");
             IKimaiTimeEntries efKimai = new EFKimaiTimeEntries();
-            efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"), GetFromConfig("Kimai:TimeZone"));
+            efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"), _configuration.GetKey("Kimai:TimeZone"));
         }
 
         private void CacheToggl()
@@ -57,7 +57,7 @@ namespace BulkCache.lib
             WriteTimeLog("--CacheTeamwork:Tasks", "Starting");
             ITeamworkTasks efTeamworkTasks = new EFTeamworkTasks();
             efTeamworkTasks.CacheEntries(GetFromDay("Teamwork:FromDateDays"),
-                Boolean.Parse(GetFromConfig("Teamwork:IncludeCompleted")));
+                Boolean.Parse(_configuration.GetKey("Teamwork:IncludeCompleted")));
         }
 
         private void CacheVSTS()
@@ -69,7 +69,7 @@ namespace BulkCache.lib
             List<string> statesToExclude = GetFromCollection("VSTS:StatesToExclude");
             List<string> typesToInclude = GetFromCollection("VSTS:TypesToInclude");
             DateTime fromDate = GetFromDay("VSTS:FromDateDays");
-            bool includeComments = Boolean.Parse(GetFromConfig("VSTS:IncludeComments"));
+            bool includeComments = Boolean.Parse(_configuration.GetKey("VSTS:IncludeComments"));
 
             efVSTS.CacheEntries(includeComments, assignedToInclude, statesToExclude, typesToInclude, fromDate);
         }
@@ -83,24 +83,8 @@ namespace BulkCache.lib
         
         private DateTime GetFromDay(string identifier)
         {
-            string value = GetFromConfig(identifier);
-            int fromDay = int.Parse(value);
-
+            int fromDay = _configuration.GetInt(identifier);
             return DateTime.Now.AddDays(fromDay);
-        }
-        
-        private string GetFromConfig(string identifier)
-        {
-            string fullLookup = $"APISources:{identifier}";
-            string value = (string) _configuration[fullLookup];
-            
-            if (String.IsNullOrEmpty(value))
-            {
-                throw new Exception(
-                    $"{@Directory.GetCurrentDirectory()}/appsettings.json entry does not exist for {fullLookup}, please make sure it's defined!");
-            }
-
-            return value;
         }
     }
 }
