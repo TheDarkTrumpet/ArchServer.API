@@ -15,19 +15,14 @@ using Moq;
 namespace libAPICache.tests.Entities
 {
     [TestClass]
-    public class EFKimaiTimeEntriesTests
+    public class EFKimaiTimeEntriesTests : Base<Models.Kimai.TimeEntry, IActivities>
     {
-        private Mock<EFDbContext> _context;
-        private Mock<DbSet<Models.Kimai.TimeEntry>> _mockDbSet;
-        private Mock<IConfig> _config;
-        private Mock<IActivities> _iActivities;
         private DateTime? _date;
-
         [TestMethod]
         public void Constructor_ShouldSetPropertiesAndCallConfig()
         {
             EFKimaiTimeEntries efKimaiTimeEntries =
-                new EFKimaiTimeEntries(_context.Object, _config.Object, _iActivities.Object);
+                new EFKimaiTimeEntries(_context.Object, _config.Object, _iAPIMethod.Object);
 
             Assert.IsNotNull(efKimaiTimeEntries.Entries);
             Assert.IsNotNull(efKimaiTimeEntries.ConnectionString);
@@ -40,7 +35,7 @@ namespace libAPICache.tests.Entities
         public void CacheEntries_WithDateTime_ShouldCallGetActivitiesAndSave(string inputTime)
         {
             EFKimaiTimeEntries efKimaiTimeEntries =
-                new EFKimaiTimeEntries(_context.Object, _config.Object, _iActivities.Object);
+                new EFKimaiTimeEntries(_context.Object, _config.Object, _iAPIMethod.Object);
 
             DateTime? inputDate = null;
             if (!string.IsNullOrEmpty(inputTime))
@@ -51,7 +46,7 @@ namespace libAPICache.tests.Entities
             efKimaiTimeEntries.CacheEntries(inputDate);
             
             Assert.AreEqual(inputDate, _date);
-            _iActivities.Verify(x => x.GetActivities(false), Times.Once);
+            _iAPIMethod.Verify(x => x.GetActivities(false), Times.Once);
         }
 
         [TestInitialize]
@@ -65,9 +60,9 @@ namespace libAPICache.tests.Entities
             _context = new Mock<EFDbContext>();
             _context.Setup(x => x.KimaiTimeEntries).Returns(_mockDbSet.Object);
             
-            _iActivities = new Mock<IActivities>();
-            _iActivities.Setup(x => x.GetActivities(false)).Returns(new List<Activity>());
-            _iActivities.SetupSet(x => x.FromDate = It.IsAny<DateTime?>()).Callback<DateTime?>(v => _date = v);
+            _iAPIMethod = new Mock<IActivities>();
+            _iAPIMethod.Setup(x => x.GetActivities(false)).Returns(new List<Activity>());
+            _iAPIMethod.SetupSet(x => x.FromDate = It.IsAny<DateTime?>()).Callback<DateTime?>(v => _date = v);
             
             _config = new Mock<IConfig>();
             _config.Setup(x => x.GetKey("APISources:Kimai:Mysql_CS")).Returns("A value");
