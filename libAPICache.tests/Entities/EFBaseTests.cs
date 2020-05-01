@@ -39,7 +39,9 @@ namespace libAPICache.tests.Entities
         }
 
         [TestMethod]
-        public void SaveEntry_WithObjectNonExistent_ShouldAddAndSave()
+        [DataRow(true, 1)]
+        [DataRow(false, 0)]
+        public void SaveEntry_WithObjectNonExistent_ShouldAddAndSave(bool saveChanges, int saveChangesExpected)
         {
             WorkItem input = new WorkItem()
             {
@@ -47,9 +49,9 @@ namespace libAPICache.tests.Entities
                 Description= "New Description"
             };
 
-            _baseMock.SaveEntry(input);
+            _baseMock.SaveEntry(input, saveChanges);
             
-            _context.Verify(x => x.SaveChanges(), Times.Once);
+            _context.Verify(x => x.SaveChanges(), Times.Exactly(saveChangesExpected));
             _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Once);
         }
 
