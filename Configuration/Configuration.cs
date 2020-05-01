@@ -1,20 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 
-namespace libAPICache.util
+namespace Configuration
 {
-    public interface IConfiguration
-    {
-        string GetKey(string identifier);
-        int GetInt(string identifier);
-        List<string> GetCollection(string identifier);
-    }
-    
     public class Configuration : IConfiguration
     {
         protected string ConfigurationFile { get; set; }
