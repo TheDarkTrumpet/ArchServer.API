@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 
 namespace libKimai.query
 {
-    public class Activities : Base
+    public class Activities : Base, IActivities
     {
         public DateTime? FromDate { get; set; }
 
