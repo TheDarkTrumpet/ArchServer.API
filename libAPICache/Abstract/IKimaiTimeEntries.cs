@@ -8,5 +8,7 @@ namespace libAPICache.Abstract
     public interface IKimaiTimeEntries : IBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
     {
         void CacheEntries(DateTime? fromDate = null);
+        string ConnectionString { get; set; }
+        string TimeZone { get; set; }
     }
 }

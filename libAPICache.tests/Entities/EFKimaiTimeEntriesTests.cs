@@ -22,6 +22,17 @@ namespace libAPICache.tests.Entities
         private Mock<IConfig> _config;
         private Mock<IActivities> _iActivities;
         private DateTime? _date;
+
+        [TestMethod]
+        public void Constructor_ShouldSetPropertiesAndCallConfig()
+        {
+            EFKimaiTimeEntries efKimaiTimeEntries =
+                new EFKimaiTimeEntries(_context.Object, _config.Object, _iActivities.Object);
+
+            Assert.IsNotNull(efKimaiTimeEntries.Entries);
+            Assert.IsNotNull(efKimaiTimeEntries.ConnectionString);
+            Assert.IsNotNull(efKimaiTimeEntries.TimeZone);
+        }
         
         [TestMethod]
         [DataRow("2020/01/01")]
@@ -57,7 +68,10 @@ namespace libAPICache.tests.Entities
             _iActivities = new Mock<IActivities>();
             _iActivities.Setup(x => x.GetActivities(false)).Returns(new List<Activity>());
             _iActivities.SetupSet(x => x.FromDate = It.IsAny<DateTime?>()).Callback<DateTime?>(v => _date = v);
+            
             _config = new Mock<IConfig>();
+            _config.Setup(x => x.GetKey("APISources:Kimai:Mysql_CS")).Returns("A value");
+            _config.Setup(x => x.GetKey("APISources.Kimai:TimeZone")).Returns("Another value");
         }
 
         [TestCleanup]

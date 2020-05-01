@@ -11,19 +11,19 @@ namespace libAPICache.Entities
     public sealed class EFKimaiTimeEntries : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>, IKimaiTimeEntries
     {
         private IActivities _activities;
+        public string ConnectionString { get; set; }
+        public string TimeZone { get; set; }
+        
         public EFKimaiTimeEntries() : this(new EFDbContext(), new Config()) { }
 
         public EFKimaiTimeEntries(EFDbContext context, IConfig configuration, IActivities activities = null) : base(context, configuration)
         {
             Entries = DbSet = Context.KimaiTimeEntries;
-            if (activities == null)
-            {
-                CreateActivities();
-            }
-            else
-            {
-                _activities = activities;
-            }
+            
+            ConnectionString = Configuration.GetKey("APISources:Kimai:Mysql_CS");
+            TimeZone = Configuration.GetKey("APISources.Kimai:TimeZone");
+            
+            _activities = activities ?? new Activities(ConnectionString, TimeZone);
         }
         
         public void CacheEntries(DateTime? fromDate = null)
@@ -32,13 +32,6 @@ namespace libAPICache.Entities
             List<Activity> results = _activities.GetActivities();
 
             SaveEntries(results);
-        }
-
-        private void CreateActivities()
-        {
-            string connectionString = Configuration.GetKey("APISources:Kimai:Mysql_CS");
-            string timeZone = Configuration.GetKey("APISources.Kimai:TimeZone");
-            _activities = new Activities(connectionString, timeZone);
         }
     }
 }
