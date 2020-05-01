@@ -52,19 +52,13 @@ namespace libAPICache.tests.Entities
         [TestInitialize]
         public void Initialize()
         {
-            Fixture autoFixture = new Fixture();
-            IQueryable<TimeEntry> timeEntries = autoFixture.CreateMany<TimeEntry>().AsQueryable();
-            
-            _mockDbSet = GenerateDBSetHelper<TimeEntry>.GenerateDbSet(timeEntries);
-            
-            _context = new Mock<EFDbContext>();
+            Setup();
+
             _context.Setup(x => x.KimaiTimeEntries).Returns(_mockDbSet.Object);
             
-            _iAPIMethod = new Mock<IActivities>();
             _iAPIMethod.Setup(x => x.GetActivities(false)).Returns(new List<Activity>());
             _iAPIMethod.SetupSet(x => x.FromDate = It.IsAny<DateTime?>()).Callback<DateTime?>(v => _date = v);
             
-            _config = new Mock<IConfig>();
             _config.Setup(x => x.GetKey("APISources:Kimai:Mysql_CS")).Returns("A value");
             _config.Setup(x => x.GetKey("APISources.Kimai:TimeZone")).Returns("Another value");
         }
