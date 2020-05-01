@@ -70,6 +70,25 @@ namespace libAPICache.tests.Entities
             Assert.AreEqual(1, _baseMock.EnumerablesTimesCalled);
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void GetOrReturnNull_WithElement_ShouldReturnIt()
+        {
+            Models.VSTS.WorkItem result = _baseMock.GetOrReturnNull(12345);
+            
+            Assert.IsNotNull(result);
+            Assert.AreEqual(12345, result.Id);
+        }
+
+        [TestMethod]
+        public void GetOrReturnNull_WithNoElement_ShouldReturnNull()
+        {
+            Models.VSTS.WorkItem result = _baseMock.GetOrReturnNull(9999999);
+            
+            Assert.IsNull(result);
+        }
+        
+        // SETUP and HELPERS
         
         [TestInitialize]
         public void Initialize()
