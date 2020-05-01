@@ -6,6 +6,7 @@ using libAPICache.Entities;
 using libAPICache.Models;
 using libAPICache.Models.Kimai;
 using libAPICache.tests.Helpers;
+using libAPICache.util;
 using libKimai.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -64,7 +65,7 @@ namespace libAPICache.tests.Entities
             
             _context.Verify(x => x.SaveChanges(), Times.Once);
             _mockDbSet.Verify(x => x.Add(It.IsAny<TimeEntry>()), Times.Never);
-            Assert.AreSame(input.ActivityComment, result.ActivityComment);
+            Assert.AreEqual(1, _baseMock.UpdateEntityDataTimesCalled);
         }
         
         [TestInitialize]
@@ -78,6 +79,7 @@ namespace libAPICache.tests.Entities
             
             _mockDbSet = GenerateDBSetHelper<TimeEntry>.GenerateDbSet(timeEntries);
             _context = new Mock<EFDbContext>();
+            
             _context.Setup(x => x.KimaiTimeEntries).Returns(_mockDbSet.Object);
             _baseMock = new BaseMock(_context.Object);
         }
@@ -98,6 +100,7 @@ namespace libAPICache.tests.Entities
         private class BaseMock : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
         {
             public int EnumerablesTimesCalled { get; set; } = 0;
+            public int UpdateEntityDataTimesCalled { get; set; } = 0;
             public EFDbContext InsertedContext { get; set; }
 
             public BaseMock(EFDbContext context) : base(context)
@@ -106,9 +109,15 @@ namespace libAPICache.tests.Entities
                 Entries = _dbSet = context.KimaiTimeEntries;
             }
 
-            public void UpdateEnumerables(TimeEntry timeEntry, Activity activity)
+            public override TimeEntry UpdateEnumerables(Activity activity, TimeEntry timeEntry)
             {
                 EnumerablesTimesCalled += 1;
+                return timeEntry;
+            }
+
+            public override void UpdateEntityData(TimeEntry destination, TimeEntry activity)
+            {
+                UpdateEntityDataTimesCalled += 1;
             }
         }
     }

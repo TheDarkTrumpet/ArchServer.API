@@ -6,5 +6,6 @@ namespace libAPICache.Abstract
     {
         string GetAPIKey(string identifier);
          T UpdateEnumerables(T1 source, T destination);
+         void UpdateEntityData(T destination, T source);
     }
 }

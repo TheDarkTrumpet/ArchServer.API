@@ -42,7 +42,7 @@ namespace libAPICache.Entities
 
             if (srcEntry != null)
             {
-                _context.Entry(srcEntry).CurrentValues.SetValues(input);
+                UpdateEntityData(srcEntry, input);
 
                 if (srcEntry.GetEnumerables().Any())
                 {
@@ -96,6 +96,11 @@ namespace libAPICache.Entities
         {
             throw new Exception("This method must be implemented in the derived class!");
             // return destination
+        }
+
+        public virtual void UpdateEntityData(T destination, T source)
+        {
+            _context.Entry(destination).CurrentValues.SetValues(source);
         }
     }
 }
