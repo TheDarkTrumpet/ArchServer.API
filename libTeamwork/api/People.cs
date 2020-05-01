@@ -6,7 +6,7 @@ using RestSharp;
 
 namespace libTeamwork.api
 {
-    public class People : Base
+    public class People : Base, IPeople
     {
         private readonly string _endpointUri = "/people.json";
         

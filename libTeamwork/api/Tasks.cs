@@ -7,7 +7,7 @@ using RestSharp;
 
 namespace libTeamwork.api
 {
-    public class Tasks : Base
+    public class Tasks : Base, ITasks
     {
         private readonly string _endpointUri = "/tasks.json";
         public bool IncludeCompleted { get; set; } = true;
