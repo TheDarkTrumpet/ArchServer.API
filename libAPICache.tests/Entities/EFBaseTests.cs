@@ -53,6 +53,8 @@ namespace libAPICache.tests.Entities
             
             _context.Verify(x => x.SaveChanges(), Times.Exactly(saveChangesExpected));
             _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Once);
+            Assert.AreEqual(0, _baseMock.UpdateEntityDataTimesCalled);
+            Assert.AreEqual(0, _baseMock.EnumerablesTimesCalled);
         }
 
         [TestMethod]
@@ -97,9 +99,9 @@ namespace libAPICache.tests.Entities
             Models.VSTS.WorkItem result = _baseMock.SaveEntry(input, saveChanges);
             
             _context.Verify(x => x.SaveChanges(), Times.Exactly(saveChangesExpected));
-            _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Never);
-            Assert.AreEqual(1, _baseMock.UpdateEntityDataTimesCalled);
-            Assert.AreEqual(1, _baseMock.EnumerablesTimesCalled);
+            _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Once);
+            Assert.AreEqual(0, _baseMock.UpdateEntityDataTimesCalled);
+            Assert.AreEqual(0, _baseMock.EnumerablesTimesCalled);
             Assert.IsNotNull(result);
         }
         
