@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -11,6 +12,7 @@ namespace libAPICache.util
     {
         string GetKey(string identifier);
         int GetInt(string identifier);
+        List<string> GetCollection(string identifier);
     }
     
     public class Configuration : IConfiguration
@@ -39,6 +41,13 @@ namespace libAPICache.util
         {
             int value = int.Parse(LoadedConfiguration[identifier]);
             return value;
+        }
+
+        public virtual List<string> GetCollection(string identifier)
+        {
+            List<string> returnValues = new List<string>();
+            LoadedConfiguration.GetSection($"{identifier}").Bind(returnValues);
+            return returnValues;
         }
         
         protected virtual string GetConfigurationFile(string fileName = null, string directory = null)

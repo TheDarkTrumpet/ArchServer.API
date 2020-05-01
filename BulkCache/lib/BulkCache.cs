@@ -37,7 +37,7 @@ namespace BulkCache.lib
         {
             WriteTimeLog("--CacheKimai", "Starting");
             IKimaiTimeEntries efKimai = new EFKimaiTimeEntries();
-            efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"), _configuration.GetKey("Kimai:TimeZone"));
+            efKimai.CacheEntries(GetFromDay("Kimai:FromDateDays"), _configuration.GetKey("APISources:Kimai:TimeZone"));
         }
 
         private void CacheToggl()
@@ -57,7 +57,7 @@ namespace BulkCache.lib
             WriteTimeLog("--CacheTeamwork:Tasks", "Starting");
             ITeamworkTasks efTeamworkTasks = new EFTeamworkTasks();
             efTeamworkTasks.CacheEntries(GetFromDay("Teamwork:FromDateDays"),
-                Boolean.Parse(_configuration.GetKey("Teamwork:IncludeCompleted")));
+                Boolean.Parse(_configuration.GetKey("APISources:Teamwork:IncludeCompleted")));
         }
 
         private void CacheVSTS()
@@ -65,25 +65,18 @@ namespace BulkCache.lib
             WriteTimeLog("--CacheVSTS", "Starting");
             IVSTSWorkItems efVSTS = new EFVSTSWorkItems();
             
-            List<string> assignedToInclude = GetFromCollection("VSTS:AssignedToInclude");
-            List<string> statesToExclude = GetFromCollection("VSTS:StatesToExclude");
-            List<string> typesToInclude = GetFromCollection("VSTS:TypesToInclude");
+            List<string> assignedToInclude = _configuration.GetCollection("APISources:VSTS:AssignedToInclude");
+            List<string> statesToExclude = _configuration.GetCollection("APISources:VSTS:StatesToExclude");
+            List<string> typesToInclude = _configuration.GetCollection("APISources:VSTS:TypesToInclude");
             DateTime fromDate = GetFromDay("VSTS:FromDateDays");
-            bool includeComments = Boolean.Parse(_configuration.GetKey("VSTS:IncludeComments"));
+            bool includeComments = Boolean.Parse(_configuration.GetKey("APISources:VSTS:IncludeComments"));
 
             efVSTS.CacheEntries(includeComments, assignedToInclude, statesToExclude, typesToInclude, fromDate);
         }
 
-        private List<string> GetFromCollection(string identifier)
-        {
-            List<string> returnValues = new List<string>();
-            _configuration.GetSection($"APISources:{identifier}").Bind(returnValues);
-            return returnValues;
-        }
-        
         private DateTime GetFromDay(string identifier)
         {
-            int fromDay = _configuration.GetInt(identifier);
+            int fromDay = _configuration.GetInt($"APISources:{identifier}");
             return DateTime.Now.AddDays(fromDay);
         }
     }
