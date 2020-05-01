@@ -18,7 +18,7 @@ namespace libAPICache.Entities
         
         public void CacheEntries()
         {
-            string apiKey = GetAPIKey("APISources:Toggl:API_Key");
+            string apiKey = Configuration.GetKey("APISources:Toggl:API_Key");
             Workspaces workspaces = new Workspaces(apiKey);
 
             List<libToggl.models.Workspace> workspaceList = workspaces.GetWorkspaces();

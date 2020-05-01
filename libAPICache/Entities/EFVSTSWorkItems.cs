@@ -25,9 +25,9 @@ namespace libAPICache.Entities
         public void CacheEntries(bool includeComments = false, List<string> assignedToInclude = null,
             List<string> statesToExclude = null, List<string> typesToInclude = null, DateTime? fromChanged = null)
         {
-            string api_key = GetAPIKey("APISources:VSTS:API_Key");
-            string organization = GetAPIKey("APISources:VSTS:Organization");
-            string project = GetAPIKey("APISources:VSTS:Project");
+            string api_key = Configuration.GetKey("APISources:VSTS:API_Key");
+            string organization = Configuration.GetKey("APISources:VSTS:Organization");
+            string project = Configuration.GetKey("APISources:VSTS:Project");
 
             WorkItems workItemQuery = new WorkItems(api_key, organization, project);
             workItemQuery.FromChanged = fromChanged;

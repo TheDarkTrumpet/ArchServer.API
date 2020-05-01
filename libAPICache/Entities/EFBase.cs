@@ -85,12 +85,6 @@ namespace libAPICache.Entities
             return Entries.FirstOrDefault(x => x.Id == id);
         }
 
-        public virtual string GetAPIKey(string identifier)
-        {
-            string apiKey = Configuration.GetKey(identifier);
-            return apiKey;
-        }
-
         public virtual T UpdateEnumerables(T1 source, T destination)
         {
             throw new Exception("This method must be implemented in the derived class!");

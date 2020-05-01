@@ -19,7 +19,7 @@ namespace libAPICache.Entities
         
         public void CacheEntries(DateTime? fromDate = null, string timeZone = "Central Standard Time")
         {
-            string connectionString = GetAPIKey("APISources:Kimai:Mysql_CS");
+            string connectionString = Configuration.GetKey("APISources:Kimai:Mysql_CS");
             
             Activities activities = new Activities(connectionString, timeZone);
 
