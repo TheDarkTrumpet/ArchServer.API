@@ -26,6 +26,7 @@ namespace libAPICache.Entities
         public EFBase(EFDbContext context, IConfiguration configuration)
         {
             Context = context;
+            Configuration = configuration;
         }
 
         public virtual T SaveEntry(T1 input, bool saveChanges = true)
@@ -86,13 +87,6 @@ namespace libAPICache.Entities
         public virtual string GetAPIKey(string identifier)
         {
             string apiKey = Configuration.GetKey(identifier);
-            
-            if (String.IsNullOrEmpty(apiKey))
-            {
-                throw new Exception(
-                    $"{@Directory.GetCurrentDirectory()}/appsettings.json entry does not exist for {identifier}, please make sure it's defined!");
-            }
-
             return apiKey;
         }
 

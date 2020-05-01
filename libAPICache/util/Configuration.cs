@@ -18,11 +18,12 @@ namespace libAPICache.util
     public class Configuration : IConfiguration
     {
         protected string ConfigurationFile { get; set; }
-        protected IConfigurationRoot LoadedConfiguration { get; set; }
+        protected Microsoft.Extensions.Configuration.IConfiguration LoadedConfiguration { get; set; }
         
         public Configuration(string fileName = null, string directory = null)
         {
             ConfigurationFile = GetConfigurationFile(fileName, directory);
+            LoadConfiguration();
         }
 
         public virtual string GetKey(string identifier)
@@ -39,8 +40,9 @@ namespace libAPICache.util
 
         public virtual int GetInt(string identifier)
         {
-            int value = int.Parse(LoadedConfiguration[identifier]);
-            return value;
+            string value = GetKey(identifier);
+            int intvalue = int.Parse(value);
+            return intvalue;
         }
 
         public virtual List<string> GetCollection(string identifier)
@@ -72,7 +74,6 @@ namespace libAPICache.util
         protected virtual void LoadConfiguration()
         {
             var configurationBuilder = new Microsoft.Extensions.Configuration.ConfigurationBuilder().SetBasePath(@Directory.GetCurrentDirectory());
-            
             LoadedConfiguration = configurationBuilder
                 .AddJsonFile(ConfigurationFile, optional: true, reloadOnChange: true).Build();
         }
