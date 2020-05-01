@@ -11,7 +11,7 @@ namespace libAPICache.Entities
 
         public EFTogglWorkspace(EFDbContext context) : base(context)
         {
-            Entries = _dbSet = _context.TogglWorkspaces;
+            Entries = DbSet = Context.TogglWorkspaces;
         }
         
         public void CacheEntries()

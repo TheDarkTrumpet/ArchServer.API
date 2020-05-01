@@ -16,7 +16,7 @@ namespace libAPICache.Entities
 
         public EFKimaiTimeEntries(EFDbContext context) : base(context)
         {
-            Entries = _dbSet = _context.KimaiTimeEntries;
+            Entries = DbSet = Context.KimaiTimeEntries;
         }
         
         public void CacheEntries(DateTime? fromDate = null, string timeZone = "Central Standard Time")

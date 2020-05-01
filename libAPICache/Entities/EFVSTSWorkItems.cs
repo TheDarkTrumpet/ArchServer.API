@@ -18,7 +18,7 @@ namespace libAPICache.Entities
 
         public EFVSTSWorkItems(EFDbContext context) : base(context)
         {
-            Entries = _dbSet = _context.VSTSWorkItems;
+            Entries = DbSet = Context.VSTSWorkItems;
         }
 
         public void CacheEntries(bool includeComments = false, List<string> assignedToInclude = null,
@@ -63,7 +63,7 @@ namespace libAPICache.Entities
         // TODO Automapper may be good here, or a refactor of how the models and decouple from the API into their own set.
         public override WorkItem UpdateEnumerables(libVSTS.models.WorkItem source, Models.VSTS.WorkItem destination)
         {
-            _context.Entry(destination).Collection(x => x.Comments).Load();
+            Context.Entry(destination).Collection(x => x.Comments).Load();
             
             foreach (libVSTS.models.WorkItemComment wic in source.Comments)
             {

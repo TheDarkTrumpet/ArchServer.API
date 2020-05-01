@@ -10,7 +10,7 @@ namespace libAPICache.Entities
 
         public EFTeamworkPeople(EFDbContext context) : base(context)
         {
-            Entries = _dbSet = _context.TeamworkPeople;
+            Entries = DbSet = Context.TeamworkPeople;
         }
 
         public void CacheEntries()

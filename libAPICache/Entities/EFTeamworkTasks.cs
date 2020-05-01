@@ -12,7 +12,7 @@ namespace libAPICache.Entities
 
         public EFTeamworkTasks(EFDbContext context) : base(context)
         {
-            Entries = _dbSet = _context.TeamworkTasks;
+            Entries = DbSet = Context.TeamworkTasks;
         }
         
         public void CacheEntries(DateTime? fromDate = null, bool includeCompleted = true)

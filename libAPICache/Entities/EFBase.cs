@@ -8,23 +8,26 @@ using libAPICache.Models;
 using libAPICache.util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using IConfiguration = libAPICache.util.IConfiguration;
 
 namespace libAPICache.Entities
 {
     public abstract class EFBase<T,T1> : IBaseInternal<T,T1>, IBase<T,T1>  where T: Base, new() where T1 : class
     {
-        protected readonly EFDbContext _context;
-        protected DbSet<T> _dbSet;
+        protected readonly EFDbContext Context;
+        protected DbSet<T> DbSet;
         private T1 _cachedInput;
+        protected IConfiguration Configuration;
+        
         public IEnumerable<T> Entries { get; set; }
 
-        public EFBase() : this(new EFDbContext())
+        public EFBase() : this(new EFDbContext(), new Configuration())
         {
         }
 
-        public EFBase(EFDbContext context)
+        public EFBase(EFDbContext context, IConfiguration configuration)
         {
-            _context = context;
+            Context = context;
         }
 
         public virtual T SaveEntry(T1 input, bool saveChanges = true)
@@ -51,12 +54,12 @@ namespace libAPICache.Entities
             }
             else
             {
-                _dbSet.Add(input);
+                DbSet.Add(input);
             }
 
             if (saveChanges)
             {
-                _context.SaveChanges();
+                Context.SaveChanges();
             }
 
             return input;
@@ -72,7 +75,7 @@ namespace libAPICache.Entities
 
             if (saveChanges)
             {
-                _context.SaveChanges();
+                Context.SaveChanges();
             }
             return savedEntries;
         }
@@ -84,6 +87,7 @@ namespace libAPICache.Entities
 
         public virtual string GetAPIKey(string identifier)
         {
+            
             IConfiguration config = util.Configuration.GetConfiguration();
             string apiKey = (string) config[identifier];
             
@@ -104,7 +108,7 @@ namespace libAPICache.Entities
 
         public virtual void UpdateEntityData(T destination, T source)
         {
-            _context.Entry(destination).CurrentValues.SetValues(source);
+            Context.Entry(destination).CurrentValues.SetValues(source);
         }
     }
 }

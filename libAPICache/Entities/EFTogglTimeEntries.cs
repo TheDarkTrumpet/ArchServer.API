@@ -14,7 +14,7 @@ namespace libAPICache.Entities
 
         public EFTogglTimeEntries(EFDbContext context) : base(context)
         {
-            Entries = _dbSet = _context.TogglTimeEntries;
+            Entries = DbSet = Context.TogglTimeEntries;
         }
         
 

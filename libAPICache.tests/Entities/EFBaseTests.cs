@@ -161,7 +161,7 @@ namespace libAPICache.tests.Entities
             public BaseMock(EFDbContext context) : base(context)
             {
                 InsertedContext = context;
-                Entries = _dbSet = context.VSTSWorkItems;
+                Entries = DbSet = context.VSTSWorkItems;
             }
 
             public override Models.VSTS.WorkItem UpdateEnumerables(WorkItem activity, Models.VSTS.WorkItem timeEntry)
