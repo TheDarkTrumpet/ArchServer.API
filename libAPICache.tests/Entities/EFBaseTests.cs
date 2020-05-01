@@ -8,6 +8,7 @@ using libAPICache.Models.Kimai;
 using libAPICache.tests.Helpers;
 using libAPICache.util;
 using libKimai.models;
+using libVSTS.models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -20,14 +21,14 @@ namespace libAPICache.tests.Entities
     {
         private Mock<EFDbContext> _context;
         private BaseMock _baseMock;
-        private Mock<DbSet<TimeEntry>> _mockDbSet;
+        private Mock<DbSet<Models.VSTS.WorkItem>> _mockDbSet;
             
         [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void UpdateEnumerables_NoOverride_ShouldThrowException()
         {
             BaseMockWithoutEnumerables input = new BaseMockWithoutEnumerables();
-            input.UpdateEnumerables(new Activity(), new TimeEntry());
+            input.UpdateEnumerables(new WorkItem(), new Models.VSTS.WorkItem());
         }
 
         [TestMethod]
@@ -40,47 +41,49 @@ namespace libAPICache.tests.Entities
         [TestMethod]
         public void SaveEntry_WithObjectNonExistent_ShouldAddAndSave()
         {
-            TimeEntry input = new TimeEntry()
+            WorkItem input = new WorkItem()
             {
                 Id = 11111,
-                ProjectName = "New Project Name"
+                Description= "New Description"
             };
 
             _baseMock.SaveEntry(input);
             
             _context.Verify(x => x.SaveChanges(), Times.Once);
-            _mockDbSet.Verify(x => x.Add(It.IsAny<TimeEntry>()), Times.Once);
+            _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Once);
         }
 
         [TestMethod]
         public void SaveEntry_WithObjectExistent_ShouldNotAddButSave()
         {
-            TimeEntry input = new TimeEntry()
+            WorkItem input = new WorkItem()
             {
                 Id = 12345,
-                ActivityComment = "A New comment"
+                Description = "A New comment"
             };
 
-            TimeEntry result = _baseMock.SaveEntry(input);
+            Models.VSTS.WorkItem result = _baseMock.SaveEntry(input);
             
             _context.Verify(x => x.SaveChanges(), Times.Once);
-            _mockDbSet.Verify(x => x.Add(It.IsAny<TimeEntry>()), Times.Never);
+            _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Never);
             Assert.AreEqual(1, _baseMock.UpdateEntityDataTimesCalled);
+            Assert.AreEqual(1, _baseMock.EnumerablesTimesCalled);
+            Assert.IsNotNull(result);
         }
         
         [TestInitialize]
         public void Initialize()
         {
-            IQueryable<TimeEntry> timeEntries = new List<TimeEntry>()
+            IQueryable<Models.VSTS.WorkItem> workItems = new List<Models.VSTS.WorkItem>()
             {
-                new TimeEntry() {Id = 12345, ActivityComment = "A Comment"},
-                new TimeEntry() {Id = 54321, ActivityName = "A Name"}
+                new Models.VSTS.WorkItem() {Id = 12345, Description = "Description #1"},
+                new Models.VSTS.WorkItem() {Id = 54321, Description = "Description #2"}
             }.AsQueryable();
             
-            _mockDbSet = GenerateDBSetHelper<TimeEntry>.GenerateDbSet(timeEntries);
+            _mockDbSet = GenerateDBSetHelper<Models.VSTS.WorkItem>.GenerateDbSet(workItems);
             _context = new Mock<EFDbContext>();
             
-            _context.Setup(x => x.KimaiTimeEntries).Returns(_mockDbSet.Object);
+            _context.Setup(x => x.VSTSWorkItems).Returns(_mockDbSet.Object);
             _baseMock = new BaseMock(_context.Object);
         }
 
@@ -92,12 +95,12 @@ namespace libAPICache.tests.Entities
             _baseMock = null;
         }
         
-        private class BaseMockWithoutEnumerables : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
+        private class BaseMockWithoutEnumerables : EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>
         {
             //Empty!
         }
 
-        private class BaseMock : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>
+        private class BaseMock : EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>
         {
             public int EnumerablesTimesCalled { get; set; } = 0;
             public int UpdateEntityDataTimesCalled { get; set; } = 0;
@@ -106,16 +109,16 @@ namespace libAPICache.tests.Entities
             public BaseMock(EFDbContext context) : base(context)
             {
                 InsertedContext = context;
-                Entries = _dbSet = context.KimaiTimeEntries;
+                Entries = _dbSet = context.VSTSWorkItems;
             }
 
-            public override TimeEntry UpdateEnumerables(Activity activity, TimeEntry timeEntry)
+            public override Models.VSTS.WorkItem UpdateEnumerables(WorkItem activity, Models.VSTS.WorkItem timeEntry)
             {
                 EnumerablesTimesCalled += 1;
                 return timeEntry;
             }
 
-            public override void UpdateEntityData(TimeEntry destination, TimeEntry activity)
+            public override void UpdateEntityData(Models.VSTS.WorkItem destination, Models.VSTS.WorkItem workItem)
             {
                 UpdateEntityDataTimesCalled += 1;
             }
