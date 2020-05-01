@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace libAPICache.Entities
 {
-    public class EFVSTSWorkItems : EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
+    public sealed class EFVSTSWorkItems : EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
     {
         public EFVSTSWorkItems() : this(new EFDbContext())
         {

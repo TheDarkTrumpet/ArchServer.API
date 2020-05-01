@@ -5,7 +5,7 @@ using libToggl.api;
 
 namespace libAPICache.Entities
 {
-    public class EFTogglWorkspace : EFBase<Workspace, libToggl.models.Workspace>, ITogglWorkspace
+    public sealed class EFTogglWorkspace : EFBase<Workspace, libToggl.models.Workspace>, ITogglWorkspace
     {
         public EFTogglWorkspace() : this(new EFDbContext()) { }
 

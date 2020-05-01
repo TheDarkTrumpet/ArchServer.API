@@ -6,7 +6,7 @@ using libTeamwork.api;
 
 namespace libAPICache.Entities
 {
-    public class EFTeamworkTasks : EFBase<Models.Teamwork.Task, libTeamwork.models.Task>, ITeamworkTasks
+    public sealed class EFTeamworkTasks : EFBase<Models.Teamwork.Task, libTeamwork.models.Task>, ITeamworkTasks
     {
         public EFTeamworkTasks() : this(new EFDbContext()) { }
 

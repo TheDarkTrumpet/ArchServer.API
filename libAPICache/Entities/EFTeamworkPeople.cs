@@ -4,7 +4,7 @@ using libTeamwork.api;
 
 namespace libAPICache.Entities
 {
-    public class EFTeamworkPeople: EFBase<Models.Teamwork.Person, libTeamwork.models.Person>, ITeamworkPeople
+    public sealed class EFTeamworkPeople: EFBase<Models.Teamwork.Person, libTeamwork.models.Person>, ITeamworkPeople
     {
         public EFTeamworkPeople() : this(new EFDbContext()) { }
 
