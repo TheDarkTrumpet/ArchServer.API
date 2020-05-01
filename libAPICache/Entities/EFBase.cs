@@ -27,13 +27,13 @@ namespace libAPICache.Entities
             _context = context;
         }
 
-        public virtual T SaveEntry(T1 input)
+        public virtual T SaveEntry(T1 input, bool saveChanges = true)
         {
             _cachedInput = input;
             var newEntry = new T();
             newEntry.Copy(input);
 
-            return SaveEntry(newEntry, true);
+            return SaveEntry(newEntry, saveChanges);
         }
 
         public virtual T SaveEntry(T input, bool saveChanges = true)
@@ -62,14 +62,18 @@ namespace libAPICache.Entities
             return input;
         }
 
-        public virtual List<T> SaveEntries(List<T1> entries)
+        public virtual List<T> SaveEntries(List<T1> entries, bool saveChanges = true)
         {
             List<T> savedEntries = new List<T>();
             foreach (var te in entries)
             {
-                savedEntries.Add(SaveEntry(te));
+                savedEntries.Add(SaveEntry(te, false));
             }
 
+            if (saveChanges)
+            {
+                _context.SaveChanges();
+            }
             return savedEntries;
         }
         

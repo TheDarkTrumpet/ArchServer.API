@@ -24,7 +24,7 @@ namespace libAPICache.tests.Entities
         private Mock<DbSet<Models.VSTS.WorkItem>> _mockDbSet;
             
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(Exception), "This method must be implemented in the derived class!")]
         public void UpdateEnumerables_NoOverride_ShouldThrowException()
         {
             BaseMockWithoutEnumerables input = new BaseMockWithoutEnumerables();
@@ -54,7 +54,9 @@ namespace libAPICache.tests.Entities
         }
 
         [TestMethod]
-        public void SaveEntry_WithObjectExistent_ShouldNotAddButSave()
+        [DataRow(true, 1)]
+        [DataRow(false, 0)]
+        public void SaveEntry_WithObjectExistent_ShouldNotAddButMaybeSave(bool saveChanges, int saveChangesExpected)
         {
             WorkItem input = new WorkItem()
             {
@@ -62,15 +64,15 @@ namespace libAPICache.tests.Entities
                 Description = "A New comment"
             };
 
-            Models.VSTS.WorkItem result = _baseMock.SaveEntry(input);
+            Models.VSTS.WorkItem result = _baseMock.SaveEntry(input, saveChanges);
             
-            _context.Verify(x => x.SaveChanges(), Times.Once);
+            _context.Verify(x => x.SaveChanges(), Times.Exactly(saveChangesExpected));
             _mockDbSet.Verify(x => x.Add(It.IsAny<Models.VSTS.WorkItem>()), Times.Never);
             Assert.AreEqual(1, _baseMock.UpdateEntityDataTimesCalled);
             Assert.AreEqual(1, _baseMock.EnumerablesTimesCalled);
             Assert.IsNotNull(result);
         }
-
+        
         [TestMethod]
         public void GetOrReturnNull_WithElement_ShouldReturnIt()
         {
