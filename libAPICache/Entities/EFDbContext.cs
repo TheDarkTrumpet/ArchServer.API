@@ -1,3 +1,4 @@
+using Configuration;
 using libAPICache.Models;
 using libAPICache.util;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace libAPICache.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            Configuration configuration = new Configuration();
+            Config configuration = new Config();
             string connectionString = configuration.GetKey("ConnectionStrings:EFDbContext");
 
             optionsBuilder.UseSqlServer(connectionString);

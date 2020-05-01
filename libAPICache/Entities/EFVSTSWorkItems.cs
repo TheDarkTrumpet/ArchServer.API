@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Configuration;
 using libAPICache.Abstract;
 using libAPICache.Models.VSTS;
 using libAPICache.util;
@@ -12,11 +13,11 @@ namespace libAPICache.Entities
 {
     public sealed class EFVSTSWorkItems: EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
     {
-        public EFVSTSWorkItems() : this(new EFDbContext(), new Configuration())
+        public EFVSTSWorkItems() : this(new EFDbContext(), new Config())
         {
         }
 
-        public EFVSTSWorkItems(EFDbContext context, IConfiguration configuration) : base(context, configuration)
+        public EFVSTSWorkItems(EFDbContext context, IConfig configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.VSTSWorkItems;
         }

@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using Configuration;
 using libAPICache.Abstract;
 using libAPICache.Entities;
-using libAPICache.util;
-using IConfiguration = libAPICache.util.IConfiguration;
 
 namespace BulkCache.lib
 {
     public class BulkCache
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfig _configuration;
         private DateTime _timeLog;
         
         public BulkCache()
         {
-            _configuration = new Configuration();
+            _configuration = new Config();
         }
 
         private void WriteTimeLog(string operation, string state)

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using Configuration;
 using libAPICache.Abstract;
 using libAPICache.Models;
 using libAPICache.util;
 using Microsoft.EntityFrameworkCore;
-using IConfiguration = libAPICache.util.IConfiguration;
 
 namespace libAPICache.Entities
 {
@@ -15,15 +16,15 @@ namespace libAPICache.Entities
         protected readonly EFDbContext Context;
         protected DbSet<T> DbSet;
         private T1 _cachedInput;
-        protected IConfiguration Configuration;
+        protected IConfig Configuration;
         
         public IEnumerable<T> Entries { get; set; }
 
-        public EFBase() : this(new EFDbContext(), new Configuration())
+        public EFBase() : this(new EFDbContext(), new Config())
         {
         }
 
-        public EFBase(EFDbContext context, IConfiguration configuration)
+        public EFBase(EFDbContext context, IConfig configuration)
         {
             Context = context;
             Configuration = configuration;

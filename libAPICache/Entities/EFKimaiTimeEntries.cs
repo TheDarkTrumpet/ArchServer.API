@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Configuration;
 using libAPICache.Abstract;
 using libAPICache.util;
 using libKimai.models;
@@ -9,9 +10,9 @@ namespace libAPICache.Entities
 {
     public sealed class EFKimaiTimeEntries : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>, IKimaiTimeEntries
     {
-        public EFKimaiTimeEntries() : this(new EFDbContext(), new util.Configuration()) { }
+        public EFKimaiTimeEntries() : this(new EFDbContext(), new Config()) { }
 
-        public EFKimaiTimeEntries(EFDbContext context, Configuration configuration) : base(context, configuration)
+        public EFKimaiTimeEntries(EFDbContext context, IConfig configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.KimaiTimeEntries;
         }

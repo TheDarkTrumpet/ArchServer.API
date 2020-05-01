@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
+using Configuration;
 using libAPICache.Abstract;
-using libAPICache.Models.Teamwork;
-using libAPICache.util;
 using libTeamwork.api;
 
 namespace libAPICache.Entities
 {
     public sealed class EFTeamworkTasks : EFBase<Models.Teamwork.Task, libTeamwork.models.Task>, ITeamworkTasks
     {
-        public EFTeamworkTasks() : this(new EFDbContext(), new Configuration()) { }
+        public EFTeamworkTasks() : this(new EFDbContext(), new Config()) { }
 
-        public EFTeamworkTasks(EFDbContext context, IConfiguration configuration) : base(context, configuration)
+        public EFTeamworkTasks(EFDbContext context, IConfig configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.TeamworkTasks;
         }

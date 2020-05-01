@@ -6,12 +6,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace Configuration
 {
-    public class Configuration : IConfiguration
+    public class Config : IConfig
     {
         protected string ConfigurationFile { get; set; }
         protected Microsoft.Extensions.Configuration.IConfiguration LoadedConfiguration { get; set; }
         
-        public Configuration(string fileName = null, string directory = null)
+        public Config(string fileName = null, string directory = null)
         {
             ConfigurationFile = GetConfigurationFile(fileName, directory);
             LoadConfiguration();

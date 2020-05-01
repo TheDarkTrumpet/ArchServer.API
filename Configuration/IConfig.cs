@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Configuration
 {
-    public interface IConfiguration
+    public interface IConfig
     {
         string GetKey(string identifier);
         int GetInt(string identifier);

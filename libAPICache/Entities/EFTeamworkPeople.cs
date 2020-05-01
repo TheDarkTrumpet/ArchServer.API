@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using Configuration;
 using libAPICache.Abstract;
 using libAPICache.util;
 using libTeamwork.api;
+using Org.BouncyCastle.Math.EC;
 
 namespace libAPICache.Entities
 {
     public sealed class EFTeamworkPeople: EFBase<Models.Teamwork.Person, libTeamwork.models.Person>, ITeamworkPeople
     {
-        public EFTeamworkPeople() : this(new EFDbContext(), new Configuration()) { }
+        public EFTeamworkPeople() : this(new EFDbContext(), new Config()) { }
 
-        public EFTeamworkPeople(EFDbContext context, Configuration configuration) : base(context, configuration)
+        public EFTeamworkPeople(EFDbContext context, IConfig configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.TeamworkPeople;
         }

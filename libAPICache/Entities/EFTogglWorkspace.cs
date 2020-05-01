@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Configuration;
 using libAPICache.Abstract;
 using libAPICache.Models.Toggl;
 using libAPICache.util;
@@ -8,9 +9,9 @@ namespace libAPICache.Entities
 {
     public sealed class EFTogglWorkspace : EFBase<Workspace, libToggl.models.Workspace>, ITogglWorkspace
     {
-        public EFTogglWorkspace() : this(new EFDbContext(), new Configuration()) { }
+        public EFTogglWorkspace() : this(new EFDbContext(), new Config()) { }
 
-        public EFTogglWorkspace(EFDbContext context, IConfiguration configuration) : base(context, configuration)
+        public EFTogglWorkspace(EFDbContext context, IConfig configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.TogglWorkspaces;
         }

@@ -15,14 +15,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libKimai\libKimai.csproj" />
     <ProjectReference Include="..\libToggl\libToggl.csproj" />
     <ProjectReference Include="..\libTeamwork\libTeamwork.csproj" />
     <ProjectReference Include="..\libVSTS\libVSTS.csproj" />
+    <ProjectReference Include="..\Configuration\Configuration.csproj" />
   </ItemGroup>
 </Project>
