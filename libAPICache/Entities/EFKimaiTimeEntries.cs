@@ -1,20 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using libAPICache.Abstract;
-using libAPICache.Models.Kimai;
 using libAPICache.util;
 using libKimai.models;
 using libKimai.query;
-using Microsoft.Extensions.Configuration;
 
 namespace libAPICache.Entities
 {
     public sealed class EFKimaiTimeEntries : EFBase<Models.Kimai.TimeEntry, libKimai.models.Activity>, IKimaiTimeEntries
     {
-        public EFKimaiTimeEntries() : this(new EFDbContext()) { }
+        public EFKimaiTimeEntries() : this(new EFDbContext(), new util.Configuration()) { }
 
-        public EFKimaiTimeEntries(EFDbContext context) : base(context)
+        public EFKimaiTimeEntries(EFDbContext context, Configuration configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.KimaiTimeEntries;
         }

@@ -4,7 +4,7 @@ using System.IO;
 using libAPICache.Abstract;
 using libAPICache.Entities;
 using libAPICache.util;
-using Microsoft.Extensions.Configuration;
+using IConfiguration = libAPICache.util.IConfiguration;
 
 namespace BulkCache.lib
 {
@@ -15,7 +15,7 @@ namespace BulkCache.lib
         
         public BulkCache()
         {
-            _configuration = Configuration.GetConfiguration();
+            _configuration = new Configuration();
         }
 
         private void WriteTimeLog(string operation, string state)

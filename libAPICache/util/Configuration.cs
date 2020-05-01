@@ -9,26 +9,27 @@ namespace libAPICache.util
 {
     public interface IConfiguration
     {
-        
+        string GetKey(string identifier);
+        int GetInt(string identifier);
     }
     
     public class Configuration : IConfiguration
     {
-        protected string configurationFile { get; set; }
-        protected IConfigurationRoot loadedConfiguration { get; set; }
+        protected string ConfigurationFile { get; set; }
+        protected IConfigurationRoot LoadedConfiguration { get; set; }
         
         public Configuration(string fileName = null, string directory = null)
         {
-            configurationFile = GetConfigurationFile(fileName, directory);
+            ConfigurationFile = GetConfigurationFile(fileName, directory);
         }
 
         public virtual string GetKey(string identifier)
         {
-            string value = (string) loadedConfiguration[identifier];
+            string value = (string) LoadedConfiguration[identifier];
 
             if (String.IsNullOrEmpty(value))
             {
-                throw new Exception($"Attempted to read, {identifier} from {configurationFile}, which was not found");
+                throw new Exception($"Attempted to read, {identifier} from {ConfigurationFile}, which was not found");
             }
 
             return value;
@@ -36,11 +37,11 @@ namespace libAPICache.util
 
         public virtual int GetInt(string identifier)
         {
-            int value = int.Parse(loadedConfiguration[identifier]);
+            int value = int.Parse(LoadedConfiguration[identifier]);
             return value;
         }
         
-        protected string GetConfigurationFile(string fileName = null, string directory = null)
+        protected virtual string GetConfigurationFile(string fileName = null, string directory = null)
         {
             if (String.IsNullOrEmpty(directory))
             {
@@ -59,12 +60,12 @@ namespace libAPICache.util
             return $"{directory}/{fileName}";
         }
         
-        protected void LoadConfiguration()
+        protected virtual void LoadConfiguration()
         {
             var configurationBuilder = new Microsoft.Extensions.Configuration.ConfigurationBuilder().SetBasePath(@Directory.GetCurrentDirectory());
             
-            loadedConfiguration = configurationBuilder
-                .AddJsonFile(configurationFile, optional: true, reloadOnChange: true).Build();
+            LoadedConfiguration = configurationBuilder
+                .AddJsonFile(ConfigurationFile, optional: true, reloadOnChange: true).Build();
         }
     }
 }

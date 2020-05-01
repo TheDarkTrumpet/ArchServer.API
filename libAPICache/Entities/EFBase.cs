@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using libAPICache.Abstract;
 using libAPICache.Models;
 using libAPICache.util;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using IConfiguration = libAPICache.util.IConfiguration;
 
 namespace libAPICache.Entities
@@ -87,9 +85,7 @@ namespace libAPICache.Entities
 
         public virtual string GetAPIKey(string identifier)
         {
-            
-            IConfiguration config = util.Configuration.GetConfiguration();
-            string apiKey = (string) config[identifier];
+            string apiKey = Configuration.GetKey(identifier);
             
             if (String.IsNullOrEmpty(apiKey))
             {

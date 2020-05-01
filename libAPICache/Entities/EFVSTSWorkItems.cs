@@ -12,11 +12,11 @@ namespace libAPICache.Entities
 {
     public sealed class EFVSTSWorkItems: EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
     {
-        public EFVSTSWorkItems() : this(new EFDbContext())
+        public EFVSTSWorkItems() : this(new EFDbContext(), new Configuration())
         {
         }
 
-        public EFVSTSWorkItems(EFDbContext context) : base(context)
+        public EFVSTSWorkItems(EFDbContext context, IConfiguration configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.VSTSWorkItems;
         }

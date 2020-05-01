@@ -158,7 +158,7 @@ namespace libAPICache.tests.Entities
             public int UpdateEntityDataTimesCalled { get; set; } = 0;
             public EFDbContext InsertedContext { get; set; }
 
-            public BaseMock(EFDbContext context) : base(context)
+            public BaseMock(EFDbContext context) : base(context, null)
             {
                 InsertedContext = context;
                 Entries = DbSet = context.VSTSWorkItems;

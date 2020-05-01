@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using libAPICache.Abstract;
+using libAPICache.util;
 using libTeamwork.api;
 
 namespace libAPICache.Entities
 {
     public sealed class EFTeamworkPeople: EFBase<Models.Teamwork.Person, libTeamwork.models.Person>, ITeamworkPeople
     {
-        public EFTeamworkPeople() : this(new EFDbContext()) { }
+        public EFTeamworkPeople() : this(new EFDbContext(), new Configuration()) { }
 
-        public EFTeamworkPeople(EFDbContext context) : base(context)
+        public EFTeamworkPeople(EFDbContext context, Configuration configuration) : base(context, configuration)
         {
             Entries = DbSet = Context.TeamworkPeople;
         }
