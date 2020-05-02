@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace libToggl.api
 {
-    public interface IWorkspaces
+    public interface IWorkspaces : IBase
     {
         public JArray GetRawWorkspaces();
         List<Workspace> GetWorkspaces();

@@ -8,7 +8,7 @@ using RestSharp;
 
 namespace libToggl.api
 {
-    public class TimeEntries : Base
+    public class TimeEntries : Base, ITimeEntries
     {
         public TimeEntries(string apiKey) : base(apiKey)
         {
