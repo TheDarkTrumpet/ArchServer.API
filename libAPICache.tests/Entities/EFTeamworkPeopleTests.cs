@@ -24,10 +24,13 @@ namespace libAPICache.tests.Entities
             Assert.IsNotNull(efTeamworkPeople.BaseUrl);
         }
 
+        [TestMethod]
         public void CacheEntries_ShouldGetPeopleAndCallSave()
         {
             EFTeamworkPeople efTeamworkPeople =
                 new EFTeamworkPeople(_context.Object, _config.Object, _iAPIMethod.Object);
+            
+            efTeamworkPeople.CacheEntries();
             
             _iAPIMethod.Verify(x => x.GetPeople(), Times.Once);
             _context.Verify(x => x.SaveChanges(), Times.Once);
