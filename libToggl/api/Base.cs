@@ -5,10 +5,10 @@ using RestSharp.Authenticators;
 
 namespace libToggl.api
 {
-    public class Base
+    public class Base : IBase
     {
-        protected string ApiKey { get; set; }
-        protected string BaseURL { get; set; }
+        public string ApiKey { get; set; }
+        public string BaseURL { get; set; }
         
         protected CookieContainer CookieContainer { get; set; }
         protected IRestClient RestClient { get; set; }
