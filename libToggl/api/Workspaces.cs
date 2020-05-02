@@ -7,7 +7,7 @@ using RestSharp;
 
 namespace libToggl.api
 {
-    public class Workspaces : Base
+    public class Workspaces : Base, IWorkspaces
     {
         public Workspaces(string apiKey) : base(apiKey) { CreateClient(); }
         private readonly string _endpointUri = "/workspaces";
