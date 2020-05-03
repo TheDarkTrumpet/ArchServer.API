@@ -34,6 +34,10 @@ namespace libAPICache.tests.Entities
 
         [TestMethod]
         [DataRow(false, false, false, false, null)]
+        [DataRow(false, true, false, false, null)]
+        [DataRow(false, false, true, false, null)]
+        [DataRow(false, false, false, true, null)]
+        [DataRow(false, false, false, false, "2020/01/01")]
         public void CacheEntries_WithVariousOptions_ShouldSetupPropertiesGetWorkItemsAndSave(bool includeComments, bool assignedInclude, bool statesExclude, bool typesInclude, string fromChangedString)
         {
             EFVSTSWorkItems efvstsWorkItems = new EFVSTSWorkItems(_context.Object, _config.Object, _iAPIMethod.Object);
@@ -43,12 +47,45 @@ namespace libAPICache.tests.Entities
             {
                 fromChanged = DateTime.Parse(fromChangedString);
             }
+
+            List<string> assignedToInclude = GenerateStringList(assignedInclude);
+            List<string> statesToExclude = GenerateStringList(statesExclude);
+            List<string> typesToInclude = GenerateStringList(typesInclude);
             
-            efvstsWorkItems.CacheEntries(includeComments, GenerateStringList(assignedInclude), 
-                GenerateStringList(statesExclude), GenerateStringList(typesInclude), fromChanged);
+            efvstsWorkItems.CacheEntries(includeComments, assignedToInclude, 
+                statesToExclude, typesToInclude, fromChanged);
 
             _iAPIMethod.Verify(x => x.GetWorkItems(), Times.Once);
             _context.Verify(x => x.SaveChanges(), Times.Once);
+            Assert.AreEqual(includeComments, _includeComments);
+            Assert.AreEqual(fromChanged, _fromDate);
+
+            if (assignedInclude)
+            {
+                Assert.AreEqual(assignedToInclude, _assignedInclude);
+            }
+            else
+            {
+                Assert.IsNull(_assignedInclude);
+            }
+            
+            if (statesExclude)
+            {
+                Assert.AreEqual(statesToExclude, _statesExclude);
+            }
+            else
+            {
+                Assert.IsNull(_statesExclude);
+            }
+            
+            if (typesInclude)
+            {
+                Assert.AreEqual(typesToInclude, _typesInclude);
+            }
+            else
+            {
+                Assert.IsNull(_typesInclude);
+            }
             
         }
         [TestInitialize]
