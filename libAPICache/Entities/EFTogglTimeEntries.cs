@@ -10,20 +10,22 @@ namespace libAPICache.Entities
 {
     public sealed class EFTogglTimeEntries : EFBase<TimeEntry, libToggl.models.TimeEntry>, ITogglTimeEntries
     {
-        public EFTogglTimeEntries() : this(new EFDbContext(), new Config()) { }
+        public string ApiKey { get; set; }
+        public ITimeEntries _timeEntries { get; set; }
+        public EFTogglTimeEntries() : this(new EFDbContext(), new Config(), null) { }
 
-        public EFTogglTimeEntries(EFDbContext context, IConfig configuration) : base(context, configuration)
+        public EFTogglTimeEntries(EFDbContext context, IConfig configuration, ITimeEntries timeEntries) : base(context, configuration)
         {
             Entries = DbSet = Context.TogglTimeEntries;
+            
+            ApiKey = Configuration.GetKey("APISources:Toggl:API_Key");
+            _timeEntries = timeEntries ?? new TimeEntries(ApiKey);
         }
         
 
         public void CacheEntries(string workspaceName, DateTime? fromDate = null)
         {
-            string apiKey = Configuration.GetKey("APISources:Toggl:API_Key");
-            TimeEntries activities = new TimeEntries(apiKey);
-
-            List<libToggl.models.TimeEntry> results = activities.GetTimeEntries(workspaceName, fromDate).ToList();
+            List<libToggl.models.TimeEntry> results = _timeEntries.GetTimeEntries(workspaceName, fromDate).ToList();
 
             SaveEntries(results);
         }

@@ -16,6 +16,7 @@ namespace libAPICache.tests.Entities
             
             _config.Verify(x => x.GetKey(It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(efTogglWorkspace.ApiKey);
+            Assert.IsNotNull(efTogglWorkspace.Entries);
         }
 
         [TestMethod]
