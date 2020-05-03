@@ -5,8 +5,10 @@ using AutoFixture;
 using libAPICache.Entities;
 using libVSTS.api;
 using libVSTS.models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using WorkItemComment = libAPICache.Models.VSTS.WorkItemComment;
 
 namespace libAPICache.tests.Entities
 {
@@ -62,6 +64,35 @@ namespace libAPICache.tests.Entities
             CollectionAssert.AreEqual(statesToExclude, _iAPIMethod.Object.StatesToExclude);
             CollectionAssert.AreEqual(typesToInclude, _iAPIMethod.Object.TypesToInclude);
         }
+
+        [TestMethod]
+        public void UpdateEnumerables_ShouldSynchronizeChildren()
+        {
+            EFVSTSWorkItems efvstsWorkItems = new EFVSTSWorkItems(_context.Object, _config.Object, _iAPIMethod.Object);
+
+            libVSTS.models.WorkItem source = new WorkItem()
+            {
+                Comments = new List<libVSTS.models.WorkItemComment>()
+                {
+                    new libVSTS.models.WorkItemComment() { Id = 1, Comment = "Id 1"},
+                    new libVSTS.models.WorkItemComment() { Id = 3, Comment = "Id 3"}
+                }
+            };
+
+            Models.VSTS.WorkItem destination = new Models.VSTS.WorkItem()
+            {
+                Comments = new List<WorkItemComment>()
+                {
+                    new WorkItemComment() {Id = 1, Comment = "Id 1"},
+                    new WorkItemComment() {Id = 2, Comment = "Id 2"}
+                }
+            };
+
+            Models.VSTS.WorkItem result = efvstsWorkItems.UpdateEnumerables(source, destination);
+            
+            Assert.AreEqual(2, result.Comments.Count);
+        }
+        
         [TestInitialize]
         public void Initialize()
         {
@@ -80,6 +111,7 @@ namespace libAPICache.tests.Entities
             _iAPIMethod.SetupSet(x => x.IncludeComments).Callback(x => _includeComments = x);
             
             _context.Setup(x => x.VSTSWorkItems).Returns(_mockDbSet.Object);
+            _context.Setup(x => x.Entry(It.IsAny<libVSTS.models.WorkItem>())).Returns(new Mock<EntityEntry<Models.VSTS.WorkItem>>())
         }
 
         protected override IQueryable<Models.VSTS.WorkItem> GenerateFixtures()
