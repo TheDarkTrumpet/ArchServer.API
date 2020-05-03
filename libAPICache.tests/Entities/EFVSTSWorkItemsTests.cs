@@ -31,10 +31,12 @@ namespace libAPICache.tests.Entities
 
         [TestMethod]
         [DataRow(false, false, false, false, null)]
+        [DataRow(true, false, false, false, null)]
         [DataRow(false, true, false, false, null)]
         [DataRow(false, false, true, false, null)]
         [DataRow(false, false, false, true, null)]
         [DataRow(false, false, false, false, "2020/01/01")]
+        [DataRow(true, true, true, true, "2020/01/01")]
         public void CacheEntries_WithVariousOptions_ShouldSetupPropertiesGetWorkItemsAndSave(bool includeComments, bool assignedInclude, bool statesExclude, bool typesInclude, string fromChangedString)
         {
             EFVSTSWorkItems efvstsWorkItems = new EFVSTSWorkItems(_context.Object, _config.Object, _iAPIMethod.Object);
