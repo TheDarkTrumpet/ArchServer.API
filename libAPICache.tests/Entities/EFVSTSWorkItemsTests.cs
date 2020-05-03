@@ -13,9 +13,6 @@ namespace libAPICache.tests.Entities
     [TestClass]
     public class EFVSTSWorkItemsTests : Base<Models.VSTS.WorkItem, IWorkItem>
     {
-        private List<string> _assignedInclude { get; set; }
-        private List<string> _statesExclude { get; set; }
-        private List<string> _typesInclude { get; set; }
         private DateTime? _fromDate { get; set; }
         private bool _includeComments { get; set; }
         
@@ -59,34 +56,9 @@ namespace libAPICache.tests.Entities
             _context.Verify(x => x.SaveChanges(), Times.Once);
             Assert.AreEqual(includeComments, _includeComments);
             Assert.AreEqual(fromChanged, _fromDate);
-
-            if (assignedInclude)
-            {
-                Assert.AreEqual(assignedToInclude, _assignedInclude);
-            }
-            else
-            {
-                Assert.IsNull(_assignedInclude);
-            }
-            
-            if (statesExclude)
-            {
-                Assert.AreEqual(statesToExclude, _statesExclude);
-            }
-            else
-            {
-                Assert.IsNull(_statesExclude);
-            }
-            
-            if (typesInclude)
-            {
-                Assert.AreEqual(typesToInclude, _typesInclude);
-            }
-            else
-            {
-                Assert.IsNull(_typesInclude);
-            }
-            
+            CollectionAssert.AreEqual(assignedToInclude, _iAPIMethod.Object.AssignedToInclude);
+            CollectionAssert.AreEqual(statesToExclude, _iAPIMethod.Object.StatesToExclude);
+            CollectionAssert.AreEqual(typesToInclude, _iAPIMethod.Object.TypesToInclude);
         }
         [TestInitialize]
         public void Initialize()
@@ -97,9 +69,11 @@ namespace libAPICache.tests.Entities
             _config.Setup(x => x.GetKey("APISources:VSTS:Project")).Returns("A Project");
 
             _iAPIMethod.Setup(x => x.GetWorkItems()).Returns(new List<WorkItem>());
-            _iAPIMethod.SetupSet(x => x.AssignedToInclude).Callback(x => _assignedInclude = x);
-            _iAPIMethod.SetupSet(x => x.StatesToExclude).Callback(x => _statesExclude = x);
-            _iAPIMethod.SetupSet(x => x.TypesToInclude).Callback(x => _typesInclude = x);
+            _iAPIMethod.SetupAllProperties();
+            _iAPIMethod.Object.AssignedToInclude = new List<string>();
+            _iAPIMethod.Object.StatesToExclude = new List<string>();
+            _iAPIMethod.Object.TypesToInclude = new List<string>();
+
             _iAPIMethod.SetupSet(x => x.FromChanged).Callback(x => _fromDate = x);
             _iAPIMethod.SetupSet(x => x.IncludeComments).Callback(x => _includeComments = x);
             
@@ -120,7 +94,7 @@ namespace libAPICache.tests.Entities
 
         private List<string> GenerateStringList(bool toCreate)
         {
-            List<string> values = null;
+            List<string> values = new List<string>();
             if (toCreate)
             {
                 Fixture autoFixture = new Fixture();
