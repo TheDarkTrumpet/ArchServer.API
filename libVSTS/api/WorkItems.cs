@@ -11,7 +11,7 @@ using RestSharp;
 
 namespace libVSTS.api
 {
-    public class WorkItems : Base
+    public class WorkItems : Base, IWorkItem
     {
         private readonly string _endpointUri;
         public List<string> StatesToExclude { get; set; }

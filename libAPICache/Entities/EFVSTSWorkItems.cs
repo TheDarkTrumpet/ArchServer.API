@@ -13,30 +13,36 @@ namespace libAPICache.Entities
 {
     public sealed class EFVSTSWorkItems: EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
     {
+        public string ApiKey { get; set; }
+        public string Organization { get; set; }
+        public string Project { get; set; }
+        
+        private IWorkItem _workItem { get; set; }
         public EFVSTSWorkItems() : this(new EFDbContext(), new Config())
         {
         }
 
-        public EFVSTSWorkItems(EFDbContext context, IConfig configuration) : base(context, configuration)
+        public EFVSTSWorkItems(EFDbContext context, IConfig configuration, IWorkItem workItem = null) : base(context, configuration)
         {
             Entries = DbSet = Context.VSTSWorkItems;
+            
+            ApiKey = Configuration.GetKey("APISources:VSTS:API_Key");
+            Organization = Configuration.GetKey("APISources:VSTS:Organization");
+            Project = Configuration.GetKey("APISources:VSTS:Project");
+            
+            _workItem = workItem ?? new WorkItems(ApiKey, Organization, Project);
         }
 
         public void CacheEntries(bool includeComments = false, List<string> assignedToInclude = null,
             List<string> statesToExclude = null, List<string> typesToInclude = null, DateTime? fromChanged = null)
         {
-            string api_key = Configuration.GetKey("APISources:VSTS:API_Key");
-            string organization = Configuration.GetKey("APISources:VSTS:Organization");
-            string project = Configuration.GetKey("APISources:VSTS:Project");
-
-            WorkItems workItemQuery = new WorkItems(api_key, organization, project);
-            workItemQuery.FromChanged = fromChanged;
-            workItemQuery.IncludeComments = includeComments;
+            _workItem.FromChanged = fromChanged;
+            _workItem.IncludeComments = includeComments;
             if (assignedToInclude != null && assignedToInclude.Any())
             {
                 foreach (var ai in assignedToInclude)
                 {
-                    workItemQuery.AssignedToInclude.Add(ai);
+                    _workItem.AssignedToInclude.Add(ai);
                 }
             }
 
@@ -44,7 +50,7 @@ namespace libAPICache.Entities
             {
                 foreach (var si in statesToExclude)
                 {
-                    workItemQuery.StatesToExclude.Add(si);
+                    _workItem.StatesToExclude.Add(si);
                 }
             }
 
@@ -52,11 +58,11 @@ namespace libAPICache.Entities
             {
                 foreach (var ti in typesToInclude)
                 {
-                    workItemQuery.TypesToInclude.Add(ti);
+                    _workItem.TypesToInclude.Add(ti);
                 }
             }
 
-            List<libVSTS.models.WorkItem> workItems = workItemQuery.GetWorkItems();
+            List<libVSTS.models.WorkItem> workItems = _workItem.GetWorkItems();
             SaveEntries(workItems);
         }
 
@@ -80,7 +86,6 @@ namespace libAPICache.Entities
             {
                 if (source.Comments.All(x => x.Id != wic.Id))
                 {
-                    Console.WriteLine("removing elements");
                     destination.Comments.Remove(wic);
                 }
             }
