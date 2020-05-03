@@ -17,12 +17,15 @@ namespace libAPICache.tests.Entities
         protected Mock<IConfig> _config;
         protected Mock<T1> _iAPIMethod;
 
+        protected IQueryable<T> ModelEntries { get; set; }
         protected void Setup(IQueryable<T> entries = null)
         {
             if (entries == null)
             {
                 entries = GenerateFixtures();
             }
+
+            ModelEntries = entries;
             
             _mockDbSet = GenerateDBSetHelper<T>.GenerateDbSet(entries);
 

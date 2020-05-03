@@ -38,6 +38,8 @@ namespace libAPICache.tests.Entities
             _config.Setup(x => x.GetKey("APISources:Toggl:API_Key")).Returns("Something");
 
             _iAPIMethod.Setup(x => x.GetWorkspaces()).Returns(new List<libToggl.models.Workspace>());
+
+            _context.Setup(x => x.TogglWorkspaces).Returns(_mockDbSet.Object);
         }
     }
 }
