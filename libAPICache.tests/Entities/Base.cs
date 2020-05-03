@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using AutoFixture.Dsl;
 using Configuration;
 using libAPICache.Entities;
 using libAPICache.Models;
@@ -40,10 +41,11 @@ namespace libAPICache.tests.Entities
             return autoFixture.Create<T>();
         }
 
-        protected IQueryable<T> GenerateFixtures()
+        protected virtual IQueryable<T> GenerateFixtures()
         {
             Fixture autoFixture = new Fixture();
             IQueryable<T> entries = autoFixture.CreateMany<T>().AsQueryable();
+            
             return entries;
         }
     }
