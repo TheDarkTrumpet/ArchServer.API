@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
@@ -24,6 +25,24 @@ namespace libAPICache.tests.Entities
             Assert.IsNotNull(efvstsWorkItems.ApiKey);
         }
 
+        [TestMethod]
+        [DataRow(false, false, false, false, null)]
+        public void CacheEntries_WithVariousOptions_ShouldSetupPropertiesGetWorkItemsAndSave(bool includeComments, bool assignedInclude, bool statesExclude, bool typesInclude, string fromChangedString)
+        {
+            EFVSTSWorkItems efvstsWorkItems = new EFVSTSWorkItems(_context.Object, _config.Object, _iAPIMethod.Object);
+
+            DateTime? fromChanged = null;
+            if (!string.IsNullOrEmpty(fromChangedString))
+            {
+                fromChanged = DateTime.Parse(fromChangedString);
+            }
+            
+            efvstsWorkItems.CacheEntries(includeComments, GenerateStringList(assignedInclude), 
+                GenerateStringList(statesExclude), GenerateStringList(typesInclude), fromChanged);
+
+            _iAPIMethod.Verify(x => x.GetWorkItems(), Times.Once);
+            _context.Verify(x => x.SaveChanges(), Times.Once);
+        }
         [TestInitialize]
         public void Initialize()
         {
@@ -47,6 +66,18 @@ namespace libAPICache.tests.Entities
                 .Do(x => x.Comments = workItemComments.ToList()).CreateMany().AsQueryable();
 
             return workItems;
+        }
+
+        private List<string> GenerateStringList(bool toCreate)
+        {
+            List<string> values = null;
+            if (toCreate)
+            {
+                Fixture autoFixture = new Fixture();
+                values = autoFixture.CreateMany<string>().ToList();
+            }
+
+            return values;
         }
     }
 }
