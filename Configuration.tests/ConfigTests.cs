@@ -9,9 +9,11 @@ namespace Configuration.tests
         [TestMethod]
         public void Config_WithFileNameAndDirectory_ShouldGetAndLoadConfiguration()
         {
-            Config config = new Config();
-            Console.WriteLine("Loaded file name from " + config.FullLoadedFileName);
-            Assert.AreEqual("", config.FullLoadedFileName);
+            ConfigMock config = new ConfigMock();
+            Assert.IsTrue(config.FullLoadedFileName.Contains("appsettings.Development.json")); // Tests file
+            Assert.IsTrue(config.FullLoadedFileName.Contains("/bin/Debug"));                   // Tests directory
+            Assert.AreEqual(1, config.LoadConfigurationCalled);
+            Assert.AreEqual(1, config.GetConfigurationFileCalled);
         }
 
         [TestMethod]
@@ -25,6 +27,22 @@ namespace Configuration.tests
         public void Initialize()
         {
             
+        }
+
+        private class ConfigMock : Config
+        {
+            public int GetConfigurationFileCalled { get; set; } = 0;
+            public int LoadConfigurationCalled { get; set; } = 0;
+            protected override void GetConfigurationFile(string fileName = null, string directory = null)
+            {
+                base.GetConfigurationFile(fileName, directory);
+                GetConfigurationFileCalled += 1;
+            }
+
+            protected override void LoadConfiguration()
+            {
+                LoadConfigurationCalled += 1;
+            }
         }
     }
 }
