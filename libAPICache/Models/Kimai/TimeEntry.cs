@@ -18,6 +18,7 @@ namespace libAPICache.Models.Kimai
         public double? HourlyRate { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public int Duration { get; set; }
         public string TimeNotes { get; set; }
     }
 }

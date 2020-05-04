@@ -12,7 +12,7 @@ namespace libKimai.query
         private TimeZoneInfo _timeZone { get; set; }
         private string _sqlStatementBase = @"select SQL_NO_CACHE kt.id as 'Id', ka.name as 'ActivityName', ka.comment as 'ActivityComment',
             kp.name as 'ProjectName', kp.comment as 'ProjectComment', kc.name as 'Customer',
-            kc.hourly_rate as 'HourlyRate', kt.start_time as 'StartTime', kt.end_time as 'EndTime',
+            kc.hourly_rate as 'HourlyRate', kt.start_time as 'StartTime', kt.end_time as 'EndTime', kt.duration as 'Duration',
             kt.description as 'TimeNotes' from kimai2_timesheet kt
 	        left join kimai2_activities ka on (kt.activity_id = ka.id)
             left join kimai2_projects kp on (ka.project_id = kp.id)
@@ -71,7 +71,8 @@ namespace libKimai.query
                 ProjectName = record.GetValue(record.GetOrdinal("ProjectName")) as string,
                 ProjectComment = record.GetValue(record.GetOrdinal("ProjectComment")) as string,
                 Customer = record.GetValue(record.GetOrdinal("Customer")) as string,
-                TimeNotes = record.GetValue(record.GetOrdinal("TimeNotes")) as string
+                TimeNotes = record.GetValue(record.GetOrdinal("TimeNotes")) as string,
+                Duration = int.Parse(record.GetValue(record.GetOrdinal("Duration")) as string ?? "0")
             };
 	
             Object value = record.GetValue(record.GetOrdinal("HourlyRate"));
