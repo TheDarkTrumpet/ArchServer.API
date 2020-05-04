@@ -17,12 +17,22 @@ namespace Configuration.tests
         }
 
         [TestMethod]
-        [DataRow("appSettings.Example.json", "")]
-        public void GetConfigurationFile_WithProperties_ShouldSetDefaults(string fileName, string directory)
+        [DataRow("appSettings.Example.json", "/tmp/foo", "appSettings.Example.json", "/tmp/foo")]
+        [DataRow("appSettings.Example.json", null, "appSettings.Example.json", "/bin/Debug")]
+        [DataRow("appSettings.Example.json", "", "appSettings.Example.json", "/bin/Debug")]
+        [DataRow("", "/tmp/foo", "appsettings.Development.json", "/tmp/foo")]
+        [DataRow(null, null, "appsettings.Development.json", "/bin/Debug")]
+        public void GetConfigurationFile_WithProperties_ShouldSetDefaults(string fileName, string directory,
+            string expectedFileName, string expectedDir)
         {
-            
+            Config config = new ConfigMock();
+
+            config.GetConfigurationFile(fileName, directory);
+
+            Assert.IsTrue(config.FullLoadedFileName.Contains(expectedFileName));
+            Assert.IsTrue(config.FullLoadedFileName.Contains(expectedDir));
         }
-        
+
         [TestInitialize]
         public void Initialize()
         {
@@ -33,7 +43,7 @@ namespace Configuration.tests
         {
             public int GetConfigurationFileCalled { get; set; } = 0;
             public int LoadConfigurationCalled { get; set; } = 0;
-            protected override void GetConfigurationFile(string fileName = null, string directory = null)
+            public override void GetConfigurationFile(string fileName = null, string directory = null)
             {
                 base.GetConfigurationFile(fileName, directory);
                 GetConfigurationFileCalled += 1;

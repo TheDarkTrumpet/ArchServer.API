@@ -43,7 +43,7 @@ namespace Configuration
             return returnValues;
         }
         
-        protected virtual void GetConfigurationFile(string fileName = null, string directory = null)
+        public virtual void GetConfigurationFile(string fileName = null, string directory = null)
         {
             if (String.IsNullOrEmpty(directory))
             {
