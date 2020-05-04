@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace libAPICache.Entities
 {
-    public sealed class EFVSTSWorkItems: EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
+    public class EFVSTSWorkItems: EFBase<Models.VSTS.WorkItem, libVSTS.models.WorkItem>, IVSTSWorkItems
     {
         public string ApiKey { get; set; }
         public string Organization { get; set; }
@@ -70,7 +70,7 @@ namespace libAPICache.Entities
         // TODO Automapper may be good here, or a refactor of how the models and decouple from the API into their own set.
         public override WorkItem UpdateEnumerables(libVSTS.models.WorkItem source, Models.VSTS.WorkItem destination)
         {
-            Context.Entry(destination).Collection(x => x.Comments).Load();
+            LoadCommentsOnObject(destination);
             
             foreach (libVSTS.models.WorkItemComment wic in source.Comments)
             {
@@ -82,7 +82,7 @@ namespace libAPICache.Entities
                 }
             }
 
-            foreach (WorkItemComment wic in destination.Comments)
+            foreach (WorkItemComment wic in destination.Comments.ToList())
             {
                 if (source.Comments.All(x => x.Id != wic.Id))
                 {
@@ -91,6 +91,11 @@ namespace libAPICache.Entities
             }
             
             return destination;
+        }
+
+        protected virtual void LoadCommentsOnObject(Models.VSTS.WorkItem destination)
+        {
+            Context.Entry(destination).Collection(x => x.Comments).Load();
         }
 }
 }

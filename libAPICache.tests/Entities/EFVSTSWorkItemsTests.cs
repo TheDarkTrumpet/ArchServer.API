@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using Configuration;
 using libAPICache.Entities;
 using libVSTS.api;
 using libVSTS.models;
@@ -68,7 +69,7 @@ namespace libAPICache.tests.Entities
         [TestMethod]
         public void UpdateEnumerables_ShouldSynchronizeChildren()
         {
-            EFVSTSWorkItems efvstsWorkItems = new EFVSTSWorkItems(_context.Object, _config.Object, _iAPIMethod.Object);
+            EFVSTSWorkItemsMock efvstsWorkItems = new EFVSTSWorkItemsMock(_context.Object, _config.Object, _iAPIMethod.Object);
 
             libVSTS.models.WorkItem source = new WorkItem()
             {
@@ -89,8 +90,11 @@ namespace libAPICache.tests.Entities
             };
 
             Models.VSTS.WorkItem result = efvstsWorkItems.UpdateEnumerables(source, destination);
+            List<long> expected = new List<long>() { 1, 3 };
             
             Assert.AreEqual(2, result.Comments.Count);
+            Assert.AreEqual(1, efvstsWorkItems.TimesCalled);
+            CollectionAssert.AreEqual(expected, result.Comments.Select(x => x.Id).ToList());
         }
         
         [TestInitialize]
@@ -111,7 +115,6 @@ namespace libAPICache.tests.Entities
             _iAPIMethod.SetupSet(x => x.IncludeComments).Callback(x => _includeComments = x);
             
             _context.Setup(x => x.VSTSWorkItems).Returns(_mockDbSet.Object);
-            _context.Setup(x => x.Entry(It.IsAny<libVSTS.models.WorkItem>())).Returns(new Mock<EntityEntry<Models.VSTS.WorkItem>>())
         }
 
         protected override IQueryable<Models.VSTS.WorkItem> GenerateFixtures()
@@ -136,6 +139,21 @@ namespace libAPICache.tests.Entities
             }
 
             return values;
+        }
+
+        private class EFVSTSWorkItemsMock : EFVSTSWorkItems
+        {
+            public int TimesCalled { get; set; } = 0;
+            public EFVSTSWorkItemsMock(EFDbContext context, IConfig configuration, IWorkItem workItem = null) : base(
+                context, configuration, workItem)
+            {
+                
+            }
+
+            protected override void LoadCommentsOnObject(Models.VSTS.WorkItem destination)
+            {
+                TimesCalled += 1;
+            }
         }
     }
 }
