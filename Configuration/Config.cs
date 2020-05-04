@@ -53,9 +53,9 @@ namespace Configuration
             if (String.IsNullOrEmpty(fileName))
             {
 #if DEBUG
-                FullLoadedFileName = $"{directory}/appsettings.Development.json";
+                fileName = "appsettings.Development.json";
 #else
-                FullLoadedFileName = $"{directory}/appsettings.json";
+                fileName = "appsettings.json";
 #endif
             }
 
