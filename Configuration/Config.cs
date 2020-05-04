@@ -8,12 +8,12 @@ namespace Configuration
 {
     public class Config : IConfig
     {
-        protected string ConfigurationFile { get; set; }
+        public string FullLoadedFileName { get; set; }
         protected IConfiguration LoadedConfiguration { get; set; }
         
         public Config(string fileName = null, string directory = null)
         {
-            ConfigurationFile = GetConfigurationFile(fileName, directory);
+            GetConfigurationFile(fileName, directory);
             LoadConfiguration();
         }
 
@@ -23,7 +23,7 @@ namespace Configuration
 
             if (String.IsNullOrEmpty(value))
             {
-                throw new Exception($"Attempted to read, {identifier} from {ConfigurationFile}, which was not found");
+                throw new Exception($"Attempted to read, {identifier} from {FullLoadedFileName}, which was not found");
             }
 
             return value;
@@ -43,7 +43,7 @@ namespace Configuration
             return returnValues;
         }
         
-        protected virtual string GetConfigurationFile(string fileName = null, string directory = null)
+        protected virtual void GetConfigurationFile(string fileName = null, string directory = null)
         {
             if (String.IsNullOrEmpty(directory))
             {
@@ -53,20 +53,25 @@ namespace Configuration
             if (String.IsNullOrEmpty(fileName))
             {
 #if DEBUG
-                return $"{directory}/appsettings.Development.json";
+                FullLoadedFileName = $"{directory}/appsettings.Development.json";
 #else
-                return $"{directory}/appsettings.json";
+                FullLoadedFileName = $"{directory}/appsettings.json";
 #endif
             }
 
-            return $"{directory}/{fileName}";
+            FullLoadedFileName = $"{directory}/{fileName}";
         }
         
         protected virtual void LoadConfiguration()
         {
+            if (String.IsNullOrEmpty(FullLoadedFileName))
+            {
+                throw new Exception("The file hasn't been defined, yet, so we can't load an empty definition");
+            }
+            
             var configurationBuilder = new Microsoft.Extensions.Configuration.ConfigurationBuilder().SetBasePath(@Directory.GetCurrentDirectory());
             LoadedConfiguration = configurationBuilder
-                .AddJsonFile(ConfigurationFile, optional: true, reloadOnChange: true).Build();
+                .AddJsonFile(FullLoadedFileName, optional: true, reloadOnChange: true).Build();
         }
     }
 }

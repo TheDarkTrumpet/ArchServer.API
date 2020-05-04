@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Configuration.tests
@@ -8,7 +9,9 @@ namespace Configuration.tests
         [TestMethod]
         public void Config_WithFileNameAndDirectory_ShouldGetAndLoadConfiguration()
         {
-            
+            Config config = new Config();
+            Console.WriteLine("Loaded file name from " + config.FullLoadedFileName);
+            Assert.AreEqual("", config.FullLoadedFileName);
         }
 
         [TestMethod]
