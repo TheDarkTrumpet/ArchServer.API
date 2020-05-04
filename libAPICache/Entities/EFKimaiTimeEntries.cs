@@ -21,7 +21,7 @@ namespace libAPICache.Entities
             Entries = DbSet = Context.KimaiTimeEntries;
             
             ConnectionString = Configuration.GetKey("APISources:Kimai:Mysql_CS");
-            TimeZone = Configuration.GetKey("APISources.Kimai:TimeZone");
+            TimeZone = Configuration.GetKey("APISources:Kimai:TimeZone");
             
             _activities = activities ?? new Activities(ConnectionString, TimeZone);
         }

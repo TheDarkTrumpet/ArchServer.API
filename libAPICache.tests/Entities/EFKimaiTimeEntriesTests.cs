@@ -62,7 +62,7 @@ namespace libAPICache.tests.Entities
             _iAPIMethod.SetupSet(x => x.FromDate = It.IsAny<DateTime?>()).Callback<DateTime?>(v => _date = v);
             
             _config.Setup(x => x.GetKey("APISources:Kimai:Mysql_CS")).Returns("A value");
-            _config.Setup(x => x.GetKey("APISources.Kimai:TimeZone")).Returns("Another value");
+            _config.Setup(x => x.GetKey("APISources:Kimai:TimeZone")).Returns("Another value");
         }
 
         [TestCleanup]
