@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using AutoFixture.Dsl;
 using Configuration;
 using libAPICache.Entities;
 using libAPICache.Models;
@@ -17,12 +18,15 @@ namespace libAPICache.tests.Entities
         protected Mock<IConfig> _config;
         protected Mock<T1> _iAPIMethod;
 
+        protected IQueryable<T> ModelEntries { get; set; }
         protected void Setup(IQueryable<T> entries = null)
         {
             if (entries == null)
             {
                 entries = GenerateFixtures();
             }
+
+            ModelEntries = entries;
             
             _mockDbSet = GenerateDBSetHelper<T>.GenerateDbSet(entries);
 
@@ -37,10 +41,11 @@ namespace libAPICache.tests.Entities
             return autoFixture.Create<T>();
         }
 
-        protected IQueryable<T> GenerateFixtures()
+        protected virtual IQueryable<T> GenerateFixtures()
         {
             Fixture autoFixture = new Fixture();
             IQueryable<T> entries = autoFixture.CreateMany<T>().AsQueryable();
+            
             return entries;
         }
     }
