@@ -9,7 +9,7 @@ namespace Configuration
     public class Config : IConfig
     {
         public string FullLoadedFileName { get; set; }
-        protected IConfiguration LoadedConfiguration { get; set; }
+        public IConfiguration LoadedConfiguration { get; private set; }
         
         public Config(string fileName = null, string directory = null)
         {
@@ -62,14 +62,14 @@ namespace Configuration
             FullLoadedFileName = $"{directory}/{fileName}";
         }
         
-        protected virtual void LoadConfiguration()
+        public virtual void LoadConfiguration()
         {
             if (String.IsNullOrEmpty(FullLoadedFileName))
             {
                 throw new Exception("The file hasn't been defined, yet, so we can't load an empty definition");
             }
             
-            var configurationBuilder = new Microsoft.Extensions.Configuration.ConfigurationBuilder().SetBasePath(@Directory.GetCurrentDirectory());
+            IConfigurationBuilder configurationBuilder = new Microsoft.Extensions.Configuration.ConfigurationBuilder().SetBasePath(@Directory.GetCurrentDirectory());
             LoadedConfiguration = configurationBuilder
                 .AddJsonFile(FullLoadedFileName, optional: true, reloadOnChange: true).Build();
         }

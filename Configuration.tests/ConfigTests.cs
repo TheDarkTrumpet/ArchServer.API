@@ -33,6 +33,25 @@ namespace Configuration.tests
             Assert.IsTrue(config.FullLoadedFileName.Contains(expectedDir));
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void LoadConfiguration_WithEmptyLoaded_ShouldThrowException()
+        {
+            Config config = new Config();
+            config.FullLoadedFileName = null;
+            
+            config.LoadConfiguration();
+        }
+
+        [TestMethod]
+        public void LoadConfiguration_WithLoadedFileName_ShouldCreateConfiguration()
+        {
+            Config config = new Config();
+            config.LoadConfiguration();
+            
+            Assert.IsNotNull(config.LoadedConfiguration);
+        }
+
         [TestInitialize]
         public void Initialize()
         {
@@ -49,7 +68,7 @@ namespace Configuration.tests
                 GetConfigurationFileCalled += 1;
             }
 
-            protected override void LoadConfiguration()
+            public override void LoadConfiguration()
             {
                 LoadConfigurationCalled += 1;
             }
