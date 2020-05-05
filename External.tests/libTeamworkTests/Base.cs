@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RestSharp;
@@ -28,6 +29,21 @@ namespace External.tests.libTeamworkTests
             Assert.IsNotNull(_baseMock.RestClient.CookieContainer);
         }
 
+        [TestMethod]
+        public void GenerateRestRequest_WithEndpointURIDefined_ShouldCreateRequest()
+        {
+            _baseMock.SetEndpointURIAndCallRestRequest();
+            Assert.IsNotNull(_baseMock.RestRequest);
+            Assert.AreEqual("/foo/bar", _baseMock.RestRequest.Resource);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GenerateRestRequest_WithEndpointURIUndefined_ShouldThrowException()
+        {
+            _baseMock.SetEndpointURINullAndCallRestRequest();
+        }
+        
         [TestInitialize]
         public void Initialize()
         {
@@ -43,6 +59,18 @@ namespace External.tests.libTeamworkTests
             public void CallCreateClient()
             {
                 base.CreateClient();
+            }
+
+            public void SetEndpointURINullAndCallRestRequest()
+            {
+                EndPointURI = null;
+                GenerateRestRequest();
+            }
+
+            public void SetEndpointURIAndCallRestRequest()
+            {
+                EndPointURI = "/foo/bar";
+                GenerateRestRequest();
             }
         }
     }
