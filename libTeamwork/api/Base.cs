@@ -7,15 +7,15 @@ namespace libTeamwork.api
 {
     public class Base
     {
-        public string ApiKey { get; private set; }
-        public string BaseURL { get; private set; }
+        public string ApiKey { get; protected set; }
+        public string BaseURL { get; protected set; }
         
         public string EndPointURI { get; protected set; }
         
-        public CookieContainer CookieContainer { get; private set; }
-        public IRestClient RestClient { get; private set; }
+        public CookieContainer CookieContainer { get; protected set; }
+        public IRestClient RestClient { get; protected set; }
         
-        public RestRequest RestRequest { get; private set; }
+        public RestRequest RestRequest { get; protected set; }
         
         protected Base(string apiKey, string baseUrl)
         {
