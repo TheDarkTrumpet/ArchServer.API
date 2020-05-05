@@ -23,4 +23,11 @@
     <ProjectReference Include="..\libVSTS\libVSTS.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="libKimai" />
+    <Folder Include="libTeamwork" />
+    <Folder Include="libToggl" />
+    <Folder Include="libVSTS" />
+  </ItemGroup>
+
 </Project>
