@@ -14,11 +14,12 @@ namespace External.tests.libTeamworkTests
     public class People
     {
         private PeopleMock _people { get; set; }
-        public Mock<RestRequest> MockRestRequest { get; set; }
+        private Mock<RestRequest> MockRestRequest { get; set; }
         
-        public Mock<RestClient> MockRestClient { get; set; }
+        private Mock<RestClient> MockRestClient { get; set; }
 
         private Dictionary<string, List<Dictionary<string, string>>> InputObject;
+        
         [TestMethod]
         public void Constructor_WithAPIAndBase_ShouldSetProperties()
         {
