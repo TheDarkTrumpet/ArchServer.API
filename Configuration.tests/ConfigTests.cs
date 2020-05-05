@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Configuration.tests
@@ -16,6 +17,61 @@ namespace Configuration.tests
             Assert.AreEqual(1, config.GetConfigurationFileCalled);
         }
 
+        [TestMethod]
+        public void GetKey_WithIdentifier_ShouldReturnIt()
+        {
+            Config config = new Config();
+
+            string value = config.GetKey("APISources:Toggl:API_Key");
+            
+            Assert.IsNotNull(value);
+            Assert.AreEqual("<API_KEY>", value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GetKey_WithMissingIdentifier_ShouldThrowException()
+        {
+            Config config = new Config();
+
+            string value = config.GetKey("DOES_NOT_EXIST!!!!");
+            
+            Assert.IsNotNull(value);
+            Assert.AreEqual("<API_KEY>", value);
+        }
+
+        [TestMethod]
+        public void GetInt_WithIdentifier_ShouldReturnIt()
+        {
+            Config config = new Config();
+
+            int value = config.GetInt("APISources:Teamwork:FromDateDays");
+
+            Assert.AreEqual(-5, value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void GetInt_WithStringIdentifier_ShouldThrowException()
+        {
+            Config config = new Config();
+
+            int value = config.GetInt("APISources:Teamwork:API_Key");
+
+            Assert.AreEqual(-5, value);
+        }
+
+        [TestMethod]
+        public void GetCollection_WithIdentifier_ShouldReturnStringList()
+        {
+            Config config = new Config();
+
+            List<string> value = config.GetCollection("APISources:VSTS:AssignedToInclude");
+
+            Assert.IsNotNull(value);
+            Assert.AreEqual(2, value.Count);
+        }
+        
         [TestMethod]
         [DataRow("appSettings.Example.json", "/tmp/foo", "appSettings.Example.json", "/tmp/foo")]
         [DataRow("appSettings.Example.json", null, "appSettings.Example.json", "/bin/Debug")]
