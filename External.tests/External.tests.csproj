@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="autofixture" Version="4.11.0" />
+    <PackageReference Include="automoqcore" Version="1.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="moq" Version="4.14.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.1.0" />
+    <PackageReference Include="coverlet.collector" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\libKimai\libKimai.csproj" />
+    <ProjectReference Include="..\libTeamwork\libTeamwork.csproj" />
+    <ProjectReference Include="..\libToggl\libToggl.csproj" />
+    <ProjectReference Include="..\libVSTS\libVSTS.csproj" />
+  </ItemGroup>
+
+</Project>
