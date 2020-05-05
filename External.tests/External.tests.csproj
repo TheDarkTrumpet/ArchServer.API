@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,16 +20,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\libKimai\libKimai.csproj" />
-    <ProjectReference Include="..\libTeamwork\libTeamwork.csproj" />
     <ProjectReference Include="..\libToggl\libToggl.csproj" />
     <ProjectReference Include="..\libVSTS\libVSTS.csproj" />
+    <ProjectReference Include="..\libTeamwork\libTeamwork.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="libKimai" />
-    <Folder Include="libTeamwork" />
-    <Folder Include="libToggl" />
-    <Folder Include="libVSTS" />
+    <Folder Include="libTogglTests" />
+    <Folder Include="libVSTSTests" />
   </ItemGroup>
 
 </Project>

@@ -6,11 +6,11 @@ namespace libTeamwork.api
 {
     public class Base
     {
-        protected string ApiKey { get; set; }
-        protected string BaseURL { get; set; }
+        public string ApiKey { get; private set; }
+        public string BaseURL { get; private set; }
         
-        protected CookieContainer CookieContainer { get; set; }
-        protected IRestClient RestClient { get; set; }
+        public CookieContainer CookieContainer { get; private set; }
+        public IRestClient RestClient { get; private set; }
         
         protected Base(string apiKey, string baseUrl)
         {
