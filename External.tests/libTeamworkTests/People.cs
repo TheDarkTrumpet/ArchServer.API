@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using libTeamwork.api;
+using libTeamwork.models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -40,7 +42,20 @@ namespace External.tests.libTeamworkTests
         [TestMethod]
         public void GetPeople_WithAvailableElements_ShouldReturnListOfPeople()
         {
+            List<Person> people = _people.GetPeople();
             
+            Assert.IsNotNull(people);
+            Assert.AreEqual(1, people.Count);
+
+            Person result = people.First();
+            Dictionary<string, string> resultReference = InputObject["people"][0];
+            Assert.AreEqual(resultReference["id"], result.Id.ToString());
+            Assert.AreEqual(resultReference["user-name"], result.UserName);
+            Assert.AreEqual(resultReference["full-name"], result.FullName);
+            Assert.AreEqual(resultReference["email-address"], result.EmailAddress);
+            Assert.AreEqual(resultReference["company-name"], result.CompanyName);
+            Assert.AreEqual(resultReference["administrator"], result.Administrator.ToString());
+            Assert.AreEqual(resultReference["last-login"], result.LastActive.Value.ToString("yyyy/MM/dd"));
         }
         
         [TestInitialize]
@@ -58,7 +73,7 @@ namespace External.tests.libTeamworkTests
                         {
                             new Dictionary<string, string>()
                             {
-                                {"Id", "12345"},
+                                {"id", "12345"},
                                 {"user-name", "user@name.com"},
                                 {"full-name", "User Name"},
                                 {"email-address", "user@email-address.com"},
