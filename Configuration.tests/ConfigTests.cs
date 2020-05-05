@@ -83,7 +83,7 @@ namespace Configuration.tests
         {
             Config config = new ConfigMock();
 
-            config.GetConfigurationFile(fileName, directory);
+            config.SetConfigurationFile(fileName, directory);
 
             Assert.IsTrue(config.FullLoadedFileName.Contains(expectedFileName));
             Assert.IsTrue(config.FullLoadedFileName.Contains(expectedDir));
@@ -118,9 +118,9 @@ namespace Configuration.tests
         {
             public int GetConfigurationFileCalled { get; set; } = 0;
             public int LoadConfigurationCalled { get; set; } = 0;
-            public override void GetConfigurationFile(string fileName = null, string directory = null)
+            public override void SetConfigurationFile(string fileName = null, string directory = null)
             {
-                base.GetConfigurationFile(fileName, directory);
+                base.SetConfigurationFile(fileName, directory);
                 GetConfigurationFileCalled += 1;
             }
 

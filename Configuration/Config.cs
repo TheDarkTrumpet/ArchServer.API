@@ -13,7 +13,7 @@ namespace Configuration
         
         public Config(string fileName = null, string directory = null)
         {
-            GetConfigurationFile(fileName, directory);
+            SetConfigurationFile(fileName, directory);
             LoadConfiguration();
         }
 
@@ -43,7 +43,7 @@ namespace Configuration
             return returnValues;
         }
         
-        public virtual void GetConfigurationFile(string fileName = null, string directory = null)
+        public virtual void SetConfigurationFile(string fileName = null, string directory = null)
         {
             if (String.IsNullOrEmpty(directory))
             {
