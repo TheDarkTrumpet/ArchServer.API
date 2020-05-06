@@ -27,8 +27,8 @@
 
   <ItemGroup>
     <Folder Include="libKimai" />
-    <Folder Include="libTogglTests" />
     <Folder Include="libVSTSTests" />
+    <Folder Include="util" />
   </ItemGroup>
 
 </Project>
