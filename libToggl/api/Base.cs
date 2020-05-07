@@ -9,9 +9,11 @@ namespace libToggl.api
     {
         public string ApiKey { get; set; }
         public string BaseURL { get; set; }
+        protected string BaseUri { get; set; }
         
-        protected CookieContainer CookieContainer { get; set; }
-        protected IRestClient RestClient { get; set; }
+        public CookieContainer CookieContainer { get; protected set; }
+        public IRestClient RestClient { get; protected set; }
+        public RestRequest RestRequest { get; protected set; }
         
         protected Base(string apiKey)
         {
@@ -25,6 +27,15 @@ namespace libToggl.api
             RestClient = new RestClient(BaseURL);
             RestClient.Authenticator = new HttpBasicAuthenticator(ApiKey, "api_token");
             RestClient.CookieContainer = CookieContainer;
+        }
+
+        protected void GenerateRestRequest()
+        {
+            if (string.IsNullOrEmpty(BaseUri))
+            {
+                throw new Exception("Unable to create request with a missing URI");
+            }
+            RestRequest = new RestRequest(BaseUri, Method.GET);
         }
     }
 }
