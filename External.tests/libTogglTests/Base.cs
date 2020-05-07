@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace External.tests.libTogglTests
@@ -16,6 +17,20 @@ namespace External.tests.libTogglTests
             Assert.IsNotNull(_base.RestRequest);
             Assert.IsNotNull(_base.BaseURL);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void CreateClient_WithEmptyURL_ShouldThrowException()
+        {
+            _base.CallCreateClientWithoutURL();
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GenerateRestRequest_WithEmptyUri_ShouldThrowException()
+        {
+            _base.CallGenerateRestRequestWithoutURI();
+        }
         
         [TestInitialize]
         public void Initialize()
@@ -27,8 +42,18 @@ namespace External.tests.libTogglTests
         {
             protected override string BaseUri { get; set; } = "/foobar";
             public BaseMock(string apiKey) : base(apiKey) { }
-            
-            
+
+            public void CallCreateClientWithoutURL()
+            {
+                BaseURL = null;
+                CreateClient();
+            }
+
+            public void CallGenerateRestRequestWithoutURI()
+            {
+                BaseUri = null;
+                GenerateRestRequest();
+            }
         }
     }
 }

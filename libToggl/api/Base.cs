@@ -27,6 +27,11 @@ namespace libToggl.api
 
         protected void CreateClient()
         {
+            if (string.IsNullOrEmpty(BaseURL))
+            {
+                throw new Exception("Unable to create client with a null URL");
+            }
+            
             RestClient = new RestClient(BaseURL);
             RestClient.Authenticator = new HttpBasicAuthenticator(ApiKey, "api_token");
             RestClient.CookieContainer = CookieContainer;
