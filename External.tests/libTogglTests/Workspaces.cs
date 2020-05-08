@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using libToggl.models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -37,15 +39,30 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetWorkspaces_ShouldMakeCallAndReturnListOfObjects()
         {
+            List<Workspace> workspaces = _mockWorkspace.GetWorkspaces();
             
+            Assert.IsNotNull(workspaces);
+            Assert.AreEqual(2, workspaces.Count);
+            CollectionAssert.AreEqual(new List<int>() { 12345, 90000 }, workspaces.Select(x => x.Id).ToList());
+            CollectionAssert.AreEqual(new List<string>() { "Test Workspace 1", "Test Workspace 2" }, workspaces.Select(x => x.Name).ToList());
+            CollectionAssert.AreEqual(new List<bool>() { true,false  }, workspaces.Select(x => x.Premium).ToList());
         }
 
         [TestMethod]
-        [DataRow("Test Workspace 1", "12345")]
+        [DataRow("Test Workspace 1", 12345)]
         [DataRow("Non-existent Workspace", null)]
-        public void GetWorkspaceByName_WithInputs_ShouldReturn(string name, string expected)
+        public void GetWorkspaceByName_WithInputs_ShouldReturn(string name, int expected)
         {
-            
+            Workspace result = _mockWorkspace.GetWorkspaceByName(name);
+
+            if (expected == 0)
+            {
+                Assert.IsNull(result);
+            }
+            else
+            {
+                Assert.AreEqual(expected, result.Id);
+            }
         }
         
 
@@ -61,14 +78,16 @@ namespace External.tests.libTogglTests
                     new Dictionary<string, string>()
                     {
                         {"id", "12345"},
-                        {"name", "Test Workspace 1"}
+                        {"name", "Test Workspace 1"},
+                        {"premium", "true"}
                     }
                 },
                 {
                     new Dictionary<string, string>()
                     {
                         {"id", "90000"},
-                        {"name", "Test Workspace 2"}
+                        {"name", "Test Workspace 2"},
+                        {"premium", "false"}
                     }
                 }
             };
