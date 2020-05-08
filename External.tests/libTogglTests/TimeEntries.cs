@@ -15,7 +15,7 @@ namespace External.tests.libTogglTests
         private Mock<Workspaces> _workspace { get; set; }
         private Mock<RestRequest> MockRestRequest { get; set; }
         private Mock<RestClient> MockRestClient { get; set; }
-        private Dictionary<string, List<Dictionary<string, string>>> InputObject;
+        private Dictionary<string, Object> InputObject;
 
         [TestMethod]
         public void Constructor_WithAPIkey_ShouldSetProperties()
@@ -84,10 +84,12 @@ namespace External.tests.libTogglTests
             MockRestRequest = new Mock<RestRequest>();
             MockRestRequest = new Mock<RestRequest>();
             
-            InputObject = new Dictionary<string, List<Dictionary<string, string>>>()
+            InputObject = new Dictionary<string, Object>()
             {
+                {"per_page", "5"},
+                {"total_count", "1"},
                 {
-                    "items", new List<Dictionary<string, string>>()
+                    "data", new List<Dictionary<string, string>>()
                     {
                         new Dictionary<string, string>()
                         {
@@ -100,7 +102,8 @@ namespace External.tests.libTogglTests
                             {"billable", "5.23"},
                             {"start", "2020/01/01 15:00"},
                             {"end", "2020/01/01 17:00"}
-                        }
+                        },
+                        
                     }
                 }
             };
