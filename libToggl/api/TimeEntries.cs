@@ -13,17 +13,15 @@ namespace libToggl.api
         public TimeEntries(string apiKey) : base(apiKey)
         {
             BaseURL = "https://www.toggl.com/reports/api/v2";
-            _userAgent = "none@nada.com";
-            CreateClient();
+            UserAgent = "none@nada.com";
         }
 
         public TimeEntries(string apiKey, string userAgent) : this(apiKey)
         {
-            _userAgent = userAgent;
+            UserAgent = userAgent;
         }
-        
-        private readonly string _endpointUri = "/details";
-        private string _userAgent { get; set; }
+        protected string UserAgent { get; set; }
+        protected override string BaseUri { get; set; } = "/details"; 
 
         public JArray GetRawTimeEntries(string workspaceName, DateTime? startDate = null, DateTime? endDate = null)
         {
@@ -38,12 +36,12 @@ namespace libToggl.api
                 startDate = DateTime.Now.AddMonths(-1);
             }
             
-            RestRequest request = new RestRequest(_endpointUri, Method.GET);
+            RestRequest request = new RestRequest(BaseUri, Method.GET);
             request.AddQueryParameter("workspace_id", workspace.Id.ToString());
             request.AddQueryParameter("since",
                 startDate.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z");
             request.AddQueryParameter("page", page.ToString());
-            request.AddQueryParameter("user_agent", _userAgent);
+            request.AddQueryParameter("user_agent", UserAgent);
             
             IRestResponse response = RestClient.Execute(request);
             JObject baseObject = JObject.Parse(response.Content);
