@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using libToggl.api;
 using libToggl.models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -10,7 +12,7 @@ namespace External.tests.libTogglTests
     public class TimeEntries
     {
         private TimeEntriesMock _timeEntriesMock { get; set; }
-        private Workspace _workspace { get; set; }
+        private Mock<Workspaces> _workspace { get; set; }
         private Mock<RestRequest> MockRestRequest { get; set; }
         private Mock<RestClient> MockRestClient { get; set; }
         private Dictionary<string, List<Dictionary<string, string>>> InputObject;
@@ -52,12 +54,33 @@ namespace External.tests.libTogglTests
         {
             
         }
+
+        [TestMethod]
+        public void GetWorkspace_WithAvailableWorkspace_ShouldReturnIt()
+        {
+            Workspace workspace = _timeEntriesMock.CallGetWorkspace("RealName");
+            Assert.IsNotNull(workspace);
+            Assert.AreEqual(1, workspace.Id);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void GetWorkspace_WithUnavailableWorkspace_ShouldThrowException()
+        {
+            _timeEntriesMock.CallGetWorkspace("Does not exist!");
+        }
         
         [TestInitialize]
         public void Initialize()
         {
-            _timeEntriesMock = new TimeEntriesMock("An API Key");
-
+            _workspace = new Mock<Workspaces>("An API Key");
+            _workspace.Setup(x => x.GetWorkspaceByName("Real Name")).Returns(new Workspace()
+            {
+                Id = 5,
+                Name = "Real Name",
+                Premium = true
+            });
+            _timeEntriesMock = new TimeEntriesMock("An API Key", _workspace.Object);
             MockRestRequest = new Mock<RestRequest>();
             MockRestRequest = new Mock<RestRequest>();
             
@@ -85,11 +108,20 @@ namespace External.tests.libTogglTests
 
         private class TimeEntriesMock : libToggl.api.TimeEntries
         {
-            public TimeEntriesMock(string apiKey) : base(apiKey) { }
-            
-            public TimeEntriesMock(string apiKey, string userAgent) : base(apiKey, userAgent) { }
+            public TimeEntriesMock(string apiKey, IWorkspaces workspaces = null) : base(apiKey, workspaces)
+            {
+            }
+
+            public TimeEntriesMock(string apiKey, string userAgent, IWorkspaces workspaces = null) : base(apiKey, userAgent, workspaces)
+            {
+            }
 
             public string GetUserAgent => UserAgent;
+
+            public Workspace CallGetWorkspace(string name)
+            {
+                return GetWorkspaceByName(name);
+            }
         }
     }
 }
