@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using libToggl.models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using RestSharp;
@@ -9,6 +10,7 @@ namespace External.tests.libTogglTests
     public class TimeEntries
     {
         private TimeEntriesMock _timeEntriesMock { get; set; }
+        private Workspace _workspace { get; set; }
         private Mock<RestRequest> MockRestRequest { get; set; }
         private Mock<RestClient> MockRestClient { get; set; }
         private Dictionary<string, List<Dictionary<string, string>>> InputObject;
@@ -32,7 +34,24 @@ namespace External.tests.libTogglTests
             Assert.IsNotNull(timeEntriesMock.GetUserAgent);
             Assert.AreEqual(timeEntriesMock.GetUserAgent, "America/Nowhere");
         }
-        
+
+        [TestMethod]
+        public void GetRawTimeEntries_WithWorkspaceAndStartDateOnePage_ShouldReturnElements()
+        {
+            
+        }
+
+        [TestMethod]
+        public void GetRawTimeEntries_WithWorkspaceAndStartDateTwoPage_ShouldReturnElements()
+        {
+            
+        }
+
+        [TestMethod]
+        public void GetRawTimeEntries_WithWorkspaceAndNullStartDate_ShouldReturnElementsWithinMonth()
+        {
+            
+        }
         
         [TestInitialize]
         public void Initialize()

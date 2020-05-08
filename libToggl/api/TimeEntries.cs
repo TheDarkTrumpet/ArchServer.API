@@ -10,13 +10,19 @@ namespace libToggl.api
 {
     public class TimeEntries : Base, ITimeEntries
     {
-        public TimeEntries(string apiKey) : base(apiKey)
+        private IWorkspaces _workspaces;
+        public TimeEntries(string apiKey, IWorkspaces workspaces = null) : base(apiKey)
         {
             BaseURL = "https://www.toggl.com/reports/api/v2";
             UserAgent = "none@nada.com";
+
+            if (workspaces == null)
+            {
+                _workspaces = new Workspaces(ApiKey);
+            }
         }
 
-        public TimeEntries(string apiKey, string userAgent) : this(apiKey)
+        public TimeEntries(string apiKey, string userAgent, IWorkspaces workspaces = null) : this(apiKey, workspaces)
         {
             UserAgent = userAgent;
         }
@@ -25,25 +31,22 @@ namespace libToggl.api
 
         public JArray GetRawTimeEntries(string workspaceName, DateTime? startDate = null, DateTime? endDate = null)
         {
-            return GetRawTimeEntries(_getWorkspace(workspaceName), startDate, endDate);
+            return GetRawTimeEntries(GetWorkspaceByName(workspaceName), startDate, endDate);
         }
 
         public JArray GetRawTimeEntries(Workspace workspace, DateTime? startDate = null, DateTime? endDate = null,
             int page = 1)
         {
-            if (startDate == null)
-            {
-                startDate = DateTime.Now.AddMonths(-1);
-            }
+            startDate ??= DateTime.Now.AddMonths(-1);
             
-            RestRequest request = new RestRequest(BaseUri, Method.GET);
-            request.AddQueryParameter("workspace_id", workspace.Id.ToString());
-            request.AddQueryParameter("since",
+            RestRequest.AddQueryParameter("workspace_id", workspace.Id.ToString());
+            RestRequest.AddQueryParameter("since",
                 startDate.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z");
-            request.AddQueryParameter("page", page.ToString());
-            request.AddQueryParameter("user_agent", UserAgent);
+            //TODO Implement the end date
+            RestRequest.AddQueryParameter("page", page.ToString());
+            RestRequest.AddQueryParameter("user_agent", UserAgent);
             
-            IRestResponse response = RestClient.Execute(request);
+            IRestResponse response = RestClient.Execute(RestRequest);
             JObject baseObject = JObject.Parse(response.Content);
             JArray results = (JArray) baseObject["data"];
             
@@ -103,15 +106,20 @@ namespace libToggl.api
 
         public IEnumerable<TimeEntry> GetTimeEntries(string name, DateTime? startDate = null, DateTime? endDate = null)
         {
-            Workspace workspace = _getWorkspace(name);
+            Workspace workspace = GetWorkspaceByName(name);
             return GetTimeEntries(workspace, startDate, endDate);
         }
 
-        private Workspace _getWorkspace(string name)
+        protected Workspace GetWorkspaceByName(string name)
         {
-            Workspaces workspace_query = new Workspaces(ApiKey);
-            Workspace workspace = workspace_query.GetWorkspaceIdByName(name);
-            return workspace;
+            Workspace matchingWorkspace = _workspaces.GetWorkspaceByName(name);
+
+            if (matchingWorkspace == null)
+            {
+                throw new Exception("Unable to find a matching workspace by that name");
+            }
+
+            return matchingWorkspace;
         }
     }
 }

@@ -39,7 +39,7 @@ namespace libToggl.api
             return workspaces;
         }
 
-        public Workspace GetWorkspaceIdByName(string name)
+        public Workspace GetWorkspaceByName(string name)
         {
             List<Workspace> workspaces = GetWorkspaces();
             return workspaces.FirstOrDefault(x => x.Name == name);
