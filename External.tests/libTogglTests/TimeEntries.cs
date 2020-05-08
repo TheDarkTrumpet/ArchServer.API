@@ -82,7 +82,7 @@ namespace External.tests.libTogglTests
             });
             _timeEntriesMock = new TimeEntriesMock("An API Key", _workspace.Object);
             MockRestRequest = new Mock<RestRequest>();
-            MockRestRequest = new Mock<RestRequest>();
+            MockRestClient = new Mock<RestClient>();
             
             InputObject = new Dictionary<string, Object>()
             {
