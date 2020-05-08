@@ -31,10 +31,10 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void Constructor_WithAPIUserAgent_ShouldSetupAgent()
         {
-            TimeEntriesMock timeEntriesMock = new TimeEntriesMock("Api Key Go", "America/Nowhere");
+            TimeEntriesMock timeEntriesMock = new TimeEntriesMock("Api Key Go", "user@email.com");
             
             Assert.IsNotNull(timeEntriesMock.GetUserAgent);
-            Assert.AreEqual(timeEntriesMock.GetUserAgent, "America/Nowhere");
+            Assert.AreEqual(timeEntriesMock.GetUserAgent, "user@email.com");
         }
 
         [TestMethod]
