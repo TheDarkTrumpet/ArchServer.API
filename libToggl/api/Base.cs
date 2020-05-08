@@ -9,16 +9,17 @@ namespace libToggl.api
     {
         public string ApiKey { get; set; }
         public string BaseURL { get; set; }
-        protected virtual string BaseUri { get; set; }
+        protected string BaseUri { get; set; }
         
         public CookieContainer CookieContainer { get; protected set; }
         public IRestClient RestClient { get; protected set; }
         public RestRequest RestRequest { get; protected set; }
         
-        protected Base(string apiKey)
+        protected Base(string apiKey, string uri)
         {
             ApiKey = apiKey;
             BaseURL = "https://www.toggl.com/api/v8";
+            BaseUri = uri;
             CookieContainer = new CookieContainer();
             
             CreateClient();

@@ -40,8 +40,7 @@ namespace External.tests.libTogglTests
 
         private class BaseMock : libToggl.api.Base
         {
-            protected override string BaseUri { get; set; } = "/foobar";
-            public BaseMock(string apiKey) : base(apiKey) { }
+            public BaseMock(string apiKey) : base(apiKey, "/foobar") { }
 
             public void CallCreateClientWithoutURL()
             {

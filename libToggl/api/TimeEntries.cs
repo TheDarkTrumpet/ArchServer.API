@@ -11,15 +11,12 @@ namespace libToggl.api
     public class TimeEntries : Base, ITimeEntries
     {
         private IWorkspaces _workspaces;
-        public TimeEntries(string apiKey, IWorkspaces workspaces = null) : base(apiKey)
+        public TimeEntries(string apiKey, IWorkspaces workspaces = null) : base(apiKey, "/details")
         {
             BaseURL = "https://www.toggl.com/reports/api/v2";
             UserAgent = "none@nada.com";
 
-            if (workspaces == null)
-            {
-                _workspaces = new Workspaces(ApiKey);
-            }
+            _workspaces = workspaces ?? new Workspaces(ApiKey);
         }
 
         public TimeEntries(string apiKey, string userAgent, IWorkspaces workspaces = null) : this(apiKey, workspaces)
@@ -27,7 +24,6 @@ namespace libToggl.api
             UserAgent = userAgent;
         }
         protected string UserAgent { get; set; }
-        protected override string BaseUri { get; set; } = "/details"; 
 
         public JArray GetRawTimeEntries(string workspaceName, DateTime? startDate = null, DateTime? endDate = null)
         {

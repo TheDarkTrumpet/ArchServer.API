@@ -58,9 +58,9 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetWorkspace_WithAvailableWorkspace_ShouldReturnIt()
         {
-            Workspace workspace = _timeEntriesMock.CallGetWorkspace("RealName");
+            Workspace workspace = _timeEntriesMock.CallGetWorkspace("Real Name");
             Assert.IsNotNull(workspace);
-            Assert.AreEqual(1, workspace.Id);
+            Assert.AreEqual(5, workspace.Id);
         }
 
         [TestMethod]

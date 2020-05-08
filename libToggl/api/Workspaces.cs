@@ -9,7 +9,7 @@ namespace libToggl.api
 {
     public class Workspaces : Base, IWorkspaces
     {
-        public Workspaces(string apiKey) : base(apiKey) { CreateClient(); }
+        public Workspaces(string apiKey) : base(apiKey, "/workspaces") { CreateClient(); }
         private readonly string _endpointUri = "/workspaces";
 
         public JArray GetRawWorkspaces()
