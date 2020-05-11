@@ -4,6 +4,7 @@ using libToggl.api;
 using libToggl.models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace External.tests.libTogglTests
@@ -107,6 +108,11 @@ namespace External.tests.libTogglTests
                     }
                 }
             };
+            IRestResponse response = new RestResponse();
+            response.Content = JsonConvert.SerializeObject(InputObject);
+
+            MockRestClient.Setup(x => x.Execute(MockRestRequest.Object)).Returns(response);
+            _timeEntriesMock.SetupMocks(MockRestClient, MockRestRequest);
         }
 
         private class TimeEntriesMock : libToggl.api.TimeEntries
@@ -124,6 +130,12 @@ namespace External.tests.libTogglTests
             public Workspace CallGetWorkspace(string name)
             {
                 return GetWorkspaceByName(name);
+            }
+            
+            public void SetupMocks(Mock<RestClient> client, Mock<RestRequest> request)
+            {
+                RestClient = client.Object;
+                RestRequest = request.Object;
             }
         }
     }
