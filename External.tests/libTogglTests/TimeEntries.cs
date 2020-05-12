@@ -85,6 +85,12 @@ namespace External.tests.libTogglTests
             MockRestRequest = new Mock<RestRequest>();
             MockRestClient = new Mock<RestClient>();
             
+            MockRestClient.Setup(x => x.Execute(MockRestRequest.Object)).Returns(_getResponse());
+            _timeEntriesMock.SetupMocks(MockRestClient, MockRestRequest);
+        }
+
+        private IRestResponse _getResponse()
+        {
             InputObject = new Dictionary<string, Object>()
             {
                 {"per_page", "5"},
@@ -108,11 +114,10 @@ namespace External.tests.libTogglTests
                     }
                 }
             };
+            
             IRestResponse response = new RestResponse();
             response.Content = JsonConvert.SerializeObject(InputObject);
-
-            MockRestClient.Setup(x => x.Execute(MockRestRequest.Object)).Returns(response);
-            _timeEntriesMock.SetupMocks(MockRestClient, MockRestRequest);
+            return response;
         }
 
         private class TimeEntriesMock : libToggl.api.TimeEntries
