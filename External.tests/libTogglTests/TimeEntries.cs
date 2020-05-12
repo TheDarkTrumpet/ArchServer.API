@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using AutoFixture;
 using libToggl.api;
 using libToggl.models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -17,6 +20,7 @@ namespace External.tests.libTogglTests
         private Mock<RestRequest> MockRestRequest { get; set; }
         private Mock<RestClient> MockRestClient { get; set; }
         private Dictionary<string, Object> InputObject;
+        private int _pagesNeeded = 1;
 
         [TestMethod]
         public void Constructor_WithAPIkey_ShouldSetProperties()
@@ -84,42 +88,51 @@ namespace External.tests.libTogglTests
             _timeEntriesMock = new TimeEntriesMock("An API Key", _workspace.Object);
             MockRestRequest = new Mock<RestRequest>();
             MockRestClient = new Mock<RestClient>();
-            
-            MockRestClient.Setup(x => x.Execute(MockRestRequest.Object)).Returns(_getResponse());
+
+            MockRestClient.Setup(x => x.Execute(MockRestRequest.Object))
+                .Callback<IRestResponse>(x => this._getResponse()).Returns<IRestResponse>(x => x);
             _timeEntriesMock.SetupMocks(MockRestClient, MockRestRequest);
         }
 
         private IRestResponse _getResponse()
         {
+            int requested_page = int.Parse(MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "page").Value.ToString());
+            int num_per_page = 5;
+            int total_count = _pagesNeeded * num_per_page;
+            
+            List<Dictionary<string, string>> entries = new List<Dictionary<string, string>>();
+            entries.AddRange(Enumerable.Range(0, 5).Select(x => generateFixtureEntry()).ToList());
+            
             InputObject = new Dictionary<string, Object>()
             {
-                {"per_page", "5"},
-                {"total_count", "1"},
-                {
-                    "data", new List<Dictionary<string, string>>()
-                    {
-                        new Dictionary<string, string>()
-                        {
-                            {"id", "123432"},
-                            {"isBillable", "True"},
-                            {"client", "A new client"},
-                            {"user", "A user"},
-                            {"project", "A new project"},
-                            {"description", "A description of the task"},
-                            {"billable", "5.23"},
-                            {"start", "2020/01/01 15:00"},
-                            {"end", "2020/01/01 17:00"}
-                        },
-                        
-                    }
-                }
+                {"per_page", num_per_page.ToString()},
+                {"total_count", total_count.ToString()},
+                {"data", entries }
             };
-            
             IRestResponse response = new RestResponse();
             response.Content = JsonConvert.SerializeObject(InputObject);
             return response;
         }
 
+        private Dictionary<string, string> generateFixtureEntry()
+        {
+            Fixture autoFixture = new Fixture();
+            Dictionary<string, string> result = new Dictionary<string, string>()
+            {
+                {"id", autoFixture.Create<int>().ToString()},
+                {"isBillable", autoFixture.Create<bool>().ToString()},
+                {"client", autoFixture.Create<string>()},
+                {"user", autoFixture.Create<string>()},
+                {"project", autoFixture.Create<string>()},
+                {"description", autoFixture.Create<string>()},
+                {"billable", autoFixture.Create<float>().ToString(CultureInfo.CurrentCulture)},
+                {"start", autoFixture.Create<DateTime>().ToString("yyyy/MM/dd HH:mm")},
+                {"end", autoFixture.Create<DateTime>().ToString("yyyy-MM-dd HH:mm")}
+            };
+
+            return result;
+        }
+        
         private class TimeEntriesMock : libToggl.api.TimeEntries
         {
             public TimeEntriesMock(string apiKey, libToggl.api.IWorkspaces workspaces = null) : base(apiKey, workspaces)
