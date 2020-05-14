@@ -42,8 +42,12 @@ namespace BulkCache.lib
         {
             WriteTimeLog("--CacheToggl", "Starting");
             ITogglWorkspace efToggl = new EFTogglWorkspace();
-            //TODO Add in cache by date here.
             efToggl.CacheEntries();
+            
+            ITogglTimeEntries efTimeEntries = new EFTogglTimeEntries();
+            string workspace = _configuration.GetKey("APISources:Toggl:Workspace");
+            // TODO Add from date here
+            efTimeEntries.CacheEntries(workspace);
         }
 
         private void CacheTeamwork()
