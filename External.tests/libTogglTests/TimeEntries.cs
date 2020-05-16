@@ -8,6 +8,7 @@ using libToggl.models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace External.tests.libTogglTests
@@ -16,7 +17,8 @@ namespace External.tests.libTogglTests
     public class TimeEntries
     {
         private TimeEntriesMock _timeEntriesMock { get; set; }
-        private Mock<libToggl.api.Workspaces> _workspace { get; set; }
+        private Mock<libToggl.api.Workspaces> _workspaces { get; set; }
+        private Workspace _workspace { get; set; }
         private Mock<RestRequest> MockRestRequest { get; set; }
         private Mock<RestClient> MockRestClient { get; set; }
         private Dictionary<string, Object> InputObject;
@@ -45,7 +47,9 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetRawTimeEntries_WithWorkspaceAndStartDateOnePage_ShouldReturnElements()
         {
+            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace);
             
+            Assert.IsNotNull(results);
         }
 
         [TestMethod]
@@ -78,14 +82,15 @@ namespace External.tests.libTogglTests
         [TestInitialize]
         public void Initialize()
         {
-            _workspace = new Mock<libToggl.api.Workspaces>("An API Key");
-            _workspace.Setup(x => x.GetWorkspaceByName("Real Name")).Returns(new Workspace()
+            _workspaces = new Mock<libToggl.api.Workspaces>("An API Key");
+            _workspace = new Workspace()
             {
                 Id = 5,
                 Name = "Real Name",
                 Premium = true
-            });
-            _timeEntriesMock = new TimeEntriesMock("An API Key", _workspace.Object);
+            };
+            _workspaces.Setup(x => x.GetWorkspaceByName("Real Name")).Returns(_workspace);
+            _timeEntriesMock = new TimeEntriesMock("An API Key", _workspaces.Object);
             MockRestRequest = new Mock<RestRequest>();
             MockRestClient = new Mock<RestClient>();
 
