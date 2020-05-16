@@ -19,6 +19,7 @@ namespace External.tests.libTogglTests
         private TimeEntriesMock _timeEntriesMock { get; set; }
         private Mock<libToggl.api.Workspaces> _workspaces { get; set; }
         private Workspace _workspace { get; set; }
+        private IRestResponse _restResponse { get; set; }
         private Mock<RestRequest> MockRestRequest { get; set; }
         private Mock<RestClient> MockRestClient { get; set; }
         private Dictionary<string, Object> InputObject;
@@ -47,9 +48,9 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetRawTimeEntries_WithWorkspaceAndStartDateOnePage_ShouldReturnElements()
         {
-            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace);
+            _timeEntriesMock.GetRawTimeEntries(_workspace);
             
-            Assert.IsNotNull(results);
+            Assert.IsNotNull(_restResponse);
         }
 
         [TestMethod]
@@ -95,7 +96,7 @@ namespace External.tests.libTogglTests
             MockRestClient = new Mock<RestClient>();
 
             MockRestClient.Setup(x => x.Execute(MockRestRequest.Object))
-                .Callback(() =>  this._getResponse()).Returns<IRestResponse>(x => x);
+                .Callback(() => _restResponse = this._getResponse()).Returns(() => _restResponse);
             _timeEntriesMock.SetupMocks(MockRestClient, MockRestRequest);
         }
 
