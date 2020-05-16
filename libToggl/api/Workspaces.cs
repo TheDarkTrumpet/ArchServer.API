@@ -9,13 +9,12 @@ namespace libToggl.api
 {
     public class Workspaces : Base, IWorkspaces
     {
-        public Workspaces(string apiKey) : base(apiKey) { CreateClient(); }
+        public Workspaces(string apiKey) : base(apiKey, "/workspaces") { }
         private readonly string _endpointUri = "/workspaces";
 
         public JArray GetRawWorkspaces()
         {
-            RestRequest request = new RestRequest(_endpointUri, Method.GET);
-            IRestResponse response = RestClient.Execute(request);
+            IRestResponse response = RestClient.Execute(RestRequest);
             JArray results = JArray.Parse(response.Content);
             return results;
         }
@@ -39,7 +38,7 @@ namespace libToggl.api
             return workspaces;
         }
 
-        public Workspace GetWorkspaceIdByName(string name)
+        public virtual Workspace GetWorkspaceByName(string name)
         {
             List<Workspace> workspaces = GetWorkspaces();
             return workspaces.FirstOrDefault(x => x.Name == name);

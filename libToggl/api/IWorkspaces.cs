@@ -8,6 +8,6 @@ namespace libToggl.api
     {
         public JArray GetRawWorkspaces();
         List<Workspace> GetWorkspaces();
-        Workspace GetWorkspaceIdByName(string name);
+        Workspace GetWorkspaceByName(string name);
     }
 }
