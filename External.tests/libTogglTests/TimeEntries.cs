@@ -90,6 +90,24 @@ namespace External.tests.libTogglTests
         }
 
         [TestMethod]
+        public void GetRawTimeEntries_WithStringWorkspace_ShouldReturnList()
+        {
+            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace.Name);
+            
+            Assert.IsNotNull(results);
+            Assert.AreEqual(5, results.Count);
+        }
+
+        [TestMethod]
+        public void GetTimeEntries_Defaults_ShouldReturnElements()
+        {
+            IEnumerable<TimeEntry> results = _timeEntriesMock.GetTimeEntries(_workspace);
+            
+            Assert.IsNotNull(results);
+            Assert.AreEqual(5, results.Count());
+        }
+        
+        [TestMethod]
         public void GetWorkspace_WithAvailableWorkspace_ShouldReturnIt()
         {
             Workspace workspace = _timeEntriesMock.CallGetWorkspace("Real Name");
@@ -149,7 +167,7 @@ namespace External.tests.libTogglTests
             Dictionary<string, string> result = new Dictionary<string, string>()
             {
                 {"id", autoFixture.Create<int>().ToString()},
-                {"isBillable", autoFixture.Create<bool>().ToString()},
+                {"is_billable", autoFixture.Create<bool>().ToString()},
                 {"client", autoFixture.Create<string>()},
                 {"user", autoFixture.Create<string>()},
                 {"project", autoFixture.Create<string>()},
