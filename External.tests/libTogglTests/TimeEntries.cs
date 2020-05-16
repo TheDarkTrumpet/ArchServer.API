@@ -48,9 +48,16 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetRawTimeEntries_WithWorkspaceAndStartDateOnePage_ShouldReturnElements()
         {
-            _timeEntriesMock.GetRawTimeEntries(_workspace);
+            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace);
+            string resultDate =
+                DateTime.Now.AddMonths(-1).ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z";
             
-            Assert.IsNotNull(_restResponse);
+            Assert.IsNotNull(results);
+            Assert.AreEqual(5, results.Count);
+            Assert.AreEqual(_workspace.Id.ToString(),
+                MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "workspace_id").Value);
+            Assert.AreEqual(resultDate, MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "since").Value);
+            
         }
 
         [TestMethod]
