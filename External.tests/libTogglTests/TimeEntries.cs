@@ -48,16 +48,18 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetRawTimeEntries_WithWorkspaceAndStartDateOnePage_ShouldReturnElements()
         {
-            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace);
+            DateTime startDate = DateTime.Now.AddMonths(-5);
+            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace, startDate);
             string resultDate =
-                DateTime.Now.AddMonths(-1).ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z";
+                startDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z";
             
             Assert.IsNotNull(results);
             Assert.AreEqual(5, results.Count);
             Assert.AreEqual(_workspace.Id.ToString(),
                 MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "workspace_id").Value);
             Assert.AreEqual(resultDate, MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "since").Value);
-            
+            Assert.AreEqual("1", MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "page").Value);
+            Assert.AreEqual("none@nada.com", MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "user_agent").Value);
         }
 
         [TestMethod]
@@ -69,7 +71,17 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetRawTimeEntries_WithWorkspaceAndNullStartDate_ShouldReturnElementsWithinMonth()
         {
+            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace);
+            string resultDate =
+                DateTime.Now.AddMonths(-1).ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z";
             
+            Assert.IsNotNull(results);
+            Assert.AreEqual(5, results.Count);
+            Assert.AreEqual(_workspace.Id.ToString(),
+                MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "workspace_id").Value);
+            Assert.AreEqual(resultDate, MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "since").Value);
+            Assert.AreEqual("1", MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "page").Value);
+            Assert.AreEqual("none@nada.com", MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "user_agent").Value);
         }
 
         [TestMethod]
