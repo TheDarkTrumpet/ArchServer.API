@@ -90,7 +90,7 @@ namespace External.tests.libTogglTests
             MockRestClient = new Mock<RestClient>();
 
             MockRestClient.Setup(x => x.Execute(MockRestRequest.Object))
-                .Callback<IRestResponse>(x => this._getResponse()).Returns<IRestResponse>(x => x);
+                .Callback(() =>  this._getResponse()).Returns<IRestResponse>(x => x);
             _timeEntriesMock.SetupMocks(MockRestClient, MockRestRequest);
         }
 
