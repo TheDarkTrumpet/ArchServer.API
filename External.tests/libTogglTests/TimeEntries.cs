@@ -65,6 +65,11 @@ namespace External.tests.libTogglTests
         [TestMethod]
         public void GetRawTimeEntries_WithWorkspaceAndStartDateTwoPage_ShouldReturnElements()
         {
+            _pagesNeeded = 5;
+            JArray results = _timeEntriesMock.GetRawTimeEntries(_workspace);
+            
+            Assert.IsNotNull(results);
+            Assert.AreEqual(25, results.Count);
             
         }
 
@@ -121,7 +126,6 @@ namespace External.tests.libTogglTests
 
         private IRestResponse _getResponse()
         {
-            int requested_page = int.Parse(MockRestRequest.Object.Parameters.FirstOrDefault(x => x.Name == "page").Value.ToString());
             int num_per_page = 5;
             int total_count = _pagesNeeded * num_per_page;
             
