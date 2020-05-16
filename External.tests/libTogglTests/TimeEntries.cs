@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using AutoFixture;
 using libToggl.api;
 using libToggl.models;
@@ -105,6 +106,15 @@ namespace External.tests.libTogglTests
             
             Assert.IsNotNull(results);
             Assert.AreEqual(5, results.Count());
+            
+            //The below simply verifies each property was filled out, which acts as a trigger if we add more properties or change the load
+            foreach(TimeEntry te in results.ToList())
+            {
+                foreach (PropertyInfo property in te.GetType().GetProperties())
+                {
+                    Assert.IsNotNull(property.GetValue(te));
+                }
+            }
         }
         
         [TestMethod]
