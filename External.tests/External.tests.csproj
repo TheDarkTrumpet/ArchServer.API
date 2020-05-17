@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="libKimai" />
-    <Folder Include="libVSTSTests" />
     <Folder Include="util" />
   </ItemGroup>
 
