@@ -50,8 +50,8 @@ namespace External.tests.libVSTSTests
         
         private class BaseMock : libVSTS.api.Base
         {
-            public BaseMock() : this("anAPIKey", "anOrganization") { }
-            public BaseMock(string apiKey, string organization) : base(apiKey,organization) { }
+            public BaseMock() : this("anAPIKey", "anOrganization", "aProject") { }
+            public BaseMock(string apiKey, string organization, string project) : base(apiKey,organization, project) { }
         }
     }
 }

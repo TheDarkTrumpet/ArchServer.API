@@ -20,13 +20,11 @@ namespace libVSTS.api
         public DateTime? FromChanged { get; set; }
         public Boolean IncludeComments { get; set; }
         
-        public WorkItems(string apiKey, string organization, string project) : base(apiKey, organization)
+        public WorkItems(string apiKey, string organization, string project) : base(apiKey, organization, project)
         {
             StatesToExclude = new List<string>();
             AssignedToInclude = new List<string>();
             TypesToInclude = new List<string>();
-            _endpointUri = $"{project}/_apis/wit/wiql";
-            CreateClient();
         }
 
         public JArray GetRawWorkItems()
