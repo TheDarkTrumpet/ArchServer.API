@@ -15,10 +15,10 @@ namespace libToggl.api
         public IRestClient RestClient { get; protected set; }
         public RestRequest RestRequest { get; protected set; }
         
-        protected Base(string apiKey, string uri)
+        protected Base(string apiKey, string uri, string baseUrl = null)
         {
             ApiKey = apiKey;
-            BaseURL = "https://www.toggl.com/api/v8";
+            BaseURL = baseUrl ?? "https://www.toggl.com/api/v8";
             BaseUri = uri;
             CookieContainer = new CookieContainer();
             
