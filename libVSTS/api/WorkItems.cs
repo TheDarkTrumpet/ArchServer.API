@@ -84,8 +84,8 @@ namespace libVSTS.api
         private List<WorkItemComment> _supplementComments(JObject workItem)
         {
             string commentsLink = (string) workItem["_links"]["workItemComments"]["href"];
-            RestRequest request = new RestRequest(commentsLink);
-            IRestResponse response = RestClient.Execute(request);
+            CreateRestRequest(uri: commentsLink);
+            IRestResponse response = RestClient.Execute(RestRequest);
             JObject content = JObject.Parse(response.Content);
 
             List<WorkItemComment> comments = new List<WorkItemComment>();
@@ -112,20 +112,20 @@ namespace libVSTS.api
         
         private JArray _getWorkItemLinks()
         {
-            RestRequest request = new RestRequest(_endpointUri, Method.POST);
-            request.AddQueryParameter("api-version", "5.1");
-            request.AddQueryParameter("$depth", "2");
-            request.AddQueryParameter("$expand", "all");
-            request.AddHeader("Content-Type", "application/json");
+            CreateRestRequest(method: Method.POST);
+            RestRequest.AddQueryParameter("api-version", "5.1");
+            RestRequest.AddQueryParameter("$depth", "2");
+            RestRequest.AddQueryParameter("$expand", "all");
+            RestRequest.AddHeader("Content-Type", "application/json");
 
             string query = BuildQuery();
             var body = new Dictionary<string, string>() {
                 {"query", query}
             };
 
-            request.AddJsonBody(body);
-            request.RequestFormat = DataFormat.Json;
-            IRestResponse response = RestClient.Execute(request);
+            RestRequest.AddJsonBody(body);
+            RestRequest.RequestFormat = DataFormat.Json;
+            IRestResponse response = RestClient.Execute(RestRequest);
             var content = response.Content;
 
             // Convert the list of tasks received into a work item list.
