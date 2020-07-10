@@ -4,5 +4,6 @@ namespace libToggl.api
     {
         string ApiKey { get; set; }
         string BaseURL { get; set; }
+        void GenerateClient();
     }
 }

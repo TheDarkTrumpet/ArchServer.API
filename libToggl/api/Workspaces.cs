@@ -9,11 +9,19 @@ namespace libToggl.api
 {
     public class Workspaces : Base, IWorkspaces
     {
-        public Workspaces(string apiKey) : base(apiKey, "/workspaces") { }
         private readonly string _endpointUri = "/workspaces";
 
+        public Workspaces(string apiKey, IWorkspaces workspaces = null) : base(apiKey, "/workspaces")
+        {
+            BaseURL = "https://www.toggl.com/api/v8";
+        }
         public JArray GetRawWorkspaces()
         {
+            if (RestClient == null)
+            {
+                GenerateClient();
+            }
+            
             IRestResponse response = RestClient.Execute(RestRequest);
             JArray results = JArray.Parse(response.Content);
             return results;

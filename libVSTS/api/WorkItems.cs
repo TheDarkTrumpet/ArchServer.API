@@ -132,7 +132,8 @@ namespace libVSTS.api
 
             // Convert the list of tasks received into a work item list.
             JObject contentJSON = JObject.Parse(content);
-            return (JArray) contentJSON["workItems"];
+
+            return (JArray) contentJSON["workItems"] ?? new JArray();
         }
 
         public string BuildQuery()

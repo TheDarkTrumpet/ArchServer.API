@@ -13,9 +13,8 @@ namespace libToggl.api
         private IWorkspaces _workspaces;
         public TimeEntries(string apiKey, IWorkspaces workspaces = null) : base(apiKey, "/details")
         {
-            BaseURL = "https://www.toggl.com/reports/api/v2";
             UserAgent = "none@nada.com";
-
+            BaseURL = "https://www.toggl.com/reports/api/v2";
             _workspaces = workspaces ?? new Workspaces(ApiKey);
         }
 

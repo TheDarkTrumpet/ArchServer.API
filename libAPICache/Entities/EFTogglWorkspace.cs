@@ -24,6 +24,7 @@ namespace libAPICache.Entities
         
         public void CacheEntries()
         {
+            _workspaces.GenerateClient();
             List<libToggl.models.Workspace> workspaceList = _workspaces.GetWorkspaces();
             SaveEntries(workspaceList);
         }

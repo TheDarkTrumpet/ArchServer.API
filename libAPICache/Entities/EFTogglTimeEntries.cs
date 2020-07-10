@@ -25,6 +25,7 @@ namespace libAPICache.Entities
 
         public void CacheEntries(string workspaceName, DateTime? fromDate = null)
         {
+            _timeEntries.GenerateClient();
             List<libToggl.models.TimeEntry> results = _timeEntries.GetTimeEntries(workspaceName, fromDate).ToList();
 
             SaveEntries(results);

@@ -18,14 +18,15 @@ namespace libToggl.api
         protected Base(string apiKey, string uri)
         {
             ApiKey = apiKey;
-            BaseURL = "https://www.toggl.com/api/v8";
             BaseUri = uri;
             CookieContainer = new CookieContainer();
-            
+        }
+
+        public void GenerateClient()
+        {
             CreateClient();
             GenerateRestRequest();
         }
-
         protected void CreateClient()
         {
             if (string.IsNullOrEmpty(BaseURL))
