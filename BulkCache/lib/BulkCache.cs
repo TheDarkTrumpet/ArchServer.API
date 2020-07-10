@@ -46,8 +46,23 @@ namespace BulkCache.lib
             
             ITogglTimeEntries efTimeEntries = new EFTogglTimeEntries();
             string workspace = _configuration.GetKey("APISources:Toggl:Workspace");
-            // TODO Add from date here
-            efTimeEntries.CacheEntries(workspace);
+            string fromDateDaysString = _configuration.GetKey("APISources:Toggl:FromDateDays");
+
+            int? fromDateDays = null;
+            if (!String.IsNullOrEmpty(fromDateDaysString))
+            {
+                try
+                {
+                    fromDateDays = int.Parse(fromDateDaysString);
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidCastException(
+                        "Unable to convert the integer (intended) value in the APISources:Toggl:FromDateDays setting in the appSettings");
+                }
+            }
+
+            efTimeEntries.CacheEntries(workspace, fromDateDays);
         }
 
         private void CacheTeamwork()

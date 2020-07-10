@@ -30,5 +30,15 @@ namespace libAPICache.Entities
 
             SaveEntries(results);
         }
+
+        public void CacheEntries(string workspaceName, int? fromDateDays = null)
+        {
+            DateTime? fromDate = null;
+            if (fromDateDays != null)
+            {
+                fromDate = DateTime.Now.AddDays(fromDateDays.Value);
+            }
+            CacheEntries(workspaceName, fromDate);
+        }
     }
 }
