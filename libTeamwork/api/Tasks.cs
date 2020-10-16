@@ -26,6 +26,9 @@ namespace libTeamwork.api
                 RestRequest.AddQueryParameter("updatedAfterDate",
                     UpdatedAfterDate.Value.ToString("s", System.Globalization.CultureInfo.InvariantCulture) + "Z");
             }
+            
+            RestRequest.AddQueryParameter("includeCompletedTasks", IncludeCompleted.ToString());
+
             RestRequest.AddHeader("Accept", "application/json");
 
             IRestResponse response = RestClient.Execute(RestRequest);
