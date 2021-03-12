@@ -12,11 +12,12 @@ namespace libKimai.query
         private TimeZoneInfo _timeZone { get; set; }
         private string _sqlStatementBase = @"select SQL_NO_CACHE kt.id as 'Id', ka.name as 'ActivityName', ka.comment as 'ActivityComment',
             kp.name as 'ProjectName', kp.comment as 'ProjectComment', kc.name as 'Customer',
-            kc.hourly_rate as 'HourlyRate', kt.start_time as 'StartTime', kt.end_time as 'EndTime', ROUND(kt.duration/60,0) as 'Duration',
+            cr.rate as 'HourlyRate', kt.start_time as 'StartTime', kt.end_time as 'EndTime', ROUND(kt.duration/60,0) as 'Duration',
             kt.description as 'TimeNotes' from kimai2_timesheet kt
 	        left join kimai2_activities ka on (kt.activity_id = ka.id)
             left join kimai2_projects kp on (ka.project_id = kp.id)
-            left join kimai2_customers kc on (kp.customer_id = kc.id)";
+            left join kimai2_customers kc on (kp.customer_id = kc.id)
+            left join kimai2_customers_rates cr on (kp.customer_id = cr.customer_id)";
 
         public Activities(string queryString, string timeZone = "Central Standard Time") : base(queryString)
         {
